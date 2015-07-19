@@ -1,0 +1,97 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > **Sql**
+
+Фабрика [[http://framework.zend.com/manual/current/en/modules/zend.db.sql.html|Sql]] позволяет создать объекты классов ''Select'', ''Insert'', ''Update'' и ''Delete'', используемые для формирования SQL запросов.
+
+Объект этого класса принимает [[ЯП:ZF2:lib:Db:Adapter]] и включает следующие, основные методы:
+
+  * select - создание объекта Select;
+  * insert - создание объекта Insert;
+  * update - создание объекта Update;
+  * delete - создание объекта Delete;
+  * prepareStatementForSqlObject - создание подготовленного запроса на основании одного из объектов запросов;
+  * getSqlStringForSqlObject - создание строки SQL запроса на основании одного из объектов запросов.
+
+<code php>
+$sql = new Sql($adapter);
+$select = $sql->select();
+$select->from('foo');
+$select->where(array('id' => 2));
+
+$statement = $sql->prepareStatementForSqlObject($select);
+$results = $statement->execute();
+</code>
+
+===== Select =====
+
+Объект класса ''Select'' представляет запрос на получение данных из БД. Объект данного класса включает следующие основные методы:
+
+  * from - метод определяет целевую таблицу, из которой будет производится выборка;
+  * columns - метод определяет имена полей, которые будут участвовать в выборке;
+  * join - метод определяет связь между таблицами для получения выборки;
+  * where - метод определяет условие отбора;
+  * order - метод определяет метод сортировки;
+  * limit - метод определяет размерность результата.
+
+<code php>
+$sql = new Sql($adapter);
+$select = $sql->select();
+$select->from('product');
+$select->columns(['alias' => 'field_name']);
+$select->join('category', 'product.id = category.id', null, $select::JOIN_INNER);
+$select->where(['id' => [46, 47, 48]]);
+$select->order('id DESC')
+/* 
+SELECT field_name AS alias 
+FROM test 
+INNER JOIN category ON product.id = category.id 
+WHERE id IN (46, 47, 48)
+ORDER BY id DESC
+*/
+$statement = $sql->prepareStatementForSqlObject($select);
+</code>
+
+===== Insert =====
+
+Объект класса ''Insert'' представляет запрос на добавление данных в БД. Объект данного класса включает следующие основные методы:
+
+  * into - метод определяет целевую таблицу;
+  * columns - метод определяет целевые поля;
+  * values - метод определяет добавляемые данные.
+
+<code php>
+$insert = $sql->insert();
+$insert->into('product');
+$insert->values(['id' => 1, 'name' => 'test']);
+// INSERT INTO product (`id`, `name`) VALUES ('1', 'test')
+</code>
+
+===== Update =====
+
+Объект класса ''Update'' представляет запрос на изменение данных в БД. Объект данного класса включает следующие основные методы:
+
+  * table - метод определяет целевую таблицу;
+  * set - метод определяет данные для изменения;
+  * where - метод аналогичен одноименному методу класса ''Select'' и используется для определения затрагиваемых изменениями записей.
+
+<code php>
+$update = $sql->update();
+$update->table('product');
+$update->set(['name' => 'new_name']);
+$update->where(['id = 2']);
+// UPDATE product SET name = new_name WHERE id = 2
+</code>
+
+===== Delete =====
+
+
+Объект класса ''Update'' представляет запрос на удаление данных из БД. Объект данного класса включает следующие основные методы:
+
+  * from - метод определяет целевую таблицу;
+  * where - метод аналогичен одноименному методу класса ''Select'' и используется для определения удаляемых записей.
+
+<code php>
+$delete = $sql->delete();
+$delete->from('product');
+$delete->where(['id = 2']);
+// DELETE FROM product WHERE id = 2
+</code>

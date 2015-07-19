@@ -1,0 +1,23 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > **Logger**
+
+Класс [[http://framework.zend.com/manual/current/en/modules/zend.log.overview.html|Logger]] реализует интерфейс логирования событий системы. Для логирования объекту данного класса необходимо передать службу записи (объект одного из классов пакета [[ЯП:ZF2:lib:Log:Writers|Writer]]), после чего возможно его использование.
+
+<code php>
+$logger = new Zend\Log\Logger;
+
+$writer = new Zend\Log\Writer\Stream('php://output');
+$logger->addWriter($writer);
+
+$logger->log(Zend\Log\Logger::INFO, 'Informational message');
+</code>
+
+В качестве первого параметра, метод 'log' принимает одно из следующих значений:
+
+  * Logger::EMERG - аварийная ошибка;
+  * Logger::ALERT - тревога;
+  * Logger::CRIT - критическая ошибка;
+  * Logger::ERR - ошибка;
+  * Logger::WARN - предупреждение;
+  * Logger::NOTICE - предупреждающее сообщение;
+  * Logger::INFO - сообщение;
+  * Logger::DEBUG - дебагинг.

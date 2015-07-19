@@ -1,0 +1,33 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > [[:ЯП:ZF2:lib:InputFilter]] > **Service**
+
+Получить объект класса ''InputFilter'' можно из [[:ЯП:ZF2:lib:ServiceManager]], предварительно сконфигурировав его. Делается это с помощью свойства ''input_filter_specs''.
+
+<code php>
+return [
+  ...
+  'input_filter_specs' => [
+    'myFilter' => [
+      [
+        'name' => 'login',
+        'required' => true,
+        'filters' => [
+          [
+            'name' => 'Zend\Filter\StringTrim',
+            'options' => [],
+          ],
+        ],
+        'validators' => [],
+        'description' => 'Hello to name',
+      ],
+      ... // Другие проверяемые поля.
+    ],
+  ],
+];
+</code>
+
+Получить доступ к такому фильтру можно следующим образом:
+
+<code php>
+$filters = $controllers->getServiceLocator()->get('InputFilterManager');
+$filter = $filters->get('myFilter');
+</code>

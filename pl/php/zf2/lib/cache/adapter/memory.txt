@@ -1,0 +1,19 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > [[ЯП:ZF2:lib:Cache:Adapter|Cache]] > **Memory**
+
+Адаптер [[http://framework.zend.com/manual/current/en/modules/zend.cache.storage.adapter.html#the-memory-adapter|Memory]] позволяет реализовать кэш в PHP массиве.
+
+Адаптер имеет следующие ограничения:
+
+  * Кэш существует только на время работы PHP скрипта.
+
+Адаптер включает следующие специфичные опции:
+
+  * memory_limit - максимальный объем памяти, который может использоваться кэшем.
+
+<code php>
+$cache = StorageFactory::factory([
+  'adapter' => [
+    'name' => 'memory'
+  ]
+]);
+</code>

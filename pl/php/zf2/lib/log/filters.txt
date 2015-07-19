@@ -1,0 +1,31 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > **Filters**
+
+Класс [[http://framework.zend.com/manual/current/en/modules/zend.log.filters.html|Filters]] позволяет настроить объекты пакета Writers так, чтобы они пропускали только определенные сообщения в лог.
+
+Фильтры делятся на следующие классы:
+
+  * Priority - фильтр типа сообщения;
+  * Regex - фильтр на основе регулярного выражения;
+  * Timestamp - фильтр времени;
+  * SuppressFilter - подовляющий фильтр;
+  * Validator - валидирующий фильтр.
+
+<code php>
+$logger = new Logger();
+
+$writer1 = new Zend\Log\Writer\Stream('/path/to/first/logfile');
+$logger->addWriter($writer1);
+
+$writer2 = new Zend\Log\Writer\Stream('/path/to/second/logfile');
+$logger->addWriter($writer2);
+
+// Добавление фильтра в writer2
+$filter = new Zend\Log\Filter\Priority(Logger::CRIT); // До уровня критических сообщений
+$writer2->addFilter($filter);
+
+// Логирование только writer1
+$logger->info('Informational message');
+
+// Логирование обоими потоками
+$logger->emerg('Emergency message');
+</code>

@@ -1,0 +1,16 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > **ResultSet**
+
+Класс [[http://framework.zend.com/manual/current/en/modules/zend.db.result-set.html|ResultSet]] представляет результат SQL запроса к СУБД. Объекты этого класса реализуют интерфейс ''Iterator'', благодаря чему могут использоваться в качестве итератора в конструкции ''foreach''.
+
+<code php>
+$result = $statement->execute();
+foreach($result as $row){
+  print_r($row);
+}
+</code>
+
+Класс так же включает следующие полезные методы:
+
+  * count - возвращает число строк в результирующем наборе;
+  * getFieldCount - возвращает число полей, задействованных в результирующем наборе;
+  * toArray - приведение объекта к PHP массиву.

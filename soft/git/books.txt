@@ -1,0 +1,3 @@
+  - [[http://githowto.com/ru/|Интерактивный тур по Git]] - основы использования Git в примерах и упражнен
+  - [[http://git-scm.com/book/ru|Pro Git]] - простой и доступный учебник Git от создателей;
+  - [[http://diseaz.github.io/gitmagic/index.html|Магия Git]] - углубленное изучение Git.

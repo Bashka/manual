@@ -1,0 +1,12 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > **Config**
+
+Класс [[http://framework.zend.com/manual/current/en/modules/zend.config.introduction.html|Config]] предоставляет удобный интерфейс доступа к данным конфигурации. При создании экземпляра класса ему необходимо передать массив с конфигурацией, после чего доступ к элементам конфигурации можно осуществлять как к свойствам PHP объекта.
+
+<code php>
+$config = new Zend\Config\Config([
+  'core' => [
+    'author' => 'zf2'
+  ]
+]);
+echo $config->core->author;
+</code>

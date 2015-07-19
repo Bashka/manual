@@ -1,0 +1,26 @@
+====== Данные и операторы ======
+  * [[.:data:number|Числа]]
+  * [[.:data:string|Строки]]
+  * [[.:data:boolean|Логический тип]]
+  * [[.:data:variable|Переменные]]
+  * [[.:data:array|Массивы]]
+
+====== Структуры ======
+  * [[.:struct:if|if]]
+  * [[.:struct:case|case]]
+  * [[.:struct:for|for]]
+  * [[.:struct:while|while]]
+  * [[.:struct:break|break и continue]]
+  * [[.:struct:utilities|Внешние утилиты]]
+  * [[.:struct:fun|Функции]]
+  * [[.:struct:pipe|Потоки]]
+  * [[.:struct:signal|Сигналы]]
+
+====== Разное ======
+  * [[.:other:debug|Отладка]]
+
+====== Библиотека ======
+  * Ввод/Вывод
+  * Файловая система
+  * Пользователи
+  * Сеть

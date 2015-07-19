@@ -1,0 +1,71 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > [[:ЯП:ZF2:lib:ViewManager]] > **ViewModel**
+
+===== Представление модуля =====
+
+Обычно обращение к контроллеру сопровождается рендерингом и возвратом пользователю HTML страницы представления. 
+
+Для рендеринга шаблона представления ему нужно передать параметры, которые будут вставляться в шаблон. Делается это путем возврата из контроллера объекта класса [[http://framework.zend.com/manual/current/en/modules/zend.view.quick-start.html#controllers-and-view-models|ViewModel]].
+
+<code php>
+public function doSomethingCrazyAction(){
+  $view = new ViewModel([
+    'message' => 'Hello world',
+  ]);
+  return $view;
+}
+</code>
+
+Если дальнейшей настройки возвращаемой ''ViewModel'' не требуется, можно просто вернуть ассоциативный массив параметров.
+
+<code php>
+public function doSomethingCrazyAction(){
+  return [
+    'message' => 'Hello world',
+  ];
+}
+</code>
+
+Чаще всего имя шаблона представления, передаваемого пользователю, соответствует имени метода контроллера. Так, метод ''indexAction'' контроллера ''IndexController'' обычно использует шаблон: ''модуль/index/index.phtml'', но можно указать явно используемый шаблон.
+
+<code php>
+public function doSomethingCrazyAction(){
+  $view = new ViewModel([
+    'message' => 'Hello world',
+  ]);
+  $view->setTemplate('foo/baz-bat/do-something-crazy');
+  return $view;
+}
+</code>
+
+Для разделение шаблона на части, возможно определение вложенных шаблонов.
+
+Файл index.phtml:
+<code php>
+<div>
+    <?php echo $this->article ?>
+</div>
+</code>
+
+
+Файл article.phtml:
+<code php>
+<article>
+    <?=$this->escapeHtml('article') ?>
+</article>
+</code>
+
+Контроллер:
+<code php>
+public function indexAction(){
+    // Модель представления для вложенного шаблона "article".
+    $article = '...';
+    $articleView = new ViewModel(['article' => $article]);
+    $articleView->setTemplate('content/article');
+
+    // Основная модель представления действия контроллера.
+    $view = new ViewModel();
+    $view->addChild($articleView, 'article');
+
+    return $view;
+}
+</code>

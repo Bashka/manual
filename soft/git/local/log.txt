@@ -1,0 +1,77 @@
+====== История ветки ======
+
+Для просмотра истории комитов текущей ветки используется команда ''git log''.
+
+Пример:
+
+  commit 776a7eeec90740dfa8cdbc5b65049323c8a5c449
+  Merge: be0a617 7d7cf7e
+  Author: artur <Artur-Mamedbekov@yandex.ru>
+  Date:   Fri Jan 30 14:21:42 2015 +0300
+  
+      Merge branch 'newBranch'
+      
+      Conflicts:
+      	new
+  
+  commit be0a617baf779dad8968f80ce873bf906454b56e
+  Author: artur <Artur-Mamedbekov@yandex.ru>
+  Date:   Fri Jan 30 14:12:51 2015 +0300
+  
+      Add test
+
+Команда имеет следующие ключи:
+
+  * ''%%git log --stat%%'' - история дополняется краткой сводкой изменений для каждого комита
+  * ''%%git log -число%%'' - число последних комитов, которые будут включены в историю
+  * ''%%git log комитA..комитB%%'' - история между комитом A и комитом B
+  * ''%%git log --author=автор%%'' - комиты только данного автора
+  * ''%%git log --grep=шаблон%%'' - только те комиты, описания которых соответствует шаблону
+  * ''%%git log --since=дата%%'' - комиты, созданные после заданной даты (на пример ''%%git log --since="2 month ago"%%''
+  * ''%%git log --until=дата%%'' - комиты, созданные до заданной даты
+
+====== Исторический граф ======
+
+Для просмотра истории комитов всех веток, а так же их взаимосвязи, используется команда ''%%git log --all --graph%%''.
+
+Пример:
+
+<code>
+*   commit 776a7eeec90740dfa8cdbc5b65049323c8a5c449
+|\  Merge: be0a617 7d7cf7e
+| | Author: artur <Artur-Mamedbekov@yandex.ru>
+| | Date:   Fri Jan 30 14:21:42 2015 +0300
+| |
+| |     Merge branch 'newBranch'
+| |
+| |     Conflicts:
+| |             new
+| |
+| * commit 7d7cf7e12d890065622f93346d76e38cff7eabd5
+| | Author: artur <Artur-Mamedbekov@yandex.ru>
+| | Date:   Fri Jan 30 13:57:03 2015 +0300
+| |
+| |     New branch
+| |
+* | commit be0a617baf779dad8968f80ce873bf906454b56e
+| | Author: artur <Artur-Mamedbekov@yandex.ru>
+| | Date:   Fri Jan 30 14:12:51 2015 +0300
+| |
+| |     Add test
+| |
+* | commit ed2888df5ffbcb9ab65ab9043b754a77bec8519b
+|/  Author: artur <Artur-Mamedbekov@yandex.ru>
+|   Date:   Fri Jan 30 13:54:51 2015 +0300
+|
+|       New file
+|
+* commit fb736a1f28680680c2be4f80751af09595f613f5
+  Author: artur <Artur-Mamedbekov@yandex.ru>
+  Date:   Wed Jan 28 12:49:56 2015 +0300
+ 
+      First commit
+</code>
+
+====== История файла ======
+
+Историю комитов можно ограничить конкретным файлом. Для этого используется команда ''%%git log -- адрес%%'', которая сформирует историю комитов с участием данного файла.

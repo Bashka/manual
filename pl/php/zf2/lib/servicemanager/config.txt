@@ -1,0 +1,26 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > **Config**
+
+Класс [[ЯП:ZF2:lib:ServiceManager]] может быть сконфигурирован во время инстанциации. Это позволяет задать все службы в виде массива конфигурации, а не посредствам вызова методов локатора служб.
+
+Для конфигурации сервиса используется класс [[http://framework.zend.com/manual/current/en/modules/zend.service-manager.quick-start.html|Config]], представляющий конфигурацию. Конструктор этого класса принимает PHP массив конфигураций, а его экземпляр должен быть передан в конструктор локатора служб.
+
+<code php>
+$sm = new Zend\ServiceManager\ServiceManager(new Zend\ServiceManager\Config([
+  'invokables' => [
+    'my_service' => 'MyClass',
+  ],
+  'shared' => [
+    'my_service' => true,
+  ],
+]));
+$obj = $sm->get('my_service');
+</code>
+
+Для конфигурации локатора служб могут использоваться следующие ключи конфигурации:
+
+  * services - массив служб;
+  * invokables - массив служб с "ленивой загрузкой";
+  * factories - массив фабрик служб;
+  * abstract_factories - массив абстрактных фабрик;
+  * aliases - массив псевдонимов;
+  * shared - флаги разделяемых служб.

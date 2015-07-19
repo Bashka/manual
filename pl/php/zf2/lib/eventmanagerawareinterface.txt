@@ -1,0 +1,25 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > **EventManagerAwareInterface**
+
+Обычно событийная модель реализуется через объекты бизнес-логики. Другими словами [[ЯП:ZF2:lib:EventManager]] является частью некоторого класса, а не используется отдельно. Делается это путем агрегации ''EventManager'' в объекты целевого класса. В этом случае класс должен реализовать два интерфейса:
+
+  * EventsCapableInterface - основной интерфейс, отвечающий за предоставление ''EventManager'' объектам посредствам метода ''getEventManager'';
+  * EventManagerAwareInterface - дополнительный интерфейс, отвечающий за внедрение в объекты ''EventManager'' посредствам метоа ''setEventManager''.
+
+Реализовать эти интерфейсы можно самостоятельно, но удобнее использовать trait ''EventManagerAwareTrait''.
+
+<code php>
+class MyClass implements EventManagerAwareInterface{
+  use EventManagerAwareTrait;
+
+  public function sayHello(){
+    echo 'Hello';
+    $this->getEventManager()->trigger('hello_event', $this);
+  }
+}
+
+$obj = new MyClass;
+$obj->getEventManager()->attach('hello_event', function($e){
+  echo 'Run "Hello" listener';
+});
+$obj->sayHello();
+</code>

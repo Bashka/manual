@@ -1,0 +1,46 @@
+Если необходимо создать пакет для Composer, достаточно добавить в корневой каталог пакета файл ''composer.json'' с описанием пакета, его зависимостями и информацией для автозагрузчика.
+
+<code javascript>
+{
+    "name": "user/my-pack",
+    "version": "1.0",
+    "description": "Test pack",
+    "license": "GNU-3.0",
+    "authors": [
+        {
+            "name": "User",
+            "email": "User@email.com"
+        }
+    ],
+    "require": {
+      "php": ">=5.3.3"
+    },
+    "autoload": {
+      "psr-4": {
+        "Test\\": "test/"
+      },
+      "classmap": ["src/"]
+    }
+}
+</code>
+
+Свойство ''autoload'' описывает расположение классов в пакете и используется для генерации автозагрузчика Composer. Данное свойство может включать следующие характеристики:
+
+  * psr-4 - объект, описывающий соответствия пространств имен каталогам пакета, в которых хранятся классы этого пространства;
+
+<code javascript>
+"autoload": {
+  "psr-4": {
+    "MyLib\\": "src/MyLib/", // Классы из пространства MyLib находятся в каталоге src/MyLib/ (на пример класс MyLib/HelloClass будет в файле src/MyLib/HelloClass.php)
+    "Test\\": "test/" // Классы из пространства Test находятся в каталоге test/ (на пример класс Test/HelloClassTest будет в файле test/HelloClassTest.php)
+  }
+}
+</code>
+
+  * classmap - массив имен файлов или каталогов, которые сканируются Composer на предмет наличия в них PHP классов.
+
+<code javascript>
+"autoload": {
+  "classmap": ["src/"] // Все классы из каталога src/ будут проиндексированы и добавлены в автозагрузчик
+}
+</code>

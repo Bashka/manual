@@ -1,0 +1,38 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > [[:ЯП:ZF2:lib:InputFilter]] > **Factory**
+
+Экземпляр ''InputFilter'' можно создать с помощью фабрики. Для этого используется класс ''Zend\InputFilter\Factory'', метод ''createInputFilter'' которого принимает конфигурацию будущего фильтра и возвращает готовый объект.
+
+<code php>
+$if = (new Zend\InputFilter\Factory)->createInputFilter([
+  'login' => [
+    'name' => 'login',
+    'required' => true,
+    'validators' => [
+      ['name' => 'not_empty'],
+    ],
+    'filters' => [
+      ['name' => 'string_trim'],
+      ['name' => 'string_to_lower'],
+    ]
+  ],
+  'pass' => [
+    'name' => 'pass',
+    'required' => true,
+    'validators' => [
+      ['name' => 'not_empty'],
+      [
+        'name' => 'string_length',
+        'options' => [
+          'min' => '6'
+        ]
+      ]
+    ]
+  ]
+]);
+
+$data = ['login' => 'User  ', 'pass' => '123456'];
+$if->setData($data);
+if($if->isValid()){
+  echo $if->getValue('login'); // "user"
+}
+</code> 

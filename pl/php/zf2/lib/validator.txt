@@ -1,0 +1,89 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > **Validator**
+
+===== Валидация =====
+
+Пакет [[http://framework.zend.com/manual/current/en/modules/zend.validator.html|Validator]] включает классы, реализующие основную логику валидации (проверки) данных. Объекты данного класса принимают проверяемые данные и возвращают логическое значение, определяющее, прошли ли данные валидацию или нет.
+
+Все классы этого пакета используют два основных метода:
+
+  * Конструктор класса, который принимает опции валидации;
+  * isValid - метод выполняющий валидацию входных данных.
+
+<code php>
+$validator = new Zend\Validator\EmailAddress();
+if($validator->isValid($email)){
+    // email валиден
+}
+else{
+    // email не валидет
+}
+</code>
+
+Вызвать валидатор можно так же по его имени: 
+
+<code php>
+echo StaticValidator::execute('Data', 
+                              'notempty'
+                              [...] // Опции валидатора
+                             );
+</code>
+
+===== Стандартные фильтры =====
+
+Пакет ''Validator'' включает множество готовых валидаторов. Ниже перечислены некоторые из них:
+
+  * **Базовые типы:**
+    * Alnum - только буквенные символы и числа;
+    * Alpha - только буквенные символы;
+    * Digits - только числа (целые и дробные);
+    * NotEmpty - не пустое значение;
+    * StringLength - строка заданной длины;
+
+<code php>
+$validator = new Zend\Validator\StringLength(['max' => 6);
+$validator->isValid("Test"); // true
+$validator->isValid("Testing"); // false
+</code>
+
+    * Date - дата;
+
+<code php>
+$validator = new Zend\Validator\Date(['format' => 'Y']);
+$validator->isValid('2010'); // true
+$validator->isValid('May');  // false
+</code>
+
+  * **Функции:**
+    * Callback - функция, используемая для валидации. В качестве функции может выступать как имя, так и лямбда-функция;
+
+<code php>
+class MyClass{
+    public static function test($value){
+        ...
+    }
+}
+
+$valid = new Zend\Validator\Callback(['MyClass', 'test']);
+echo $valid->isValid($input);
+</code>
+
+  * Файловая система и сеть:
+    * EmailAddress - адрес электронной почты;
+    * Ip - IP адрес;
+    * Hostname - домен;
+  * **Разное:**
+    * Regex - регулярное выражение, используемое для валидации;
+
+<code php>
+$validator = new Zend\Validator\Regex(['pattern' => '/^Test/']);
+$validator->isValid("Test"); // true
+$validator->isValid("Testing"); // true
+$validator->isValid("Pest"); // false
+</code>
+
+    * InArray - значение соответствует одному из перечисленных.
+
+<code php>
+$validator = new Zend\Validator\InArray(['haystack' => ['value1', 'value2',...'valueN']]);
+echo $validator->isValid('value');
+</code>

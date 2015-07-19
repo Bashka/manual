@@ -1,0 +1,38 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > **InputFilter**
+
+Класс [[http://framework.zend.com/manual/current/en/modules/zend.input-filter.intro.html|InputFilter]] позволяет объединить [[:ЯП:ZF2:lib:Filter]] и [[:ЯП:ZF2:lib:Validator]] в единый механизм, проверяющий входные данные (любой ассоциативный массив).
+
+Формирование ''InputFilter'' проходит в несколько этапов:
+
+  * Создается по одному объекту класса ''Input'' для каждого входного параметра. Он отвечает за валидацию и фильтрацию;
+  * Объекты заполняются фильтрами и валидаторами через вызов их методов ''getFilterChain'' и ''getValidatorChain'';
+  * Объекты добавляются в объединяющий их объект класса ''InputFilter'' c помощью метода ''add'';
+  * Метод ''setData'' того же класса определяет входной, проверяемый массив;
+  * Проверка осуществляется с помощью метода ''isValid'' этого класса;
+  * Метод ''getValue'' позволяет получить отфильтрованное значение заданного параметра.
+
+<code php>
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\Input;
+use Zend\Validator;
+
+$email = new Input('email'); // Компонент для проверки поля email
+$email->getValidatorChain()->attach(new Validator\EmailAddress());
+
+$password = new Input('password'); // Компонент для проверки поля password
+$password->getValidatorChain()->attach(new Validator\StringLength(8));
+$password->getFilterChain()->attachByName('alpha');
+
+$inputFilter = new InputFilter(); // Объединяющий компоненты объект
+$inputFilter->add($email)
+            ->add($password)
+            ->setData($_POST); // Проверяемые данные
+
+if($inputFilter->isValid()){ // Валидация всех входных данных
+    echo "The form is valid\n";
+    echo $inputFilter->getValue('password'); // Получение поля password, прошедшего фильтрацию
+}
+else{
+    echo "The form is not valid\n";
+}
+</code>

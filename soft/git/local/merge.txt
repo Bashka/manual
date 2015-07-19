@@ -1,0 +1,160 @@
+====== Слияние ======
+
+Слияние веток это процесс, целью которого является добавление в текущую ветку комитов, присутствующих в другой (добавляемой) ветке. В результате слияния в текущей ветке создается новый комит, фиксирующий результат слияния, а так же копируются комиты добавляемой ветки.
+
+Для слияния веток необходимо:
+
+  - Перейти на некоторую ветку, в которую будет выполняться слияние (текущая ветка)
+  - Выполнить команду ''git merge ветка'', указав добавляемую ветку
+
+Пример (до слияния):
+<code>
+# Графическое представление истории репозитория
+  B2
+ /    
+A--B1
+
+$>git log
+commit 564e80535c21d4347e4c4a7e25a3842f96ec27ab	# Комит B1 (из текущей ветки)
+Author: artur <Artur-Mamedbekov@yandex.ru>
+Date:   Sun Feb 1 16:44:25 2015 +0300
+
+    Изменение в ветке master.
+
+commit e8a993525016cf3114359f67a0ea1e5e227ead81	# Коммит A
+Author: artur <Artur-Mamedbekov@yandex.ru>
+Date:   Sun Feb 1 16:43:00 2015 +0300
+
+    Первый комит.
+</code>
+
+Пример (после слияния):
+
+<code>
+$>git checkout master
+$>git merge new
+
+# Графическое представление истории репозитория
+  -B2-
+ /    \
+A--B1--C
+
+$>git log
+commit 087c14ff104a11d8f6c591cbfd222692c754e31d	# Фиксирующий слияние комит С
+Merge: 564e805 b90eac6
+Author: artur <Artur-Mamedbekov@yandex.ru>
+Date:   Sun Feb 1 16:44:29 2015 +0300
+
+    Merge branch 'new'
+
+commit 564e80535c21d4347e4c4a7e25a3842f96ec27ab	# Комит B1 (из текущей ветки)
+Author: artur <Artur-Mamedbekov@yandex.ru>
+Date:   Sun Feb 1 16:44:25 2015 +0300
+
+    Изменение в ветке master.
+
+commit b90eac699d49ca62c57c9afa19cc100f3b5f24a8	# Комит B2 (из добавляемой ветки)
+Author: artur <Artur-Mamedbekov@yandex.ru>
+Date:   Sun Feb 1 16:43:59 2015 +0300
+
+    Изменение в ветке new.
+
+commit e8a993525016cf3114359f67a0ea1e5e227ead81	# Коммит A
+Author: artur <Artur-Mamedbekov@yandex.ru>
+Date:   Sun Feb 1 16:43:00 2015 +0300
+
+    Первый комит.
+</code>
+
+====== Конфликты слияния ======
+
+Конфликт слияния это ситуация, когда Git не способен выбрать способ объединения изменений. Такое возможно в следующих случаях:
+
+  * Файл удален - текущая ветка содержит некоторый файл, который удален в добавляемой ветке
+<code>
+$>git merge new
+CONFLICT (modify/delete): Stack.php deleted in new and modified in HEAD. Version HEAD of Stack.php left in tree.
+Automatic merge failed; fix conflicts and then commit the result.
+</code>
+  * Конфликтующие изменения - некая строка или группа строк в файле текущей ветки не соответствует той же строке в файле добавляемой ветки
+<code>
+$>git merge new
+Auto-merging Stack.php
+CONFLICT (content): Merge conflict in Stack.php
+Automatic merge failed; fix conflicts and then commit the result.
+</code>
+
+===== Файл удален =====
+
+Такой конфликт разрешается двумя возможными способами:
+
+  - Если файл должен быть удален, то файл удаляется, а состояние репозитория фиксируется комитом
+  - Если файл должен быть сохранен, то состояние репозитория фиксируется пустым комитом (без индексации)
+
+Пример:
+
+  commit e90687bf9be73798978083a0cfa8a530fa9cf9fe	# Пустой комит, фиксирующий слияние через сохранение файла
+  Merge: aa08a17 9e08748
+  Author: artur <Artur-Mamedbekov@yandex.ru>
+  Date:   Sun Feb 1 18:37:40 2015 +0300
+  
+      Сохранение файла.
+  
+  commit aa08a17d460d5a16e2f9612879c84040b45bad10	# Комит текущей ветки, в котором зафиксировано изменение файла
+  Author: artur <Artur-Mamedbekov@yandex.ru>
+  Date:   Sun Feb 1 18:34:57 2015 +0300
+  
+      Изменен файл.
+  
+  commit 9e087487ab4aa86cd5e80cdfe332cde2c52f067a	# Комит добавляемой ветки, в котором зафиксировано удаление файла
+  Author: artur <Artur-Mamedbekov@yandex.ru>
+  Date:   Sun Feb 1 18:34:19 2015 +0300
+  
+      Удален файл.
+
+===== Конфликтующие изменения =====
+
+Такой конфликт создает специальные метки в конфликтующих файлах:
+
+  <?php
+  class Stack{
+    private $values;
+  
+  <<<<<<< HEAD					# Изменения текущей ветки
+    /**						# Присутствует описание метода
+     * Метод добавляет значение в стек.
+     * @param mixed $val Добавляемое значение.
+     */
+  =======					# Изменения добавляемой ветки
+  >>>>>>> new					# Описание метода отсутствует
+    public function push($val){
+      $this->values[] = $val;
+    }
+  
+    public function pop(){
+      return array_pop($this->values);
+    }
+  }
+
+Для разрешения такого конфликта, необходимо открыть все конфликтующие файлы и заменить эти метки на конкретное значение, после чего создать фиксирующий слияние комит.
+
+Пример:
+
+  commit 5c63807af4ede95a5bcee1b849670861462b832f	# Фиксирующий слияние комит
+  Merge: 0984180 9012a16
+  Author: artur <Artur-Mamedbekov@yandex.ru>
+  Date:   Sun Feb 1 18:45:05 2015 +0300
+  
+      Слияние.
+  
+  commit 09841805cde168e670a08cc2e7d0ea7cb2220d47	# Комит из текущей ветки
+  Author: artur <Artur-Mamedbekov@yandex.ru>
+  Date:   Sun Feb 1 18:41:58 2015 +0300
+  
+      Изменение в файле ветки master.
+  
+  commit 9012a162b7eeed6ae49b52e0c2320b1c779d3184	# Комит из добавляемой ветки
+  Author: artur <Artur-Mamedbekov@yandex.ru>
+  Date:   Sun Feb 1 18:41:29 2015 +0300
+  
+      Изменения в файле ветки new.

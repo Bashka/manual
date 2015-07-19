@@ -1,0 +1,28 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > **Writers**
+
+Классы пакета [[http://framework.zend.com/manual/current/en/modules/zend.log.writers.html|Writer]] используются в качестве интерфейса доступа к логу. Каждый класс используются для различных типов логов.
+
+При создании экземпляра данного класса необходимо указать, что будет являться логом, после чего объект можно будет установить в класс Logger.
+
+Указание адреса файла лога:
+<code php>
+$writer = new Zend\Log\Writer\Stream('/path/to/logfile');
+$logger = new Zend\Log\Logger();
+$logger->addWriter($writer);
+
+$logger->info('Informational message');
+</code>
+
+Использование потока вывода:
+<code php>
+$stream = @fopen('/path/to/logfile', 'a', false);
+if (!$stream) {
+  throw new Exception('Failed to open stream');
+}
+
+$writer = new Zend\Log\Writer\Stream($stream);
+$logger = new Zend\Log\Logger();
+$logger->addWriter($writer);
+
+$logger->info('Informational message');
+</code>

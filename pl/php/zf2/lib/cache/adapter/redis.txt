@@ -1,0 +1,27 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > [[ЯП:ZF2:lib:Cache:Adapter|Cache]] > **Redis**
+
+Адаптер [[http://framework.zend.com/manual/current/en/modules/zend.cache.storage.adapter.html#the-redis-adapter|Redis]] позволяет реализовать кэш в системе Redis.
+
+Адаптер имеет следующие ограничения:
+
+  * Длина ключа не должна превышать 255 символов.
+
+Адаптер включает следующие специфичные опции:
+
+  * server - массив конфигураций для доступа к серверам Redis (следующей структуры [[хост, порт], ...]) или URI адреса сокетов Redis;
+  * password - пароль для соединения с Redis;
+  * lib_options - массив опций Redis.
+
+<code php>
+$cache = StorageFactory::factory([
+  'adapter' => [
+    'name' => 'redis',
+    'ttl' => 3600,
+    'options' => [
+      'servers' => [
+        ['localhost', 6379],
+      ],
+    ],
+  ]
+]);
+</code>

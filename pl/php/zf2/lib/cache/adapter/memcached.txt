@@ -1,0 +1,32 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > [[ЯП:ZF2:lib:Cache:Adapter|Cache]] > **Memcached**
+
+Адаптер [[http://framework.zend.com/manual/current/en/modules/zend.cache.storage.adapter.html#the-memcached-adapter|Memcached]] позволяет реализовать кэш в системе Memcached.
+
+Адаптер имеет следующие ограничения:
+
+  * Длина ключа не должна превышать 255 символов.
+
+Адаптер включает следующие специфичные опции:
+
+  * servers - массив конфигураций для доступа к серверам Memcached (следующей структуры [[хост, порт], …]);
+  * lib_options - массив [[http://php.net/manual/memcached.setoption.php|опций]] Memcached.
+
+<code php>
+$cache = StorageFactory::factory([
+  'adapter' => [
+    'name' => 'memcached',
+    'ttl' => 3600,
+    'options' => [
+      'servers' => [
+        ['localhost', 11211],
+      ],
+      'lib_options' => [
+        'COMPRESSION' => true,
+        'binary_protocol' => true,
+        'no_block' => true,
+        'connect_timeout' => 100,
+      ],
+    ],
+  ]
+]);
+</code>

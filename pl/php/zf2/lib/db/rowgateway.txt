@@ -1,0 +1,35 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > **RowGateway**
+
+Класс [[http://framework.zend.com/manual/current/en/modules/zend.db.row-gateway.html|RowGateway]] реализует шаблон Active record для доступа к конкретным записям в таблице.
+
+Для создания экземпляра данного класса необходимо сначала получить из БД целевую строку в виде массива, которая и будет использоваться в качестве основы.
+
+<code php>
+$result = $adapter->query('select * from artist where id = ?', [46]); // Получение строки
+
+$row = new RowGateway('id' , 'artist', $adapter);
+$row->populate($result->current()->getArrayCopy(), true); // Инициализация RowGateway
+$row->name = 'Jake';
+$row->save();
+</code>
+
+Как видно из примера, метод ''populate'' принимает в качестве первого параметра исходную строку, а второй параметр является логическим флагом, определяющим является ли эта строка новой (false) или она уже имеется в таблице (true). Во втором случае, метод ''save'' добавит новую строку в таблицу.
+
+Класс включает следующие основные методы:
+
+  * populate - инициализация объекта ''RowGateway'';
+  * save - сохранение состояния объекта в целевую таблицу;
+  * delete - удаление строки из целевой таблицы.
+
+===== Использование TableGateway =====
+
+Класс [[ЯП:ZF2:lib:Db:TableGateway]] может возвращать в качестве результата объекты класса ''RowGateway''. Для этого достаточно передать третий параметр конструктору этого класса.
+
+<code php>
+$table = new Zend\Db\TableGateway\TableGateway('artist', $adapter, new Zend\Db\TableGateway\Feature\RowGatewayFeature('id'));
+$results = $table->select(['id' => 2]);
+
+$artistRow = $results->current();
+$artistRow->name = 'New Name';
+$artistRow->save();
+</code>

@@ -1,0 +1,34 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > **Formatters**
+
+Классы пакета [[http://framework.zend.com/manual/current/en/modules/zend.log.formatters.html|Formatter]] позволяют определить формат сообщений лога.
+
+Формат может включать следующие ключевые слова:
+
+  * %timestamp% - временная метка добавления сообщения в лог;
+  * %priorityName% - имя типа сообщения;
+  * %priority% - числовой эквивалент типа сообщения;
+  * %message% - сообщение.
+
+Простой формат:
+<code php>
+$writer = new Zend\Log\Writer\Stream('php://output');
+$formatter = new Zend\Log\Formatter\Simple('hello %message%' . PHP_EOL);
+$writer->setFormatter($formatter);
+
+$logger = new Zend\Log\Logger();
+$logger->addWriter($writer);
+
+$logger->info('there'); // "hello there"
+</code>
+
+В виде XML:
+<code php>
+$writer = new Zend\Log\Writer\Stream('php://output');
+$formatter = new Zend\Log\Formatter\Xml();
+$writer->setFormatter($formatter);
+
+$logger = new Zend\Log\Logger();
+$logger->addWriter($writer);
+
+$logger->info('informational message');
+</code>

@@ -1,0 +1,167 @@
+Для тестирования проекта на базе ZF2 рекомендуется использовать утилиту PHPUnit. Добавив данную утилиту в список зависимостей проекта, следует так же подготовить файл конфигурации утилиты.
+
+Файл composer.json:
+<code javascript>
+{
+  ...
+  "require-dev": {
+    "phpunit/phpunit": "3.7.*",
+    ...
+  },
+  ...
+}
+</code>
+Для этого необходимо:
+  * В тестируемом модуле создать каталог ''test'' (на пример ''module/Application/test''). Этот каталог будет содержать все тест-кейсы для данного модуля;
+  * В данном каталоге следует создать подкаталог с именем, соответствующим имени модуля (на пример ''Application''). Этот каталог будет хранить все unit-тесты для данного модуля;
+<code>
+test
+  Application
+    Model
+      BookTest.php
+      BookTableGateway.php
+    Controller
+      BookController.php
+</code>
+  * Для запуска этих unit-тестов необходимо передать утилите PHPUnit автозагрузчик классов, а так же настроить ZF2 для работы тестов. Для этого необходимо в каталоге ''test'' создать файл ''phpunit.xml''. Этот файл будет сообщать PHPUnit каталоги, в которых хранятся unit-тесты, а так же имя файла, выполняющего первоначальную настройку окружения (''Botstrap.php'');
+<file xml phpunit.xml>
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+  bootstrap="Bootstrap.php"
+  colors="true"
+  backupGlobals="false"
+  >
+  <testsuites>
+    <testsuite name="Test Suite">
+      <!-- Узлы directory содержат имена каталогов с тестами -->
+      <directory>./Application</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>
+</file>
+  * Так же следует создать в каталоге ''test'' файл ''Bootstrap.php''. Этот файл будет содержать конфигурацию ZF2 и автозагрузчик для работы с unit-тестами;
+<file php Bootstrap.php>
+use Zend\Loader\AutoloaderFactory;
+use Zend\Mvc\Service\ServiceManagerConfig;
+use Zend\ServiceManager\ServiceManager;
+use Zend\Stdlib\ArrayUtils;
+use RuntimeException;
+
+error_reporting(E_ALL | E_STRICT);
+chdir(__DIR__);
+
+class Bootstrap{
+  protected static $serviceManager;
+  protected static $config;
+  protected static $bootstrap;
+
+  public static function init(){
+    if(is_readable(__DIR__ . '/TestConfig.php')){
+      $testConfig = include __DIR__ . '/TestConfig.php';
+    }
+    else{
+      $testConfig = include __DIR__ . '/TestConfig.php.dist';
+    }
+
+    $zf2ModulePaths = array();
+
+    if(isset($testConfig['module_listener_options']['module_paths'])){
+      $modulePaths = $testConfig['module_listener_options']['module_paths'];
+      foreach ($modulePaths as $modulePath){
+        if (($path = static::findParentPath($modulePath))){
+          $zf2ModulePaths[] = $path;
+        }
+      }
+    }
+
+    $zf2ModulePaths  = implode(PATH_SEPARATOR, $zf2ModulePaths) . PATH_SEPARATOR;
+    $zf2ModulePaths .= getenv('ZF2_MODULES_TEST_PATHS') ?: (defined('ZF2_MODULES_TEST_PATHS') ? ZF2_MODULES_TEST_PATHS : '');
+
+    static::initAutoloader();
+
+    $baseConfig = [
+      'module_listener_options' => [
+        'module_paths' => explode(PATH_SEPARATOR, $zf2ModulePaths),
+      ],
+    ];
+
+    $config = ArrayUtils::merge($baseConfig, $testConfig);
+
+    $serviceManager = new ServiceManager(new ServiceManagerConfig());
+    $serviceManager->setService('ApplicationConfig', $config);
+    $serviceManager->get('ModuleManager')->loadModules();
+
+    static::$serviceManager = $serviceManager;
+    static::$config = $config;
+  }
+
+  public static function getServiceManager(){
+    return static::$serviceManager;
+  }
+
+  public static function getConfig(){
+    return static::$config;
+  }
+
+  protected static function initAutoloader(){
+    $vendorPath = static::findParentPath('vendor');
+
+    if(is_readable($vendorPath . '/autoload.php')){
+      $loader = include $vendorPath . '/autoload.php';
+    }
+    else{
+      $zf2Path = getenv('ZF2_PATH') ?: (defined('ZF2_PATH') ? ZF2_PATH : (is_dir($vendorPath . '/ZF2/library') ? $vendorPath . '/ZF2/library' : false));
+
+      if(!$zf2Path){
+        throw new RuntimeException('Unable to load ZF2. Run `php composer.phar install` or define a ZF2_PATH environment variable.');
+      }
+
+      include $zf2Path . '/Zend/Loader/AutoloaderFactory.php';
+    }
+
+    AutoloaderFactory::factory([
+        'Zend\Loader\StandardAutoloader' => [
+          'autoregister_zf' => true,
+          'namespaces' => [
+            __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+          ],
+        ],
+      ]);
+  }
+
+  protected static function findParentPath($path){
+    $dir = __DIR__;
+    $previousDir = '.';
+    while(!is_dir($dir . '/' . $path)){
+      $dir = dirname($dir);
+      if ($previousDir === $dir) return false;
+      $previousDir = $dir;
+    }
+    return $dir . '/' . $path;
+  }
+}
+
+Bootstrap::init();
+</file>
+  * ''Bootstrap'' использует конфигурацию, заданную в файле ''TestConfig.php'', расположенную в каталоге ''test'' для инициализации ZF2. Обычно этот файл содержит ту же конфигурацию, что и файл ''config/application.config.php''.
+<file php TestConfig.php>
+return [
+  'modules' => [
+    'Application',
+    // Другие модули, тестируемые PHPUnit
+  ],
+  'module_listener_options' => [
+    'config_glob_paths'    => [
+      '../../../config/autoload/{,*.}{global,local}.php',
+    ],
+    'module_paths' => [
+      '../../../module',
+      '../../../vendor',
+    ],
+  ],
+];
+</file>
+После того, как все настройки выполнены, можно запустить тестирование. Для этого следует перейти в каталог ''test'' и выполнить команду:
+<code bash>
+phpunit .
+</code>

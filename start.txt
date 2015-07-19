@@ -1,0 +1,24 @@
+====== Программирование ======
+  * [[.:pl:bash:|Bash]]
+  * [[.:pl:perl:|Perl]]
+  * [[.:pl:php:|PHP]]
+    * [[.:pl:php:zf2:|Zend Framework 2]]
+    * [[.:pl:php:composer:|Composer]]
+  * [[.:pl:javascript:|JavaScript]]
+  * [[.:pl:cpp:|C++]]
+  * [[.:pl:python:|Python]]
+
+====== Разметка ======
+  * XML, XSD, XSLT
+  * HTML
+  * CSS
+
+====== Утилиты и программы ======
+  * [[soft:git:|Git]]
+  * [[soft:latex:|LaTeX]]
+  * [[soft:vim:|Vim]]
+  * LibreOffice
+
+====== Операционные системы ======
+  * [[.:os:linux:|GNU/Linux]]
+  * [[.:os:networks:|Компьютерные сети]]

@@ -1,0 +1,175 @@
+[[:start|Главная]] > [[:ЯП:ZF2|Zend Framework 2]] > Компоненты фреймворка > **Router**
+
+===== Конфигурация роутера =====
+[[http://framework.zend.com/manual/current/en/modules/zend.mvc.routing.html|Router]] это пакет, отвечающий за роутинг запросов пользователя внутри системы.
+
+Для конфигурации службы используется массив (как правило, содержащийся в файле config/application.config.php) следующей структуры: 
+
+<code php>
+return [
+  'router' => [
+    'routes' => [
+      'home' => [
+        'type' => 'Zend\Mvc\Router\Http\Literal',
+        'options' => [
+          'route'    => '/',
+          'defaults' => [
+            'controller' => 'Application\Controller\Index',
+            'action'     => 'index',
+          ],
+        ],
+      ],
+    ],
+  ],
+  ...
+]
+</code>
+
+===== Типы роутеров =====
+
+Для роутинга могут применяться следующие типы роутеров:
+
+  * ''Zend\Mvc\Router\Http\Scheme'' - данный роутер используется для разбора протокол доступа;
+
+<code php>
+$route = Scheme::factory([
+  'scheme' => 'https', // Искомый протокол соединения
+  // Дополнительные параметры роутера, возвращаемые при совпадении
+  'defaults' => [
+      'https' => true,
+  ],
+]);
+</code>
+
+  * ''Zend\Mvc\Router\Http\Hostname'' - данный роутер используется для разбора доменного имени и, как правило, служит для выделения поддоменов;
+
+<code php>
+$route = Hostname::factory([
+  'route' => ':subdomain.site.com', // Проверяется поддомен (subdomain)
+  'constraints' => [
+    'subdomain' => 'user_\d{6}' // subdomain должен содержать строку вида "user_[0-9]{6}" (user_ и 6 цифр)
+                                // это значение будет являться параметром роутера
+  ],
+  'defaults' => [
+    'type' => 'json', // Дополнительный параметр роутера, возвращаемый при совпадении
+  ],
+]);
+</code>
+
+  * ''Zend\Mvc\Router\Http\Literal'' - данный роутер используется для разбора URI;
+
+<code php>
+$route = Literal::factory([
+  'route' => '/foo', // Искомый путь
+  'defaults' => [
+    // Дополнительные параметры роутера, возвращаемые при совпадении
+    'controller' => 'Application\Controller\IndexController',
+    'action' => 'index'
+  ],
+]);
+</code>
+
+  * ''Zend\Mvc\Router\Http\Regex'' - данный роутер используется для разбора URI и регулярное выражение;
+
+<code php>
+$route = Regex::factory([
+  'regex' => '/blog/(?<id>[a-zA-Z0-9_-]+)(.(?<format>(json|html|xml|rss)))?', // Искомый путь
+  // Дополнительные параметры роутера, возвращаемые при совпадении
+  'defaults' => [
+    'controller' => 'Application\Controller\BlogController',
+    'action'     => 'view',
+    'format'     => 'html',
+  ],
+  'spec' => '/blog/%id%.%format%', // Расположение компонентов URI
+]);
+</code>
+
+  * ''Zend\Mvc\Router\Http\Segment'' - данный роутер похож на предыдущий, но имеет несколько отличный формат разбора URI;
+
+<code php>
+$route = Segment::factory([
+  'route' => '/:controller[/:action]', // Искомый путь
+  // Регулярные выражения, определяющие содержимое сегментов
+  'constraints' => [
+    'controller' => '[a-zA-Z][a-zA-Z0-9_-]+',
+    'action'     => '[a-zA-Z][a-zA-Z0-9_-]+',
+  ],
+  // Дополнительные параметры роутера, возвращаемые при совпадении
+  'defaults' => [
+    'controller' => 'Application\Controller\IndexController',
+    'action'     => 'index',
+  ],
+]);
+</code>
+
+  * ''Zend\Mvc\Router\Http\Method'' - данный роутер используется для разбора метода доступа (GET,POST,PUT и DELETE);
+
+<code php>
+$route = Method::factory([
+  'verb' => 'post,put', // Методы, которые должны использоваться запросом для совпадения с роутером
+  'defaults' => [
+    // Дополнительные параметры роутера, возвращаемые при совпадении
+    'controller' => 'Application\Controller\IndexController',
+    'action' => 'form-submit'
+  ],
+]);
+</code>
+
+  * ''Zend\Mvc\Router\Http\Part'' - данный роутер позволяет реализовывать составняе методы разбора.
+
+<code php>
+return [
+  'router' => [
+    'routes' => [
+      // Корень проетка
+      'home' => [
+        'type' => 'literal',
+        'options' => [
+          'route' => '/',
+          'defaults' => [
+            'controller' => 'Application\Controller\IndexController',
+            'action' => 'index'
+          ]
+        ]
+      ],
+      // Путь "/blog"
+      'blog' => [
+        'type' => 'literal',
+        'options' => [
+          'route' => '/blog',
+          'defaults' => [
+            'controller' => 'Applicaton\Controller\BlogController',
+            'action' => 'index'
+          ],
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+          // Путь "/blog/имяБлога"
+          'post' => [
+            'type' => 'segment',
+            'options' => [
+              'route' => '/[:slug]',
+              'constraints' => [
+                'slug' => '[a-zA-Z0-9_-]+'
+              ],
+              'defaults' => [
+                'action' => 'view'
+              ]
+            ]
+          ],
+          // Путь "/blog/rss"
+          'rss' => [
+            'type' => 'literal',
+            'options' => [
+              'route' => '/rss',
+              'defaults' => [
+                'action' => 'rss'
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+];
+</code>

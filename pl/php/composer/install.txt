@@ -1,0 +1,11 @@
+Для установки Composer используется команда:
+
+<code bash>
+php -r "readfile('https://getcomposer.org/installer');" | php
+</code>
+
+Данная команда загружает инсталлятор Composer и выполняет его с помощью PHP интерпретатора. В результате создается файл `composer.phar`, который и является менеджером пакетов Composer.
+
+===== Полезные ссылки =====
+
+ * [[https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx|Установка в различных ОС]]
