@@ -20,6 +20,13 @@ for process in `ps`; do # По одному процессу за итераци
 done
 </code>
 
+Пример прохода по файлам каталога:
+<code bash>
+for file in ./*; do
+  echo $file
+done
+</code>
+
 Пример прохода по ключам массива:
 <code bash>
 arr=('a' 'b' 'c')
@@ -38,7 +45,7 @@ done
 
 Пример C-подобной структуры ''for'':
 <code bash>
-for (( i = 10; $i >= 1; i-- )); do
+for (( i = 10, j = 0; $i >= 1; i--, j++ )); do
   echo $i
 done
 </code>

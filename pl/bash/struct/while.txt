@@ -12,3 +12,28 @@ until командаУсловия; do
   тело
 done
 </code>
+
+Пример цикла ''while'':
+<code bash>
+i=0
+while test $i -lt 10; do # Аналог while [ test $i -lt 10 ]; do
+  echo $i
+  (( i++ ))
+done
+</code>
+
+Использование C-подобного синтаксиса:
+<code bash>
+i=0
+while (( $i < 10 )); do
+  echo $i
+  (( i++ ))
+done
+</code>
+
+Пример цикла ''while'' для прохода по строкам файла:
+<code bash>
+while read line; do # Построчное чтение потока ввода
+  echo "$line"
+done < test.txt # Поток ввода получен из файла
+</code>

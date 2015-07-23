@@ -12,9 +12,8 @@ echo `expr length "$str"`
   * ''строка строка'' - конкатенация строк;
 <code bash>
 a='Hello'
-b=' '
-c='world'
-echo $a$b$c
+a=$a' world'
+echo $a # Hello world
 </code>
   * ''expr length строка'' - длина строки;
   * ''expr index строка символ'' - поиск первого вхождения заданного символа в строке (первый символ имеет индекс 1);
