@@ -6,17 +6,21 @@
   * [[.:data:array|Массивы]]
 
 ====== Структуры ======
-  * [[.:struct:if|if]]
-  * [[.:struct:case|case]]
-  * [[.:struct:for|for]]
-  * [[.:struct:while|while]]
-  * [[.:struct:break|break и continue]]
-  * [[.:struct:utilities|Внешние утилиты]]
-  * [[.:struct:fun|Функции]]
-  * [[.:struct:pipe|Потоки]]
-  * [[.:struct:signal|Сигналы]]
+  * Ветвления:
+    * [[.:struct:if|if]]
+    * [[.:struct:case|case]]
+  * Циклы:
+    * [[.:struct:for|for]]
+    * [[.:struct:while|while]]
+    * [[.:struct:select|select]]
+    * [[.:struct:break|break и continue]]
+  * Команды и функции:
+    * [[.:struct:utilities|Внешние утилиты]]
+    * [[.:struct:fun|Функции]]
+    * [[.:struct:pipe|Потоки]]
 
 ====== Разное ======
+  * [[.:struct:signal|Сигналы]]
   * [[.:other:debug|Отладка]]
 
 ====== Библиотека ======
@@ -25,5 +29,3 @@
     * [[.:lib:io:echo|echo]] - запись в поток
   * Файловая система
     * [[.:lib:fs:mktemp|mktemp]] - создание временных файлов и каталогов
-  * Пользователи
-  * Сеть
