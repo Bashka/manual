@@ -16,7 +16,8 @@
 ====== Утилиты и программы ======
   * [[soft:git:|Git]]
   * [[soft:latex:|LaTeX]]
-  * [[soft:vim:|Vim]]
+  * [[.:soft:vim:|Vim]]
+    * [[.:pl:vimscript:|VimScript]]
   * LibreOffice
 
 ====== Операционные системы ======

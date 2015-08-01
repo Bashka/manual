@@ -13,7 +13,7 @@
     * [[.:struct:for|for]]
     * [[.:struct:while|while]]
     * [[.:struct:select|select]]
-    * [[.:struct:break|break и continue]]
+    * [[.:struct:break|Прерывания]]
   * Команды и функции:
     * [[.:struct:utilities|Внешние утилиты]]
     * [[.:struct:fun|Функции]]
