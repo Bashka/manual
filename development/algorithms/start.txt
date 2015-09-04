@@ -3,9 +3,9 @@
     * [[.:struct:array|Массив]] (Array, Vector)
     * [[.:struct:list|Список]] (List)
     * [[.:struct:set|Множество]] (Set)
-    * Хэш-таблица
+    * [[.:struct:hashtable|Хэш-таблица]] (Hash-table)
   * Нелинейные:
-    * Дерево
+    * [[.:struct:tree|Дерево]] (Tree)
     * Граф
 
 ====== Алгоритмы ======
