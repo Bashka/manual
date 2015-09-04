@@ -1,12 +1,21 @@
 ====== Программирование ======
-  * [[.:pl:bash:|Bash]]
-  * [[.:pl:perl:|Perl]]
-  * [[.:pl:php:|PHP]]
-    * [[.:pl:php:zf2:|Zend Framework 2]]
-    * [[.:pl:php:composer:|Composer]]
-  * [[.:pl:javascript:|JavaScript]]
-  * [[.:pl:cpp:|C++]]
-  * [[.:pl:python:|Python]]
+  * Языки и библиотеки:
+    * [[.:pl:bash:|Bash]]
+    * [[.:pl:perl:|Perl]]
+    * [[.:pl:php:|PHP]]
+      * [[.:pl:php:zf2:|Zend Framework 2]]
+      * [[.:pl:php:composer:|Composer]]
+    * [[.:pl:javascript:|JavaScript]]
+    * [[.:pl:cpp:|C++]]
+      * [[.:pl:cpp:lex:|Lex]]
+      * Yacc
+    * [[.:pl:python:|Python]]
+    * [[.:pl:jass:|Jass]]
+
+  * Разработка:
+    * [[.:development:algorithms:|Алгоритмы и структуры данных]]
+    * Паттерны
+    * [[.:development:refactoring:|Рефакторинг]]
 
 ====== Разметка ======
   * XML, XSD, XSLT

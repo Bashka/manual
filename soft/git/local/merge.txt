@@ -158,3 +158,5 @@ Automatic merge failed; fix conflicts and then commit the result.
   Date:   Sun Feb 1 18:41:29 2015 +0300
   
       Изменения в файле ветки new.
+
+~~DISQUS~~

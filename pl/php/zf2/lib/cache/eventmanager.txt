@@ -19,3 +19,5 @@ $em->attach('getItem.pre', function($e){
 $cache->setItem('key', 'value'); // "Item set"
 echo $cache->getItem('key'); // "Item get"
 </code>
+
+~~DISQUS~~

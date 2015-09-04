@@ -10,3 +10,5 @@ $config = new Zend\Config\Config([
 ]);
 echo $config->core->author;
 </code>
+
+~~DISQUS~~

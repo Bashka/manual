@@ -15,3 +15,5 @@ cd $tmpdir
 tmpfile=`mktemp file_XXXXXX`
 echo 'Hello world' > $tmpfile
 </code>
+
+~~DISQUS~~

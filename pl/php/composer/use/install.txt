@@ -43,3 +43,5 @@ php composer.phar create-project издатель/пакет целевойКа�
 <code bash>
 php composer.phar create-project zendframework/skeleton-application /var/www/myProj
 </code>
+
+~~DISQUS~~

@@ -19,3 +19,5 @@ $config = Zend\Config\Factory::toFile('/conf/conf.ini', $config);
 </code>
 
 В качестве конфигурации здесь может выступать как объект класса Config, так и PHP массив.
+
+~~DISQUS~~

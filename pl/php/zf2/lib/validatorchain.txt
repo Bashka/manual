@@ -16,3 +16,5 @@ $validatorChain = new Zend\Validator\ValidatorChain();
 $validatorChain->attachByName('alpha')
                ->attachByName('notempty');
 </code>
+
+~~DISQUS~~

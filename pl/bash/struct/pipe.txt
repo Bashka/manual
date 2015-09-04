@@ -67,3 +67,5 @@ result=$( cat /etc/passwd | while read i; do # Перенаправление п
   IFS="\n"
 done )
 </code>
+
+~~DISQUS~~

@@ -24,3 +24,5 @@ $obj = $sm->get('my_service');
   * abstract_factories - массив абстрактных фабрик;
   * aliases - массив псевдонимов;
   * shared - флаги разделяемых служб.
+
+~~DISQUS~~

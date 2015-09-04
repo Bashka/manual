@@ -6,3 +6,5 @@
       public - клиенские файлы проекта и index.php
       vendor - библиотеки проекта
 Данная структура реализуется при сборке проекта с использованием [[https://github.com/zendframework/ZendSkeletonApplication|ZendSkeletonApplication]].
+
+~~DISQUS~~

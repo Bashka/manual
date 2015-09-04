@@ -1,0 +1,20 @@
+====== Структура ======
+Цикл ''for'' имеет вид:
+<code>
+loop
+  exitwhen (условиеВыхода)
+  тело
+endloop
+</code>
+
+Пример использования:
+<code>
+  local integer i = 0
+  loop
+    exitwhen (i > 10)
+    call DisplayTextToForce(bj_FORCE_PLAYER[0], I2S(i))
+    set i = i + 1
+  endloop
+</code>
+
+~~DISQUS~~

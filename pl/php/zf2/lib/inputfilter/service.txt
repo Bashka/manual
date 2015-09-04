@@ -31,3 +31,5 @@ return [
 $filters = $controllers->getServiceLocator()->get('InputFilterManager');
 $filter = $filters->get('myFilter');
 </code>
+
+~~DISQUS~~

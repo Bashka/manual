@@ -87,3 +87,5 @@ $result = $statement->execute([5]);
 <code php>
 $result = $adapter->query('SELECT * FROM `artist` WHERE `id` = ?', [5]);
 </code>
+
+~~DISQUS~~

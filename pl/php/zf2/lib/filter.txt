@@ -127,3 +127,5 @@ echo $filter->filter('Hello world 123'); // "Helloworld"
 </code>
 
     * UriNormalize - нормализация URI.
+
+~~DISQUS~~

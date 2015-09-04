@@ -9,3 +9,5 @@ php -r "readfile('https://getcomposer.org/installer');" | php
 ===== Полезные ссылки =====
 
  * [[https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx|Установка в различных ОС]]
+
+~~DISQUS~~

@@ -9,3 +9,5 @@ let s:choice = confirm("What do you want?", "&Apples\n&Oranges\n&Bananas", 2)
 <code vim>
 let s:color = input('Color?', 'white')
 </code>
+
+~~DISQUS~~

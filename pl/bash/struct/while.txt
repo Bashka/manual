@@ -37,3 +37,5 @@ while read line; do # Построчное чтение потока ввода
   echo "$line"
 done < test.txt # Поток ввода получен из файла
 </code>
+
+~~DISQUS~~

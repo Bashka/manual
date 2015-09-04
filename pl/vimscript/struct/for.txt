@@ -28,3 +28,5 @@ for [s:k, s:v] in items(s:hash)
   echo s:k ' - ' s:v
 endfor
 </code>
+
+~~DISQUS~~

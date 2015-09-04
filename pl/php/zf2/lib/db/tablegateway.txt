@@ -98,3 +98,5 @@ $table = new Zend\Db\TableGateway\TableGateway('artist', $adapter, null, $rs);
 <code php>
 $result = $table->select();
 </code>
+
+~~DISQUS~~

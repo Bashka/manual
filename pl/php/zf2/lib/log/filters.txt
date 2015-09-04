@@ -29,3 +29,5 @@ $logger->info('Informational message');
 // Логирование обоими потоками
 $logger->emerg('Emergency message');
 </code>
+
+~~DISQUS~~

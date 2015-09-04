@@ -34,3 +34,5 @@ $inflector->setFilterRule('script', [
     new Zend\Filter\StringToLower()
 ]);
 </code>
+
+~~DISQUS~~

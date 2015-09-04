@@ -59,3 +59,5 @@ arr2=("${arr[@]}" ...)
 <code bash>
 arr[${#arr[@]}]=значение
 </code>
+
+~~DISQUS~~

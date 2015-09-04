@@ -34,3 +34,5 @@ if (( $a == $b )); then # Аналог: test $a -ea $b
   ...
 fi
 </code>
+
+~~DISQUS~~

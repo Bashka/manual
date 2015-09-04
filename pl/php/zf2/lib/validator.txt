@@ -87,3 +87,5 @@ $validator->isValid("Pest"); // false
 $validator = new Zend\Validator\InArray(['haystack' => ['value1', 'value2',...'valueN']]);
 echo $validator->isValid('value');
 </code>
+
+~~DISQUS~~

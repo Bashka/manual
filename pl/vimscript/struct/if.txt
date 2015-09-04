@@ -7,7 +7,7 @@ elseif условие
   иначеЕсли
 else
   иначе
-ifend
+endif
 </code>
 Ветви ''elseif'' и ''else'' являются необязательными.
 
@@ -25,3 +25,5 @@ else
   echo 'Год не високосный'
 endif
 </code>
+
+~~DISQUS~~

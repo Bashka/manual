@@ -21,3 +21,5 @@ $logger->log(Zend\Log\Logger::INFO, 'Informational message');
   * Logger::NOTICE - предупреждающее сообщение;
   * Logger::INFO - сообщение;
   * Logger::DEBUG - дебагинг.
+
+~~DISQUS~~

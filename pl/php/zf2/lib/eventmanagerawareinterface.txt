@@ -23,3 +23,5 @@ $obj->getEventManager()->attach('hello_event', function($e){
 });
 $obj->sayHello();
 </code>
+
+~~DISQUS~~

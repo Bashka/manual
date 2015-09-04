@@ -16,3 +16,5 @@ $filterChain = new Zend\Filter\FilterChain();
 $filterChain->attachByName('alpha')
             ->attachByName('stringtolower', ['encoding' => 'utf-8'], 500);
 </code>
+
+~~DISQUS~~

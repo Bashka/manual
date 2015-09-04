@@ -54,7 +54,7 @@
   -<?xml version="1.0" encoding="UTF-8"?>
   -<!--
   -Date Create: 2015-01-29 10:24:26
-  -Last Change: 2015-07-12 23:45:11
+  -Last Change: 2015-08-07 19:35:35
   -Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
   -License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
   --->
@@ -67,3 +67,5 @@
 ====== Отмена индексации ======
 
 Для исключения файла из индекса, используется команда ''%%git reset -- адрес%%'' или ''git reset'', если необходимо отменить весь индекс.
+
+~~DISQUS~~

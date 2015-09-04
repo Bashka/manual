@@ -95,3 +95,5 @@ $delete->from('product');
 $delete->where(['id = 2']);
 // DELETE FROM product WHERE id = 2
 </code>
+
+~~DISQUS~~

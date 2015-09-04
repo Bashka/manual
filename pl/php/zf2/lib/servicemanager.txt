@@ -112,3 +112,5 @@ $serviceManager->setInvokableClass('my_service', 'MyClass');
 
 echo $serviceManager->get('my-service')->initialized; // initialized
 </code>
+
+~~DISQUS~~

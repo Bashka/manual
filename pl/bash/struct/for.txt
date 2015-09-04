@@ -49,3 +49,5 @@ for (( i = 10, j = 0; $i >= 1; i--, j++ )); do
   echo $i
 done
 </code>
+
+~~DISQUS~~

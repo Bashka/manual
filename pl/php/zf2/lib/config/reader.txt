@@ -49,3 +49,5 @@ $reader = new Zend\Config\Reader\Ini();
 $conf = new Zend\Config\Config($reader->fromFile('conf/conf.ini'));
 echo $conf->core->author;
 </code>
+
+~~DISQUS~~

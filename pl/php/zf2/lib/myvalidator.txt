@@ -27,3 +27,5 @@ StaticValidator::getPluginManager()->setInvokableClass(
 );
 echo StaticValidator::isValid('Data', 'myNewValidator');
 </code>
+
+~~DISQUS~~

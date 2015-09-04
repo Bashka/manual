@@ -19,3 +19,5 @@ StaticFilter::getPluginManager()->setInvokableClass(
 );
 echo StaticFilter::execute('Data', 'myNewFilter');
 </code>
+
+~~DISQUS~~

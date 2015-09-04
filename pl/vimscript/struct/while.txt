@@ -5,3 +5,5 @@ while условие
   тело
 endwhile
 </code>
+
+~~DISQUS~~

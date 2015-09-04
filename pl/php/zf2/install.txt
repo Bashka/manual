@@ -38,3 +38,5 @@ Zend\Loader\AutoloaderFactory::factory(['Zend\Loader\StandardAutoloader' => [
 
 ===== Полезные ссылки =====
   * Установка ZF2 с помощью ZendSkeletonApplication ([[http://framework.zend.com/manual/current/en/user-guide/skeleton-application.html|En]]|[[http://zf2.com.ua/doc/32|Ru]])
+
+~~DISQUS~~

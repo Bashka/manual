@@ -28,3 +28,5 @@ read line <&3 # Чтение из дескриптора 3
 exec 3>$-
 echo $line
 </code>
+
+~~DISQUS~~

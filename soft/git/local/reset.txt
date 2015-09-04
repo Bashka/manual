@@ -30,3 +30,5 @@
 
   # Удаление последнего комита
   git reset --hard HEAD^
+
+~~DISQUS~~

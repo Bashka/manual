@@ -25,3 +25,5 @@ exec 3>file.txt
 echo 'Hello world' >&3
 exec 3>&-
 </code>
+
+~~DISQUS~~
