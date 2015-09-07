@@ -1,0 +1,9 @@
+host='pi@188.242.76.233'
+path='/var/www/man/data'
+
+[deploy]
+cd pages
+git checkout master
+git pull
+cd ..
+chmod -R 777 pages
