@@ -1,0 +1,69 @@
+====== Описание ======
+Очередь - это коллекция, элементы в которую добавляются и исключаются методом "первый пришел, первый вышел". Место добавления элементов называется хвостом, а место удаления элементов - головой.
+
+====== Реализации ======
+===== Неограниченная =====
+{{ .:media:queue.png |Схема связей}}
+  * Структура аналогична двунаправленному списку.
+
+==== Операции ====
+<code>
+class QueueUnlimited
+  // Список.
+  ListDouble store
+  // Текущая длина.
+  int size
+  
+  function QueueUnlimited()
+    store = new ListReverse()
+    size = 0
+  
+  function push(value)
+    store.addLast(value)
+    size++
+  
+  function pop(value)
+    if size == 0
+      throw QueueUnderflow
+    item = store.getFirst()
+    store.removeFirst()
+    size--
+    return item
+</code>
+
+===== Ограниченная =====
+{{ .:media:queue_limited.png |Схема связей}}
+  * Структура аналогична двунаправленному списку;
+  * Перед добавлением элемента необходимо проверить, не превышает ли текущее число элементов коллекции максимального значения.
+
+==== Операции ====
+<code>
+class QueueLimited
+  // Список.
+  ListDouble store
+  // Текущая длина.
+  int size
+  // Максимальная длина.
+  int maxSize
+  
+  function QueueLimited(maxSize)
+    store = new ListReverse()
+    size = 0
+    maxSize = maxSize
+  
+  function push(value)
+    if size == maxSize
+      throw QueueOwerflow
+    store.addLast(value)
+    size++
+  
+  function pop(value)
+    if size == 0
+      throw QueueUnderflow
+    item = store.getFirst()
+    store.removeFirst()
+    size--
+    return item
+</code>
+
+~~DISQUS~~

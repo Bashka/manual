@@ -1,0 +1,14 @@
+====== Описание ======
+Линейный поиск - это метод поиска в неотсортированной коллекции, при котором последовательно проверяются все элементы коллекции.
+
+====== Реализация ======
+<code>
+function lineSearch(array, low, high, key)
+  while low <= high
+    if array[low] == key
+      return low
+    low++
+  return -1
+</code>
+
+~~DISQUS~~

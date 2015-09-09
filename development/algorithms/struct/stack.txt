@@ -1,0 +1,64 @@
+====== Описание ======
+Стек - это коллекция, элементы в которую добавляются и исключаются методом "первый пришел, последним вышел". Место добавления и удаления элементов называется вершиной стека.
+
+====== Реализации ======
+===== Неограниченный =====
+{{ .:media:stack.png |Схема связей}}
+  * Структура аналогична обратному списку.
+
+==== Операции ====
+<code>
+class StackUnlimited
+  ListReverse store
+  int size
+  
+  function StackUnlimited()
+    store = new ListReverse()
+    size = 0
+  
+  function push(value)
+    store.add(value)
+    size++
+
+  function pop()
+    if size == 0
+      throw StackUnderflow
+    item = store.get(0)
+    store.remove(0)
+    size--
+    return item
+</code>
+
+===== Ограниченный =====
+{{ .:media:stack_limited.png |Схема связей}}
+  * Структура аналогична обратному списку;
+  * Перед добавлением элемента необходимо проверить, не превышает ли текущее число элементов коллекции максимального значения.
+
+==== Операции ====
+<code>
+class StackLimited
+  ListReverse store
+  int size
+  int maxSize
+  
+  function StackLimited(maxSize)
+    store = new ListReverse()
+    size = 0
+    maxSize = maxSize
+  
+  function push(value)
+    if size == maxSize
+      throw StackOwerflow
+    store.add(value)
+    size++
+  
+  function pop()
+    if size == 0
+      throw StackUnderflow
+    item = store.get(0)
+    store.remove(0)
+    size--
+    return item
+</code>
+
+~~DISQUS~~

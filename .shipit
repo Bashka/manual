@@ -2,6 +2,12 @@ host='pi@188.242.76.233'
 path='/var/www/man/data'
 
 [deploy]
+sudo chown -R pi:pi pages
 cd pages
 git checkout master
 git pull
+cd ..
+sudo chown -R www-data:www-data pages
+
+[clear_cache]
+sudo rm -rf cache/*

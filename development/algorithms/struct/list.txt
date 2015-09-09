@@ -7,62 +7,169 @@
 |Упорядоченность элементов|Да|
 |Доступ к элементу|Перебором|
 
-====== Реализация ======
-===== Связанный список =====
+====== Реализации ======
+===== Прямой =====
 {{ .:media:list.png |Схема связей}}
-Для реализации необходимо:
-  * Определить блок памяти длиной, достаточной для хранения данных заданного типа и указателя на такой блок;
-  * Каждый блок (кроме последнего) должен ссылаться на соседний блок, связывая элементы списка;
-  * Получить ссылку на первый блок.
+  * Элемент коллекции это структура, хранящая данные и указатель на такой элемент;
+  * Каждый элемент (кроме последнего) должен ссылаться на следующий, связывая элементы коллекции;
+  * Структура хранит указатель на первый элемент коллекции.
 
 ==== Плюсы ====
-  * Именение структуры
+  * Добавление элементов с начала коллекции
 
 ==== Минусы ====
+  * Добавление элементов с конца коллекции
   * Поиск
 
 ==== Операции ====
-Получение элемента:
 <code>
-ablock = afblock
-while index--
-  ablock = ablock.next
-return ablock
+class List
+  class Item
+    // Значение элемента.
+    mixed value
+    // Следующий элемент.
+    Item* next
+    
+    function Item(value)
+      value = value
+      next = null
+    
+  // Адрес первого элемента
+  Item* first
+  
+  // Получить элемент по индексу.
+  function get(index)
+    target = first
+    while index--
+      target = target.next
+    return target
+  
+  // Вставить элемент в начало списка.
+  function add(value)
+    newItem = new Item(value)
+    newItem.next = first
+    first = newItem
+  
+  // Найти первый элемент с заданным значением.
+  function find(value)
+    target = first
+    while target
+      if target.value == value
+        return target
+      else
+        target = taget.next
+    return null
 </code>
-где:
-  * ''afblock'' - адрес памяти первого элемента;
-  * ''index'' - индекс целевого элемента.
 
-Увеличения длины:
-<code>
-ablock = list[index]
-ablock.next = newblock
-</code>
-где:
-  * ''list'' - исходный список;
-  * ''index'' - индекс элемента, после которого вставляется новый элемент.
+===== Обратный =====
+{{ .:media:list_reverse.png |Схема связей}}
+  * Элемент коллекции это структура, хранящая данные и указатель на такой элемент;
+  * Каждый элемент (кроме первого) должен ссылаться на предыдущий, связывая элементы коллекции;
+  * Структура хранит указатель на последний элемент коллекции.
 
-Уменьшения длины:
-<code>
-pablock = list[index - 1]
-ablock = pablock.next
-pablock.next = null
-delete ablock
-</code>
-где:
-  * ''list'' - исходный список;
-  * ''index'' - индекс удаляемого элемента.
+==== Плюсы ====
+  * Добавление элементов с конца коллекции
 
-Поиск:
+==== Минусы ====
+  * Добавление элементов с начала коллекции
+  * Поиск
+
+==== Операции ====
 <code>
-ablock = afblock
-do
-  if ablock.val == target
-    return ablock
-while ablock = ablock.next
+class ListReverse
+  class Item
+    // Значение элемента.
+    mixed value
+    // Предыдущий элемент.
+    Item* pre
+    
+    function Item(value)
+      value = value
+      pre = null
+    
+  // Адрес последнего элемента
+  Item* last
+  
+  // Получить элемент по индексу с конца списка.
+  function get(rIndex)
+    target = last
+    while rIndex--
+      target = target.pre
+    return target
+  
+  // Вставить элемент в конец списка.
+  function add(value)
+    newItem = new Item(value)
+    newItem.pre = last
+    last = newItem
+  
+  // Найти последний элемент с заданным значением.
+  function find(value)
+    target = first
+    while target
+      if target.value == value
+        return target
+      else
+        target = taget.pre
+    return null
 </code>
-где:
-  * ''target'' - искомое значение;
-  * ''afblock'' - адрес памяти первого элемента.
+
+===== Двунаправленный =====
+{{ .:media:list_double.png |Схема связей}}
+  * Элемент коллекции это структура, хранящая данные и два указателя на такой элемент;
+  * Каждый элемент должен ссылаться на предыдущий (кроме первого) и следующий (кроме последнего), связывая элементы коллекции;
+  * Структура хранит указатель на первый и последний элементы коллекции.
+
+==== Плюсы ====
+  * Добавление элементов с конца коллекции
+  * Добавление элементов с начала коллекции
+
+==== Минусы ====
+  * Поиск
+  * Потребление памяти
+
+==== Операции ====
+<code>
+class ListDouble
+  class Item
+    // Значение элемента.
+    mixed value
+    // Следующий элемент.
+    Item* next
+    // Предыдущий элемент.
+    Item* pre
+    
+    function Item(value)
+      value = value
+      next = null
+      pre = null
+    
+  // Адрес первого элемента
+  Item* first
+  // Адрес последнего элемента
+  Item* last
+  
+  // Получить первый элемент.
+  functon getFirst()
+    return first
+  
+  // Получить последний элемент.
+  function getLast()
+    return last
+  
+  // Вставить элемент в начало списка.
+  function addBefore(value)
+    newItem = new Item(value)
+    newItem.next = first
+    first.pre = newItem
+    first = newItem
+    
+  // Вставить элемент в конец списка.
+  function addAfter(value)
+    newItem = new Item(value)
+    newItem.pre = last
+    last.next = newItem
+    last = newItem
+</code>
 
 ~~DISQUS~~

@@ -6,12 +6,21 @@
     * [[.:struct:hashtable|Хэш-таблица]] (Hash-table)
   * Нелинейные:
     * [[.:struct:tree|Дерево]] (Tree)
-    * Граф
+    * Граф (Graph)
+  * Составные:
+    * [[.:struct:stack|Стек]] (Stack)
+    * [[.:struct:queue|Очередь]] (Queue)
 
 ====== Алгоритмы ======
   * Сортировка:
-    * [[.:sort:bubble|Пузырьком]]
-    * Половинным делением
-    * [[.:sort:quick|Быстрая]]
+    * [[.:sort:bubble|Пузырьком]] (Bubble)
+    * [[.:sort:quick|Быстрая]] (Quick)
+  * Поиск:
+    * [[.:search:line|Линейный]]
+    * [[.:search:bin|Бинарный]] (Binary)
+  * Итератор:
+    * Линейный
+    * Иерархический
+    * Сетевой
   
 ~~DISQUS~~

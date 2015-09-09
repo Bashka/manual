@@ -7,12 +7,12 @@
 |Упорядоченность элементов|Да|
 |Доступ к элементу|По индексу (порядковому номеру)|
 
-====== Реализация ======
+====== Реализации ======
 ===== Векторная =====
-Для реализации необходимо:
-  * Определить блок памяти длиной, достаточной для хранения данных заданного типа;
-  * Выделить необходимое число блоков (равное длине массива) в памяти;
-  * Получить ссылку на первый блок.
+{{ .:media:array.png |Схема связей}}
+  * Элемент коллекции это данные;
+  * Все элементы коллекции должны располагаться в памяти последовательно;
+  * Структура хранит указатель на первый элемент коллекции.
 
 ==== Плюсы ====
   * Поиск по индексу
@@ -22,47 +22,39 @@
   * Поиск по значению
 
 ==== Операции ====
-Получения элемента:
 <code>
-return afblock + index * length
-</code>
-где:
-  * ''afblock'' - адрес памяти первого элемента;
-  * ''index'' - индекс целевого элемента;
-  * ''length'' - длина блока.
+class Vector
+  // Адрес первого элемента.
+  mixed* first
+  // Максимальное число элементов в массиве.
+  int size
+  
+  function Array(type, size)
+    first = new type[size]
+    size = size
+  
+  // Получить элемент по индексу.
+  function get(index)
+    return *(first + index * getSize(first))
+  
+  // Вставить элемент на место индекса со сдвигом.
+  function add(index, value)
+    newArray = new getType(first)[size + 1]
+    i = j = 0
+    while i < size + 1
+      if i != index
+        newArray[i++] = get(j++)
+      else
+        newarray[i++] = value
+    delete first[size]
+    first = newArray
 
-Увеличения длины:
-<code>
-newarray[newsize]
-for index in oldarray
-  newarray[index] = oldarray[index]
-delete oldarray
+  // Найти индекс первого элемента с заданным значением.
+  function find(value)
+    for index = 0; index < size; index++
+      if get(index) == target
+        return index
+    return -1
 </code>
-где:
-  * ''newsize'' - целевая длина массива;
-  * ''oldarray'' - текущий массив;
-
-Уменьшения длины:
-<code>
-newarray[newsize]
-for index in oldarray
-  if index > newsize
-    break
-  newarray[index] = oldarray[index]
-delete oldarray
-</code>
-где:
-  * ''newsize'' - целевая длина массива;
-  * ''oldarray'' - текущий массив;
-
-Поиск:
-<code>
-for index in array
-  if array[index] == target
-    return index
-</code>
-где:
-  * ''target'' - искомое значение;
-  * ''array'' - исходный массив.
 
 ~~DISQUS~~

@@ -1,0 +1,16 @@
+====== Описание ======
+Бинарный поиск - это метод поиска в упорядоченном массива, при котором интервал поиска постепенно сжимается до одного элемента, который проверяется на равенство искомому значению.
+
+====== Реализация ======
+<code>
+function binSearch(array, low, high, key)
+  while low < high
+    middle = roundDown((low + high) / 2)
+    if array[middle] >= key
+      high = middle
+    else
+      low = middle + 1
+  return array[low] == key? low : -1
+</code>
+
+~~DISQUS~~
