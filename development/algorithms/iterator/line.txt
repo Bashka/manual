@@ -1,0 +1,86 @@
+====== Описание ======
+Линейный итератор - это механизм перебора элементов линейных коллекций, реализующий три основных метода: проверка наличия следующего элемента, переход к следующему элементу, получение текущего элемента.
+
+====== Реализации ======
+===== Внутренняя =====
+==== Плюсы ====
+  * Инкапсуляция структуры коллекции
+
+==== Минусы ====
+  * Невозможность параллельной итерации
+  * Единый алгоритм итерации
+
+==== Операции ====
+<code>
+class List
+  class Item
+    ...
+    
+  Item* first
+  Item* point
+  
+  function reset()
+    point = first
+    
+  function hasMore()
+    return point.next != null
+  
+  function getCurrent()
+    return point
+  
+  function next()
+    point = point.next
+
+// Использование.
+List list = new List()
+list.reset()
+while list.hasMore()
+  item = list.getCurrent()
+  ...
+  list.next()
+</code>
+
+===== Внешняя =====
+==== Плюсы ====
+  * Параллельная итерация
+  * Различные алгоритмы итерации
+
+==== Минусы ====
+  * Необходим доступ к структуре коллекции
+
+==== Операции ====
+<code>
+class List
+  class Item
+    ...
+
+  class ListIterator
+    Item* point
+    
+    function ListIterator(Item* first)
+      point = first
+      
+    function hasMore()
+      return point.next != null
+    
+    function getCurrent()
+      return point
+    
+    function next()
+      point = point.next
+
+  Item* first
+  
+  function getIterator()
+    return new ListIterator(first)
+
+// Использование.
+List list = new List()
+ListIterator iterator = list.getIterator()
+while iterator.hasMore()
+  item = iterator.getCurrent()
+  ...
+  iterator.next()
+</code>
+
+~~DISQUS~~
