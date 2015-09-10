@@ -1,0 +1,97 @@
+====== Описание ======
+Иерархический итератор - это механизм перебора элементов древовидных коллекций, реализующий три основных метода: проверка наличия следующего элемента, переход к следующему элементу, получение текущего элемента.
+
+====== Реализации ======
+===== Вглубь =====
+<code>
+class TreeList
+  class Item
+    mixed value
+    Item* brother
+    Item* firstChild
+  
+  class TreeDeepIterator
+    Item* point
+    Stack stack
+    
+    function ListIterator(Item* first)
+      point = first
+      
+    function hasMore()
+      return point != null
+    
+    function getCurrent()
+      return point
+    
+    function next()
+      if point.brother != null
+        stack.add(point.brother)
+      if point.child != null
+        point = point.child
+      else
+        try
+          point = stack.pop()
+        catch StackUnderflow
+          point = null
+  
+  Item* root
+
+  function getIterator()
+    return new TreeIterator(root)
+
+// Использование.
+TreeList tree = new TreeList()
+TreeDeepIterator iterator = tree.getIterator()
+while iterator.hasMore()
+  item = iterator.getCurrent()
+  ...
+  iterator.next()
+</code>
+
+===== Вширь =====
+<code>
+class TreeList
+  class Item
+    mixed value
+    Item* brother
+    Item* firstChild
+  
+  class TreeBroadIterator
+    Item* point
+    Stack stack
+    
+    function ListIterator(Item* first)
+      point = first
+      
+    function hasMore()
+      return point != null
+    
+    function getCurrent()
+      return point
+    
+    function next()
+      if point.child != null
+        stack.add(point.child)
+      if point.brother != null
+        point = point.brother
+      else
+        try
+          point = stack.pop()
+        catch StackUnderflow
+          point = null
+  
+  Item* root
+
+  function getIterator()
+    return new TreeIterator(root)
+
+// Использование.
+TreeList tree = new TreeList()
+TreeBroadIterator iterator = tree.getIterator()
+while iterator.hasMore()
+  item = iterator.getCurrent()
+  ...
+  iterator.next()
+</code>
+
+~~DISQUS~~

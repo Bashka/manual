@@ -54,7 +54,7 @@ class TreeList
     Item* brother
     Item* firstChild
   
-  Item root
+  Item* root
 </code>
 
 ~~DISQUS~~
