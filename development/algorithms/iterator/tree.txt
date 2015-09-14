@@ -17,7 +17,7 @@ class TreeList
     function ListIterator(Item* first)
       point = first
       
-    function hasMore()
+    function hasElem()
       return point != null
     
     function getCurrent()
@@ -42,7 +42,7 @@ class TreeList
 // Использование.
 TreeList tree = new TreeList()
 TreeDeepIterator iterator = tree.getIterator()
-while iterator.hasMore()
+while iterator.hasElem()
   item = iterator.getCurrent()
   ...
   iterator.next()
@@ -63,7 +63,7 @@ class TreeList
     function ListIterator(Item* first)
       point = first
       
-    function hasMore()
+    function hasElem()
       return point != null
     
     function getCurrent()
@@ -88,7 +88,7 @@ class TreeList
 // Использование.
 TreeList tree = new TreeList()
 TreeBroadIterator iterator = tree.getIterator()
-while iterator.hasMore()
+while iterator.hasElem()
   item = iterator.getCurrent()
   ...
   iterator.next()
