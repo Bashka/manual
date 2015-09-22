@@ -1,0 +1,98 @@
+====== Описание ======
+Лексический анализатор - это строковый итератор, возвращающий при каждой итерации лексемы (токены).
+
+====== Реализации ======
+===== Упреждающий =====
+  * Очередь шаблонов хранится в виде массива;
+  * Лексема выделяется путем сравнения всех шаблонов с накопленной последовательностью символов;
+  * Лексема считается найденой, если при очередной аккумуляции символов не остается шаблонов, соответствующих ей.
+
+==== Плюсы ====
+  * Возможность выделения вложенных лексем (''=='', ''==='', ''!='', ''!=='')
+
+==== Минусы ====
+  * Ресурсоемкость
+
+==== Операции ====
+<code>
+// Очередь шаблонов поиска.
+class TemplatesQueue
+  Queue queue
+  
+  function addTemplate(Template template)
+    queue.push(template)
+    
+  function search(str)
+    iterator = queue.getIterator()
+    while(iterator.hasMore())
+      if(iterator.getCurrent().isMatches(str))
+        return iterator.getCurrent()
+      else
+        iterator.next()
+  
+// Упреждающий лексический анализатор.
+class OutrunnigLexer implements Iterator
+  class Lexem
+    int type
+    string value
+    
+  StringIterator stringIterator
+  TemplatesQueue templatesQueue
+  Lexem currentLexem
+  
+  function OutrunnigLexer(string)
+    stringIterator = new StringIterator(string)
+    templatesQueue = new TemplatesQueue;
+    currentLexem = null
+    
+  function addTemplate(Template template, type)
+    template.type = type
+    templatesQueue.addTemplate(template)
+  
+  function hasMore()
+    return stringIterator.hasMore()
+  
+  function getCurrent()
+    if(currentLexem != null)
+      return currentLexem
+      
+    store = ''
+    char = ''
+    type = null
+    do
+      store += char
+      char = stringIterator.getCurrent()
+      template = templatesQueue.search(store + char)
+      if(template != null)
+        type = template.type
+
+      stringIterator.next()
+
+      if(!stringIterator.hasMore())
+        store += char
+        isGetTail = false
+        break
+      else
+        isGetTail = true
+    while(template != null)
+    // Возврат строкового итератора на упрежденный символ, если не достигнут конец строки.
+    if(isGetTail)
+      stringIterator.pre()
+
+    // Возвращение строкового итератора к началу лексемы.
+    storeLength = strlen(store)
+    while(storeLength--)
+      stringIterator.pre()
+    
+    currentLexem = new Lexem(type, store)
+    return currentLexem
+  
+  function next()
+    // Сдвиг строкового итератора на длину текущей лексемы.
+    currentLexemLength = strlen(getCurrent().value)
+    while(currentLexemLength--)
+      stringIterator.next()
+    currentLexem = null
+</code>
+
+~~DISQUS~~
