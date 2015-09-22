@@ -22,6 +22,6 @@
     * [[.:iterator:line|Линейный]]
     * [[.:iterator:tree|Иерархический]]
     * Сетевой
-    * [[.:iterator:lexer|Лексический анализатор]]
+    * [[.:iterator:lexer|Лексический анализатор]] (Lexer)
   
 ~~DISQUS~~

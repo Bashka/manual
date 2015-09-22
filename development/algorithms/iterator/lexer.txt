@@ -55,35 +55,25 @@ class OutrunnigLexer implements Iterator
   function getCurrent()
     if(currentLexem != null)
       return currentLexem
-      
+
     store = ''
+    storeLength = 0
     char = ''
     type = null
-    do
-      store += char
+    while(stringIterator.hasMore())
       char = stringIterator.getCurrent()
+
       template = templatesQueue.search(store + char)
-      if(template != null)
-        type = template.type
-
-      stringIterator.next()
-
-      if(!stringIterator.hasMore())
-        store += char
-        isGetTail = false
+      if(template == null)
+        while(storeLength--)
+          stringIterator.pre()
         break
       else
-        isGetTail = true
-    while(template != null)
-    // Возврат строкового итератора на упрежденный символ, если не достигнут конец строки.
-    if(isGetTail)
-      stringIterator.pre()
+        store += char
+        storeLength++
+        type = template.type
+        stringIterator.next()
 
-    // Возвращение строкового итератора к началу лексемы.
-    storeLength = strlen(store)
-    while(storeLength--)
-      stringIterator.pre()
-    
     currentLexem = new Lexem(type, store)
     return currentLexem
   
