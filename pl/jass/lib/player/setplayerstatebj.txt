@@ -1,0 +1,13 @@
+====== Описание ======
+<code>
+void SetPlayerStateBJ(player игрок, playerstate ресурс, integer количество)
+</code>
+
+Установить количество указанного [[..:const:playerstate|ресурса]] игроку. 
+
+====== Пример ======
+<code>
+call SetPlayerStateBJ(Player(0), PLAYER_STATE_RESOURCE_GOLD, 750)
+</code>
+
+~~DISQUS~~

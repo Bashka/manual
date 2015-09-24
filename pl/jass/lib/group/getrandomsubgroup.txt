@@ -1,0 +1,14 @@
+====== Описание ======
+<code>
+group GetRandomSubGroup(integer размер, group группа)
+</code>
+
+Получить случайную подгруппу указанного размера из группы.
+
+====== Пример ======
+Получить четырех случайных юнитов из последней созданной группы:
+<code>
+local group subgroup = GetRandomSubGroup(4, GetLastCreatedGroup())
+</code>
+
+~~DISQUS~~

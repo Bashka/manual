@@ -1,0 +1,14 @@
+====== Описание ======
+<code>
+void CreateNUnitsAtLocFacingLocBJ(integer количество, string тип, player владелец, location положение, location направление)
+</code>
+
+Создать группу однотипных юнитов в указанной точке и повернуть в указанную точку.
+
+====== Пример ======
+Создать пехотинца в центре карты и повернуть в центр карты:
+<code>
+call CreateNUnitsAtLocFacingLocBJ(1, 'hfoo', Player(0), GetRectCenter(GetPlayableMapRect()), GetRectCenter(GetPlayableMapRect()))
+</code>
+
+~~DISQUS~~

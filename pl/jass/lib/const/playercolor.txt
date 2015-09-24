@@ -1,0 +1,17 @@
+====== Описание ======
+Константы описывают цвета игроков.
+
+  * ''PLAYER_COLOR_RED'' - красный;
+  * ''PLAYER_COLOR_BLUE'' - синий;
+  * ''PLAYER_COLOR_AQUA'' - сине-зеленый;
+  * ''PLAYER_COLOR_BROWN'' - коричневый;
+  * ''PLAYER_COLOR_CYAN'' - фиолетовый;
+  * ''PLAYER_COLOR_GREEN'' - зеленый;
+  * ''PLAYER_COLOR_LIGHT_BLUE'' - светло-синий;
+  * ''PLAYER_COLOR_LIGHT_GRAY'' - серый;
+  * ''PLAYER_COLOR_ORANGE'' - оранженый;
+  * ''PLAYER_COLOR_PINK'' - розовый;
+  * ''PLAYER_COLOR_PURPLE'' - темно-зеленый;
+  * ''PLAYER_COLOR_YELLOW'' - желтый.
+
+~~DISQUS~~

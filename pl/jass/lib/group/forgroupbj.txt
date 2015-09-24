@@ -1,0 +1,19 @@
+====== Описание ======
+<code>
+void ForGroupBJ(group отряд, code обработчик)
+</code>
+
+Вызвать для каждого юнита в отряде обработчик.
+
+Получить очередного юнита в обработчике можно с помощью функции [[..:unit:getenumunit|GetEnumUnit]]. 
+
+====== Пример ======
+<code>
+function killUnits takes nothing returns nothing
+  call KillUnit(GetEnumUnit())
+endfuncton
+
+call ForGroupBJ(GetUnitsSelectedAll(Player(0)), function killUnits)
+</code>
+
+~~DISQUS~~

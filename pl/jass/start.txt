@@ -10,8 +10,50 @@
     * [[.:struct:if|if]]
   * Циклы:
     * [[.:struct:loop|loop]]
-  * Функции
-
+  * [[.:struct:fun|Функции]]
 ====== Библиотека ======
+<spoiler |Игроки>
+<spoiler |Действия>
+  * Ресурсы:
+    * [[.:lib:const:playerstate|playerstate]] - ресурсы игрока
+    * [[.:lib:player:adjustplayerstatebj|AdjustPlayerStateBJ]] - добавить ресурс игроку
+    * [[.:lib:player:setplayerstatebj|SetPlayerStateBJ]] - установить ресурс игроку
+  * Сообщения:
+    * [[.:lib:player:displaytexttoplayer|DisplayTextToPlayer]] - показать сообщение игроку
+    * [[.:lib:player:displaytimedtexttoplayer|DisplayTimedTextToPlayer]] - показывать сообщение указанное время игроку
+  * Представление:
+    * [[.:lib:const:playercolor|playercolor]] - цвета игроков
+    * [[.:lib:player:setplayercolorbj|SetPlayerColorBJ]] - изменить цвет игрока
+    * [[.:lib:player:getplayercolor|GetPlayerColor]] - получить текущий цвет игрока
+    * [[.:lib:player:setplayername|SetPlayerName]] - установить имя игроку
+</spoiler>
+</spoiler>
+
+<spoiler |Юниты>
+<spoiler |Действия>
+  * Создание:
+    * [[.:lib:unit:createnunitsatloc|CreateNUnitsAtLoc]] - создать группу юнитов и повернуть их на угол
+    * [[.:lib:unit:createnunitsatlocfacinglocbj|CreateNUnitsAtLocFacingLocBJ]] - создать группу юнитов и повернуть их в точку
+  * Разное:
+    * [[.:lib:unit:getenumunit|GetEnumUnit]] - получить очередного юнита при итерации по отряду
+</spoiler>
+</spoiler>
+
+<spoiler |Отряды>
+<spoiler |События>
+  * [[.:lib:group:triggerregisterplayerselectioneventbj|TriggerRegisterPlayerSelectionEventBJ]] - выбор отряда игроком
+</spoiler>
+<spoiler |Действия>
+  * Получение:
+    * [[.:lib:group:getunitsselectedall|GetUnitsSelectedAll]] - получить выбранный игроком отряд
+    * [[.:lib:group:getunitsoftypeidall|GetUnitsOfTypeIdAll]] - получить всех юнитов указанного типа
+    * [[.:lib:group:getunitsofplayerall|GetUnitsOfPlayerAll]] - получить всех юнитов игрока
+    * [[.:lib:group:getunitsofplayerandtypeidd|GetUnitsOfPlayerAndTypeId]] - получить всех юнитов указанного типа, принадлежащих игроку
+    * [[.:lib:group:getlastcreatedgroup|GetLastCreatedGroup]] - получить последнюю созданную группу юнитов
+    * [[.:lib:group:getrandomsubgroup|GetRandomSubGroup]] - получить случайную подгруппу из группы
+  * Итерация:
+    * [[.:lib:group:forgroupbj|ForGroupBJ]] - итерация по юнитам отряда
+</spoiler>
+</spoiler>
 
 ~~DISQUS~~

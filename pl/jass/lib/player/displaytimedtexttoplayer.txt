@@ -1,0 +1,13 @@
+====== Описание ======
+<code>
+void DisplayTimedTextToPlayer(player игрок, integer время, string сообщение)
+</code>
+
+Показывать текст указанное число секунд игроку.
+
+====== Пример ======
+<code>
+call DisplayTimedTextToPlayer(Player(0), 30, "Hello red player")
+</code>
+
+~~DISQUS~~

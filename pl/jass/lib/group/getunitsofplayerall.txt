@@ -1,0 +1,14 @@
+====== Описание ======
+<code>
+group GetUnitsOfPlayerAll(player игрок)
+</code>
+
+Получить всех юнитов игрока на карте.
+
+====== Пример ======
+Получить всех юнитов первого игрока:
+<code>
+local group units = GetUnitsOfPlayerAll(Player(0))
+</code>
+
+~~DISQUS~~

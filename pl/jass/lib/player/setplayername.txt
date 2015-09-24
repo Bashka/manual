@@ -1,0 +1,13 @@
+====== Описание ======
+<code>
+void SetPlayerName(player игрок, string имя)
+</code>
+
+Установить имя игроку.
+
+====== Пример ======
+<code>
+call SetPlayerName(Player(0), "Новое имя");
+</code>
+
+~~DISQUS~~

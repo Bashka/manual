@@ -6,7 +6,7 @@ local string str = "Hello world"
 
 ====== Операции ======
 Операторы:
-  * ''.'' - конкатенация.
+  * ''+'' - конкатенация.
 <code>
 local string str1 = "Hello"
 local string str2 = "world"

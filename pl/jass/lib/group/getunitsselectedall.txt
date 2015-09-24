@@ -1,0 +1,18 @@
+====== Описание ======
+<code>
+group GetUnitsSelectedAll(player игрок)
+</code>
+
+Получить выбранный в данный момент игроком отряд.
+
+====== Пример ======
+Вызвать функцию и убить всех выбранных игроком юнитов:
+<code>
+function killUnits takes nothing returns nothing
+  call KillUnit(GetEnumUnit())
+endfuncton
+
+call ForGroupBJ(GetUnitsSelectedAll(Player(0)), function killUnits)
+</code>
+
+~~DISQUS~~

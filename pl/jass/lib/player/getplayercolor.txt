@@ -1,0 +1,13 @@
+====== Описание ======
+<code>
+playercolor GetPlayerColor(player игрок)
+</code>
+
+Получить цвет игрока.
+
+====== Пример ======
+<code>
+local playercolor color = GetPlayerColor(Player(0))
+</code>
+
+~~DISQUS~~

@@ -1,0 +1,13 @@
+====== Описание ======
+<code>
+group GetLastCreatedGroup()
+</code>
+
+Получить последнюю созданную группу юнитов. 
+
+====== Пример ======
+<code>
+local group createdUnits = GetLastCreatedGroup()
+</code>
+
+~~DISQUS~~

@@ -1,0 +1,7 @@
+====== Описание ======
+Константы описывают различные ресурсы игрока.
+
+  * ''PLAYER_STATE_RESOURCE_GOLD'' - золото;
+  * ''PLAYER_STATE_RESOURCE_LUMBER'' - древесина.
+
+~~DISQUS~~

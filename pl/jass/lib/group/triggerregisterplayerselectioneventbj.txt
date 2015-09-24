@@ -1,0 +1,15 @@
+====== Описание ======
+<code>
+void TriggerRegisterPlayerSelectionEventBJ(trigger тригер, player игрок, boolean выбор)
+</code>
+
+Событие выбора (если последний параметр - true, иначе событие снятия выбора) игроком юнита.
+
+====== Пример ======
+<code>
+set gg_trigger = CreateTrigger()
+call TriggerRegisterPlayerSelectionEventBJ(gg_trigger, Player(0), false)
+call TriggerAddAction(gg_trigger, function triggerAction)
+</code>
+
+~~DISQUS~~

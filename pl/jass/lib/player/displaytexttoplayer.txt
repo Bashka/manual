@@ -1,0 +1,13 @@
+====== Описание ======
+<code>
+void DisplayTextToPlayer(player игрок, string сообщение)
+</code>
+
+Показать текст игроку. Время показа вычисляется автоматически.
+
+====== Пример ======
+<code>
+call DisplayTextToPlayer(Player(0), "Hello red player")
+</code>
+
+~~DISQUS~~

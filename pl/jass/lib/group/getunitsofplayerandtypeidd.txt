@@ -1,0 +1,14 @@
+====== Описание ======
+<code>
+group GetUnitsOfPlayerAndTypeId(player игрок, string тип)
+</code>
+
+Получить всех юнитов указанного типа на карте, принадлежащих игроку.
+
+====== Пример ======
+Получить отряд пехотинцев первого игрока:
+<code>
+local group units = GetUnitsOfPlayerAndTypeId(Player(0), 'hfoo')
+</code>
+
+~~DISQUS~~

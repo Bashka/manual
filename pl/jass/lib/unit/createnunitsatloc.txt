@@ -1,0 +1,14 @@
+====== Описание ======
+<code>
+void CreateNUnitsAtLoc(integer количество, string тип, player владелец, location положение, real направление)
+</code>
+
+Создать группу однотипных юнитов в указанной точке и направить в указанном направлении.
+
+====== Пример ======
+Создать группу пехотинцев в центре карты:
+<code>
+call CreateNUnitsAtLoc(5, 'hfoo', Player(0), GetRectCenter(GetPlayableMapRect()), 0.0)
+</code>
+
+~~DISQUS~~

@@ -1,0 +1,14 @@
+====== Описание ======
+<code>
+group GetUnitsOfTypeIdAll(string тип)
+</code>
+
+Получить всех юнитов указанного типа на карте.
+
+====== Пример ======
+Получить отряд пехотинцев:
+<code>
+local group units = GetUnitsOfTypeIdAll('hfoo')
+</code>
+
+~~DISQUS~~

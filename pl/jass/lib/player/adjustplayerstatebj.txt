@@ -1,0 +1,13 @@
+====== Описание ======
+<code>
+void AdjustPlayerStateBJ(integer количество, player игрок, playerstate ресурс)
+</code>
+
+Добавить количество указанного [[..:const:playerstate|ресурса]] игроку. 
+
+====== Пример ======
+<code>
+call AdjustPlayerStateBJ(1000, Player(0), PLAYER_STATE_RESOURCE_GOLD)
+</code>
+
+~~DISQUS~~

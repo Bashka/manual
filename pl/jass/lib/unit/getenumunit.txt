@@ -1,0 +1,17 @@
+====== Описание ======
+<code>
+unit GetEnumUnit()
+</code>
+
+Получить очередного юнита в функции-обработчике итератора по отряду.
+
+====== Пример ======
+<code>
+function killUnits takes nothing returns nothing
+  call KillUnit(GetEnumUnit())
+endfuncton
+
+call ForGroupBJ(GetUnitsSelectedAll(Player(0)), function killUnits)
+</code>
+
+~~DISQUS~~
