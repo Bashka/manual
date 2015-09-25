@@ -1,0 +1,14 @@
+====== Описание ======
+<code>
+group GetUnitsInRangeOfLocAll(integer радиус, location центрДиапазона)
+</code>
+
+Получить всех юнитов в диапазоне.
+
+====== Пример ======
+Получить всех юнитов в диапазоне 512 от центра игровой карты:
+<code>
+local group units = GetUnitsInRangeOfLocAll(512, GetRectCenter(GetPlayableMapRect()))
+</code>
+
+~~DISQUS~~

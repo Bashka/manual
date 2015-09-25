@@ -1,0 +1,14 @@
+====== Описание ======
+<code>
+group GetUnitsInRectOfPlayer(rect регион, player игрок)
+</code>
+
+Получить всех юнитов игрока в регионе.
+
+====== Пример ======
+Получить всех юнитов первого игрока:
+<code>
+local group units = GetUnitsInRectOfPlayer(GetPlayableMapRect(), Player(0))
+</code>
+
+~~DISQUS~~

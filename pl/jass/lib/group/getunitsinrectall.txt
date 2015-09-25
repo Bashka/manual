@@ -1,0 +1,14 @@
+====== Описание ======
+<code>
+group GetUnitsInRectAll(rect регион)
+</code>
+
+Получить всех юнитов в регионе.
+
+====== Пример ======
+Получить всех юнитов на игровой карте:
+<code>
+local group units = GetUnitsInRectAll(GetPlayableMapRect())
+</code>
+
+~~DISQUS~~
