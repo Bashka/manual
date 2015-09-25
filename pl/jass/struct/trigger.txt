@@ -1,0 +1,28 @@
+====== Объявление ======
+Для объявления триггера используется функция ''CreateTrigger'', которая возвращает объект триггера. После получения этого объекта, необходимо определить:
+  * Событие триггера - для этого используются различные функции (на пример ''TriggerRegisterPlayerSelectionEventBJ'', которая заставляет триггер реагировать на выделение отряда игроком);
+  * Условия триггера - для этого используется функция ''TriggerAddCondition'', которая принимает триггер и условие выполнения;
+  * Действие триггера - для этого используется функция ''TriggerAddAction'', которая принимает триггер и функцию, которая будет выполнена при срабатывании триггера.
+
+====== Пример ======
+Убийство пехотинцев выбранных первым игроком:
+<code>
+globals
+  trigger myTrigger = null
+endglobals
+
+function myTriggerCondition takes nothing returns boolean
+  return GetUnitTypeId(GetTriggerUnit()) == 'hfoo'
+endfunction
+
+function myTriggerAction takes nothing returns nothing
+    call KillUnit(GetTriggerUnit())
+endfunction
+
+set myTrigger = CreateTrigger()
+call TriggerRegisterPlayerSelectionEventBJ(myTrigger, Player(0), true)
+call TriggerAddCondition(myTrigger, Condition(function myTriggerCondition))
+call TriggerAddAction(myTrigger, function myTriggerAction)
+</code>
+
+~~DISQUS~~
