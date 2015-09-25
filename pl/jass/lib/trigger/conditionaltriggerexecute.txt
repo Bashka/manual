@@ -1,0 +1,8 @@
+====== Описание ======
+<code>
+void ConditionalTriggerExecute(trigger триггер)
+</code>
+
+Выполнить триггер с проверкой условия.
+
+~~DISQUS~~

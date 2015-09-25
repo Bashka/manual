@@ -1,0 +1,18 @@
+====== Описание ======
+<code>
+void TriggerAddCondition(trigger триггер, boolexpr условие)
+</code>
+
+Добавить условие триггеру.
+
+====== Пример ======
+<code>
+function myTriggerCondition takes nothing returns boolean
+  ...
+endfunction
+
+local trigger myTrigger = CreateTrigger()
+call TriggerAddCondition(myTrigger, Condition(function myTriggerCondition))
+</code>
+
+~~DISQUS~~

@@ -61,4 +61,15 @@
       * [[.:lib:group:forgroupbj|ForGroupBJ]] - итерация по юнитам отряда
 </spoiler>
 
+<spoiler |Триггеры>
+  * **Действия:**
+    * [[.:lib:trigger:createtrigger|CreateTrigger]] - создать триггер
+    * [[.:lib:trigger:destroytrigger|DestroyTrigger]] - удалить триггер
+    * [[.:lib:trigger:triggeraddcondition|TriggerAddCondition]] - добавить условие триггеру
+    * [[.:lib:trigger:triggerclearconditions|TriggerClearConditions]] - удалить условия триггера
+    * [[.:lib:trigger:triggeraddaction|TriggerAddAction]] - добавить обработчик триггеру
+    * [[.:lib:trigger:triggerclearactions|TriggerClearActions]] - удалить обработчики триггера
+    * [[.:lib:trigger:conditionaltriggerexecute|ConditionalTriggerExecute]] - выполнить триггер с проверкой условия
+</spoiler>
+
 ~~DISQUS~~

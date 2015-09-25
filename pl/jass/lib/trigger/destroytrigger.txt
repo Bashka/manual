@@ -1,0 +1,8 @@
+====== Описание ======
+<code>
+void DestroyTrigger(trigger триггер)
+</code>
+
+Удалить триггер.
+
+~~DISQUS~~

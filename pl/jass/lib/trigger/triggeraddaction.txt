@@ -1,0 +1,18 @@
+====== Описание ======
+<code>
+void TriggerAddAction(trigger триггер, code обработчик)
+</code>
+
+Добавить обработчик триггера.
+
+====== Пример ======
+<code>
+function myTriggerAction takes nothing returns nothing
+  ...
+endfunction
+
+local trigger myTrigger = CreateTrigger()
+call TriggerAddAction(myTrigger, function myTriggerAction)
+</code>
+
+~~DISQUS~~

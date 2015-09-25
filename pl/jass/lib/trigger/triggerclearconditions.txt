@@ -1,0 +1,8 @@
+====== Описание ======
+<code>
+void TriggerClearConditions(trigger триггер)
+</code>
+
+Удалить все условия триггера.
+
+~~DISQUS~~

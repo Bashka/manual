@@ -1,0 +1,15 @@
+====== Описание ======
+<code>
+trigger CreateTrigger()
+</code>
+
+Создать триггер.
+
+====== Пример ======
+<code>
+globals
+  trigger myTrigger = CreateTrigger()
+endglobals
+</code>
+
+~~DISQUS~~

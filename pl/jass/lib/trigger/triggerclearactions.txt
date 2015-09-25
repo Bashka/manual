@@ -1,0 +1,8 @@
+====== Описание ======
+<code>
+void TriggerClearActions(trigger триггер)
+</code>
+
+Удалить все обработчики триггера.
+
+~~DISQUS~~
