@@ -1,0 +1,18 @@
+====== Описание ======
+<code>
+group GetUnitsInRangeOfLocMatching(integer радиус, location центрДиапазона, boolexpr условие)
+</code>
+
+Получить юнитов в диапазоне, соответствующих условию. В условии получить доступ к проверяемому юниту можно с помощью функции [[..:unit:getfilterunit|GetFilterUnit]]. 
+
+====== Пример ======
+Получить все строения в диапазоне 512 от центра игровой карты:
+<code>
+function isBuild takes nothing returns boolean
+  return (IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == true)
+endfunction
+
+local group units = GetUnitsInRangeOfLocMatching(512, GetRectCenter(GetPlayableMapRect()), Condition(function isBuild))
+</code>
+
+~~DISQUS~~

@@ -1,0 +1,18 @@
+====== Описание ======
+<code>
+group GetUnitsInRectMatching(rect регион, boolexpr условие)
+</code>
+
+Получить юнитов в регионе, соответствующих условию. В условии получить доступ к проверяемому юниту можно с помощью функции [[..:unit:getfilterunit|GetFilterUnit]]. 
+
+====== Пример ======
+Получить все строения на игровой карте:
+<code>
+function isBuild takes nothing returns boolean
+  return (IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == true)
+endfunction
+
+local group units = GetUnitsInRectMatching(GetPlayableMapRect(), Condition(function isBuild))
+</code>
+
+~~DISQUS~~

@@ -10,7 +10,7 @@ group GetUnitsSelectedAll(player игрок)
 <code>
 function killUnits takes nothing returns nothing
   call KillUnit(GetEnumUnit())
-endfuncton
+endfunction
 
 call ForGroupBJ(GetUnitsSelectedAll(Player(0)), function killUnits)
 </code>

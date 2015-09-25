@@ -35,6 +35,7 @@
       * [[.:lib:unit:createnunitsatlocfacinglocbj|CreateNUnitsAtLocFacingLocBJ]] - создать группу юнитов и повернуть их в точку
     * Разное:
       * [[.:lib:unit:getenumunit|GetEnumUnit]] - получить очередного юнита при итерации по отряду
+      * [[.:lib:unit:getfilterunit|GetFilterUnit]] - получить очередного юнита при фильтрации отряда
 </spoiler>
 
 <spoiler |Отряды>
@@ -42,15 +43,18 @@
     * [[.:lib:group:triggerregisterplayerselectioneventbj|TriggerRegisterPlayerSelectionEventBJ]] - выбор отряда игроком
   * **Действия:**
     * Получение:
+      * [[.:lib:group:getlastcreatedgroup|GetLastCreatedGroup]] - получить последнюю созданную группу юнитов
+      * [[.:lib:group:getrandomsubgroup|GetRandomSubGroup]] - получить случайную подгруппу из группы
       * [[.:lib:group:getunitsselectedall|GetUnitsSelectedAll]] - получить выбранный игроком отряд
       * [[.:lib:group:getunitsoftypeidall|GetUnitsOfTypeIdAll]] - получить всех юнитов указанного типа
       * [[.:lib:group:getunitsofplayerall|GetUnitsOfPlayerAll]] - получить всех юнитов игрока
       * [[.:lib:group:getunitsofplayerandtypeidd|GetUnitsOfPlayerAndTypeId]] - получить всех юнитов указанного типа, принадлежащих игроку
-      * [[.:lib:group:getlastcreatedgroup|GetLastCreatedGroup]] - получить последнюю созданную группу юнитов
-      * [[.:lib:group:getrandomsubgroup|GetRandomSubGroup]] - получить случайную подгруппу из группы
+      * [[.:lib:group:getunitsofplayermatching|GetUnitsOfPlayerMatching]] - получить юнитов игрока, соответствующих условию
       * [[.:lib:group:getunitsinrectall|GetUnitsInRectAll]] - получить всех юнитов в регионе
       * [[.:lib:group:getunitsinrectofplayer|GetUnitsInRectOfPlayer]] - получить всех юнитов игрока в регионе
+      * [[.:lib:group:getunitsinrectmatching|GetUnitsInRectMatching]] - получить юнитов в регионе, соответствующих условию
       * [[.:lib:group:getunitsinrangeoflocall|GetUnitsInRangeOfLocAll]] - получить всех юнитов в диапазоне
+      * [[.:lib:group:getunitsinrangeoflocmatching|GetUnitsInRangeOfLocMatching]] - получить юнитов в диапазоне, соответствующих условию
     * Итерация:
       * [[.:lib:group:forgroupbj|ForGroupBJ]] - итерация по юнитам отряда
 </spoiler>

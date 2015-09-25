@@ -3,7 +3,7 @@
 <code>
 function имя takes параметры returns возврат
   тело
-endfuncton
+endfunction
 </code>
 
 Пример объявления функции:

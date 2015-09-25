@@ -1,0 +1,18 @@
+====== Описание ======
+<code>
+unit GetFilterUnit()
+</code>
+
+Получить очередного юнита в функции-обработчике условия фильтра.
+
+====== Пример ======
+Получить все строения на игровой карте:
+<code>
+function isBuild takes nothing returns boolean
+  return (IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == true)
+endfunction
+
+local group units = GetUnitsInRectMatching(GetPlayableMapRect, Condition(function isBuild))
+</code>
+
+~~DISQUS~~

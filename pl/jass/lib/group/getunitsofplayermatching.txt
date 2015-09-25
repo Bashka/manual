@@ -1,0 +1,18 @@
+====== Описание ======
+<code>
+group GetUnitsOfPlayerMatching(player игрок, boolexpr условие)
+</code>
+
+Получить юнитов игрока, соответствующих условию. В условии получить доступ к проверяемому юниту можно с помощью функции [[..:unit:getfilterunit|GetFilterUnit]]. 
+
+====== Пример ======
+Получить все строения первого игрока:
+<code>
+function isBuild takes nothing returns boolean
+  return (IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == true)
+endfunction
+
+local group units = GetUnitsOfPlayerMatching(Player(0), Condition(function isBuild))
+</code>
+
+~~DISQUS~~
