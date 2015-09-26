@@ -40,11 +40,16 @@ class OutrunnigLexer implements Iterator
   StringIterator stringIterator
   TemplatesQueue templatesQueue
   Lexem currentLexem
+  Vector delimiters
   
   function OutrunnigLexer(string)
     stringIterator = new StringIterator(string)
     templatesQueue = new TemplatesQueue;
     currentLexem = null
+    delimiters = [' ', '\n']
+  
+  function setDelimiters(Vector delims)
+    delimiters = delims
     
   function addTemplate(Template template, type)
     template.type = type
@@ -67,8 +72,8 @@ class OutrunnigLexer implements Iterator
       template = templatesQueue.search(store + char)
       
       if(template == null)
-        // Обнаружена ошибка. Продолжение чтения до первого пробела.
-        if(type == '' && $char != ' ')
+        if(type == '' && delimiters.find(char) == -1)
+          // Обнаружена ошибка. Продолжение чтения до первого пробельного символа.
           store += char;
           storeLength++;
           stringIterator.next()

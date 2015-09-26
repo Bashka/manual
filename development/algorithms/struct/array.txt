@@ -29,7 +29,7 @@ class Vector
   // Максимальное число элементов в массиве.
   int size
   
-  function Array(type, size)
+  function Vector(type, size)
     first = new type[size]
     size = size
   
