@@ -17,7 +17,7 @@
 <spoiler |Игроки>
   * **События:**
     * [[.:lib:player:triggerregisterplayereventendcinematic|TriggerRegisterPlayerEventEndCinematic]] - нажатие клавиши ''Escape'' игроком
-    * [[.:lib:triggerregisterplayerchatevent|TriggerRegisterPlayerChatEvent]] - набор сообщения в чате игроком
+    * [[.:lib:player:triggerregisterplayerchatevent|TriggerRegisterPlayerChatEvent]] - набор сообщения в чате игроком
     * [[.:lib:player:triggerregisterplayerstateevent|TriggerRegisterPlayerStateEvent]] - изменение значения ресурса у игрока
     * [[.:lib:player:triggerregisterplayereventvictory|TriggerRegisterPlayerEventVictory]] - победа игрока
     * [[.:lib:player:triggerregisterplayereventdefeat|TriggerRegisterPlayerEventDefeat]] - поражение игрока
