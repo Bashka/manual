@@ -70,6 +70,7 @@
     * [[.:lib:trigger:triggeraddaction|TriggerAddAction]] - добавить обработчик триггеру
     * [[.:lib:trigger:triggerclearactions|TriggerClearActions]] - удалить обработчики триггера
     * [[.:lib:trigger:conditionaltriggerexecute|ConditionalTriggerExecute]] - выполнить триггер с проверкой условия
+    * [[.:lib:trigger:triggerexecute|TriggerExecute]] - выполнить триггер без проверки условия
 </spoiler>
 
 ~~DISQUS~~
