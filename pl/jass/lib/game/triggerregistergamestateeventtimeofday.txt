@@ -1,0 +1,14 @@
+====== Описание ======
+<code>
+void TriggerRegisterGameStateEventTimeOfDay(trigger триггер, limitop оператор, real время)
+</code>
+
+Время игрового дня изменяется на указанное.
+
+====== Пример ======
+Полдень:
+<code>
+call TriggerRegisterGameStateEventTimeOfDay(myTrigger, EQUAL, 12.00)
+</code>
+
+~~DISQUS~~

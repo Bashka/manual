@@ -1,0 +1,8 @@
+====== Описание ======
+<code>
+void TriggerRegisterTimerEventSingle(trigger триггер, real время)
+</code>
+
+Прошло времени с начала игры.
+
+~~DISQUS~~

@@ -1,0 +1,8 @@
+====== Описание ======
+<code>
+void TriggerRegisterTimerEventPeriodic(trigger триггер, real интервал)
+</code>
+
+Временной цикл.
+
+~~DISQUS~~

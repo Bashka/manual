@@ -16,6 +16,13 @@
 ====== Библиотека ======
 <spoiler |Игроки>
   * **События:**
+    * [[.:lib:game:triggerregistergamestateeventtimeofday|TriggerRegisterGameStateEventTimeOfDay]] - изменение игрового времени
+    * [[.:lib:game:triggerregistertimereventsingle|TriggerRegisterTimerEventSingle]] - прошло времени с начала игры
+    * [[.:lib:game:triggerregistertimereventperiodic|TriggerRegisterTimerEventPeriodic]] - временной цикл
+</spoiler>
+
+<spoiler |Игроки>
+  * **События:**
     * [[.:lib:player:triggerregisterplayereventendcinematic|TriggerRegisterPlayerEventEndCinematic]] - нажатие клавиши ''Escape'' игроком
     * [[.:lib:player:triggerregisterplayerchatevent|TriggerRegisterPlayerChatEvent]] - набор сообщения в чате игроком
     * [[.:lib:player:triggerregisterplayerstateevent|TriggerRegisterPlayerStateEvent]] - изменение значения ресурса у игрока
