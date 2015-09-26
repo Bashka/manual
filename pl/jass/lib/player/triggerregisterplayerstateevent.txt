@@ -1,0 +1,13 @@
+====== Описание ======
+<code>
+void TriggerRegisterPlayerStateEvent(trigger триггер, player игрок, playerstate ресурс, limitop операторСравнения, real количество)
+</code>
+
+Игрок получил [[..:const:limitop|указанное]] количество [[..:const:playerstate|ресурса]]. 
+
+====== Пример ======
+<code>
+call TriggerRegisterPlayerStateEvent(myTrigger, Player(0), PLAYER_STATE_RESOURCE_GOLD, GREATER_THAN_OR_EQUAL, 100)
+</code>
+
+~~DISQUS~~

@@ -1,0 +1,8 @@
+====== Описание ======
+<code>
+void TriggerRegisterPlayerEventLeave(trigger триггер, player игрок)
+</code>
+
+Событие выхода игрока из игры.
+
+~~DISQUS~~

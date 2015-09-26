@@ -1,0 +1,8 @@
+====== Описание ======
+<code>
+void TriggerRegisterPlayerEventEndCinematic(trigger триггер, player игрок)
+</code>
+
+Событие нажания игроком клавиши ''Escape''.
+
+~~DISQUS~~

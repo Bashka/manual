@@ -1,0 +1,8 @@
+====== Описание ======
+<code>
+void TriggerRegisterPlayerEventVictory(trigger триггер, player игрок)
+</code>
+
+Событие победы игрока.
+
+~~DISQUS~~
