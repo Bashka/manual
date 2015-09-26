@@ -67,9 +67,11 @@ class OutrunnigLexer implements Iterator
       template = templatesQueue.search(store + char)
       
       if(template == null)
-        if(type == '')
-          // Обнаружена ошибка.
-          // Необходимо либо продолжить чтение, либо пропустить один символ.
+        // Обнаружена ошибка. Продолжение чтения до первого пробела.
+        if(type == '' && $char != ' ')
+          store += char;
+          storeLength++;
+          stringIterator.next()
         else
           while(storeLength--)
             stringIterator.pre()
