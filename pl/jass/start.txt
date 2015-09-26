@@ -14,7 +14,7 @@
   * [[.:struct:trigger|Триггеры]]
 
 ====== Библиотека ======
-<spoiler |Игроки>
+<spoiler |Игра>
   * **События:**
     * [[.:lib:game:triggerregistergamestateeventtimeofday|TriggerRegisterGameStateEventTimeOfDay]] - изменение игрового времени
     * [[.:lib:game:triggerregistertimereventsingle|TriggerRegisterTimerEventSingle]] - прошло времени с начала игры
