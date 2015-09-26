@@ -12,6 +12,7 @@
 
 ==== Минусы ====
   * Ресурсоемкость
+  * Неопределенная логика при обнаружении ошибки
 
 ==== Операции ====
 <code>
@@ -64,10 +65,15 @@ class OutrunnigLexer implements Iterator
       char = stringIterator.getCurrent()
 
       template = templatesQueue.search(store + char)
+      
       if(template == null)
-        while(storeLength--)
-          stringIterator.pre()
-        break
+        if(type == '')
+          // Обнаружена ошибка.
+          // Необходимо либо продолжить чтение, либо пропустить один символ.
+        else
+          while(storeLength--)
+            stringIterator.pre()
+          break
       else
         store += char
         storeLength++
