@@ -30,6 +30,29 @@ define(function(){
 
 Здесь модулем выступает то, что возвращается функцией, передаваемой в ''define''.
 
+====== AMD-формат ======
+RequireJS позволяет объявлять модули в AMD формате. Для этого используется следующая конструкция:
+
+<code javascript>
+define(function(require, exports, module){
+  ...
+});
+</code>
+
+Здесь модулем выступает объект ''exports'', но если функция возвращает некоторое значение, оно будет использовано вместо этого объекта.
+
+Этот подход делает объявление модуля с большим числом зависимостей проще и понятнее.
+
+Аналогичный результат можно получить и с помощью следующей конструкции:
+
+<code javascript>
+define(['requirejs'], function(require, exports, module){
+  ...
+});
+</code>
+
+Здесь массив зависимостей может быть расширен, при этом в качестве экспортируемых данных метода будет выступать возвращаемые функцией значения, главное передать в качестве первого параметра сам RequireJS.
+
 ====== Имя модуля ======
 Если имя модуля отличается от имени файла, в котором он содержится, используется следующая конструкция:
 
@@ -53,6 +76,8 @@ define(['jquery'], function($){
 
 Зависимые модули могут быть объявлены только в виде функции, которая принимает в качестве аргументов используемые объекты.
 
+Зависимости модуля в остальном подключаются по тем же правилам, что и при использовании функции [[.:require|requirejs]]. 
+
 Здесь так же можно указать имя модуля передав его первым параметром:
 
 <code javascript>
@@ -62,8 +87,9 @@ define('MyModule', ['jquery'], function($){
 </code>
 
 ====== Пример ======
+Формат RequireJS:
 <code javascript>
-define('App', ['jquery'], function($){
+define('app', ['jquery'], function($){
   return {
     sayHello: function(){
       $('body').html('Hello world');
@@ -71,7 +97,22 @@ define('App', ['jquery'], function($){
   };
 });
 
-requirejs(['App'], function(app){
+requirejs(['app'], function(app){
+  app.sayHello();
+});
+</code>
+
+AMD формат:
+<code javascript>
+define(function(require, exports, module){
+  var $ = require('jquery');
+
+  exports.sayHello = function(){
+    $('body').html('Hello world');
+  }
+});
+
+requirejs(['app'], function(app){
   app.sayHello();
 });
 </code>

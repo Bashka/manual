@@ -1,0 +1,40 @@
+====== Подключение модуля ======
+Подключить модуль и начать использовать его можно с помощью следующей функции:
+
+<code javascript>
+requirejs([имя, ...], function(имя, ...){
+  ...
+});
+</code>
+
+В качестве первого параметра можно передать массив подключаемых модулей, которые будут доступны в виде параметров функции.
+
+Если файлы зависимых модулей находятся в том же каталоге, что и текущий модуль, их можно подключить следующим образом:
+
+<code javascript>
+// В файле scripts/app/app.js
+requirejs(['./module'], function(module){
+  ...
+});
+</code>
+
+При этом предполагается что файл ''module.js'' находится в том же каталоге, что и текущий скрипт (''scripts/app/'').
+
+===== Подключение файла =====
+RequireJS позволяет сгенерировать URL адрес файла с использованием своих путей. Для этого используется функция ''requirejs.toUrl'':
+
+<code javascript>
+requirejs(['requirejs'], function(require){
+  var moduleUrl = require.toUrl('app/module');
+  console.log(moduleUrl); // scripts/app/module.js
+});
+</code>
+
+====== Пример ======
+<code javascript>
+requirejs(['jquery', 'app/app'], function($, app){
+  app.run();
+});
+</code>
+
+~~DISQUS~~
