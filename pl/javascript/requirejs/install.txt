@@ -1,0 +1,41 @@
+====== Подключение ======
+Для подключения RequireJS к проекту используется тег:
+
+<code html>
+<script type="text/javascript" src="path/to/require.js"></script>
+</code>
+
+Далее могут быть подключены другие JS файлы, которые смогут использовать функционал RequireJS.
+
+Если в проекте присутствует основной файл JS с логикой инициализации приложения, подключить RequireJS можно с указанием этого файла:
+
+<code html>
+<script type="text/javascript" src="path/to/require.js" data-main="path/to/main"></script>
+</code>
+
+Важно заметить, что файл в аттрибуте ''data-main'' указывается без расширения ''.js''. Данный файл будет выполнен сразу после полной загрузки RequireJS.
+
+====== Пример ======
+<file html index.html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8" />
+    <script type="text/javascript" src="require.js" data-main="main"></script>
+  </head>
+  <body>
+  </body>
+</html>
+</file>
+
+<file javascript main.js>
+requirejs.config({
+  ...
+});
+
+requirejs([...], function(...){
+  ...
+});
+</file>
+~~DISQUS~~

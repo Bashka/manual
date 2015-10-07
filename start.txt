@@ -6,6 +6,7 @@
       * [[.:pl:php:zf2:|Zend Framework 2]]
       * [[.:pl:php:composer:|Composer]]
     * [[.:pl:javascript:|JavaScript]]
+      * [[.:pl:javascript:requirejs:|RequireJS]]
     * [[.:pl:cpp:|C++]]
       * [[.:pl:cpp:lex:|Lex]]
       * Yacc
