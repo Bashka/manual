@@ -1,0 +1,21 @@
+====== Глобальный обработчик ======
+Функция ''requirejs.onError'' является глобальным обработчиком ошибок RequireJS.
+
+<code javascript>
+requirejs.onError = function(err){
+  console.log(err);
+}
+</code>
+
+====== Локальный обработчик ======
+Для обработки ошибок загрузки и исполнения подключаемых модулей используется локальный обработчик, передаваемый в функцию ''requirejs'' в качестве последнего параметра:
+
+<code javascript>
+requirejs([...], function(...){
+  ...
+}, function(err){
+  console.log(err);
+})
+</code>
+
+~~DISQUS~~
