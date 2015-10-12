@@ -1,3 +1,4 @@
   * [[.:events|События]] (Events)
+  * [[.:model|Модель]] (Model)
 
 ~~DISQUS~~
