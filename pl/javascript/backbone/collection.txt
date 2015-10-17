@@ -69,4 +69,14 @@ coll.set(['a', 'c']); // a - обновление, b - удаление, c - д�
   * ''reset (коллекция, опции)'' - замена содержимого коллекции;
   * ''sort (коллекция, опции)'' - сортировка коллекции;
 
+====== Пример ======
+<code javascript>
+var TodoCollection = Backbone.Collection.extend({
+  model: Todo
+});
+
+var myTasks = new TodoCollection;
+myTasks.add(new Todo({title: 'Купить молока'}));
+</code>
+
 ~~DISQUS~~

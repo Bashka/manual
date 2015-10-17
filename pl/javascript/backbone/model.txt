@@ -97,4 +97,32 @@ obj.set('x', 2);
   * ''error (модель, xhr, опции)'' - ошибка синхронизации модели с сервером;
   * ''invalid (модель, ошибка, опции)'' - ошибка валидации модели;
 
+====== Пример ======
+<code javascript>
+var Todo = Backbone.Model.extend({
+  defaults: {
+    title: 'No name',
+    complete: false
+  },
+
+  validate: function(attr){
+    if(attr.title === undefined || attr.title === ''){
+      return 'Поле title не должно быть пустым';
+    }
+
+    if((typeof attr.complete) !== 'boolean'){
+      return 'Поле complete должно иметь логический тип';
+    }
+  },
+
+  complete: function(){
+    this.set('complete', true);
+  }
+});
+
+var myFirstTask = new Todo({
+  title: 'Купить молока'
+});
+</code>
+
 ~~DISQUS~~
