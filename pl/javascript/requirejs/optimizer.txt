@@ -1,0 +1,44 @@
+====== Описание ======
+RequireJS включает оптимизатор, упрощающий процесс сборки проекта в компактный JS сценарий с включением всех зависимостей и файлов проекта. Делается это с помощью NodeJS утилиты ''requirejs''.
+
+====== Установка ======
+<code bash>
+npm install requirejs
+</code>
+
+====== Использование ======
+Для сборки проекта с помощью оптимизатора RequireJS необходимо создать файл ''build.js'' с данными конфигурации:
+<code javascript>
+({
+  baseUrl: 'scripts/vendor',
+  name: '../main',
+  out: 'main-min.js',
+  paths: {
+    app: '../app'
+  },
+  shim: {
+    backbone: {
+      deps: ['underscore', 'jquery'],
+      exports: 'Backbone'
+    },
+    underscore: {
+      exports: '_'
+    },
+    jquery: {
+      exports: '$'
+    }
+  }
+})
+</code>
+
+Можно так же указать все опции оптимизатора прямо в командной строке при вызове оптимизатора:
+<code bash>
+node r.js -o baseUrl=scripts/vendor name=../main out=main-min.js paths.app=../app
+</code>
+
+Здесь важно, чтобы все зависимости и пути были верно прописаны, но так как это часто повторяет конфигурацию самого RequireJS в коде проекта (''requirejs.config''), проще указать опцию оптимизатора ''mainConfigFile'', которая указывает на скрипт с конфигурацией проекта относительно опции ''baseUrl'':
+<code bash>
+node r.js -o baseUrl=scripts/vendor mainConfigFile=main.js
+</code>
+
+~~DISQUS~~
