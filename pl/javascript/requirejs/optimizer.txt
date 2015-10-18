@@ -10,7 +10,7 @@ npm install requirejs
 Для сборки проекта с помощью оптимизатора RequireJS необходимо создать файл ''build.js'' с данными конфигурации:
 <code javascript>
 ({
-  baseUrl: 'scripts/vendor',
+  baseUrl: 'scripts/lib',
   name: '../main',
   out: 'main-min.js',
   paths: {
@@ -33,12 +33,12 @@ npm install requirejs
 
 Можно так же указать все опции оптимизатора прямо в командной строке при вызове оптимизатора:
 <code bash>
-node r.js -o baseUrl=scripts/vendor name=../main out=main-min.js paths.app=../app
+node r.js -o baseUrl=scripts/lib name=../main out=main-min.js paths.app=../app
 </code>
 
 Здесь важно, чтобы все зависимости и пути были верно прописаны, но так как это часто повторяет конфигурацию самого RequireJS в коде проекта (''requirejs.config''), проще указать опцию оптимизатора ''mainConfigFile'', которая указывает на скрипт с конфигурацией проекта относительно опции ''baseUrl'':
 <code bash>
-node r.js -o baseUrl=scripts/vendor mainConfigFile=main.js
+node r.js -o baseUrl=scripts/lib mainConfigFile=main.js
 </code>
 
 ~~DISQUS~~
