@@ -40,7 +40,13 @@ var TodoView = Backbone.View.extend({
 });
 </code>
   * ''template'' - функция-шаблонизатор представления;
-  * ''initialize([object опции])'' - метод вызывается при инстанциации класса представления перед заполнением его свойств, которые передаются в качестве первого параметра;
+<code javascript>
+var TodoView = Backbone.View.extend({
+  template: _.template($('#todoTpl').html()),
+  ...
+});
+</code>
+  * ''initialize([object опции])'' - метод вызывается при инстанциации класса представления перед заполнением его свойств, которые передаются в качестве первого параметра. В момент вызова данного метода представление еще не отрендерино и может не содержать вложенных узлов;
   * ''render()'' - вызывается для создания DOM элементов представления в узле ''el'';
 
 ====== Методы ======
@@ -48,6 +54,8 @@ var TodoView = Backbone.View.extend({
 
   * ''setElement(node элемент)'' - сделать заданный элемент корневым для представления перенеся на него все обработчики событий с прежнего корневого элемента;
   * ''remove()'' - удаляет представления из документа и отключает все его обработчики событий;
+  * ''delegateEvents([object карта])'' - установка обработчиков событий с использованием карты ''this.events'' или параметра метода, если он передан;
+  * ''undelegateEvents()'' - удаление всех обработчиков событий представления;
 
 ====== Свойства ======
 Экземпляры представления включают следующие свойства:
@@ -66,7 +74,7 @@ var TodoView = Backbone.View.extend({
   tagName: 'li',
   template: _.template($('todo-template').html()),
   events: {
-    'click .complete': 'complete'
+    'change .complete': 'complete'
   },
 
   initialize: function(attr){
@@ -76,6 +84,10 @@ var TodoView = Backbone.View.extend({
   render: function(){
     this.$el.html(this.template(this.model.toJSON()));
     return this;
+  },
+
+  complete: function(event){
+    this.model.set('completed', $(event.currentTarget).prop('checked'));
   }
 });
 
