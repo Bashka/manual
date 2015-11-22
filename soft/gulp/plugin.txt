@@ -1,0 +1,22 @@
+====== Плагины ======
+
+Gulp собирает проект путем последовательного применения набора плагинов к файлам проекта. Плагины Gulp могут быть установлены с помощью npm:
+
+<code bash>
+npm install gulp-clean gulp-concat
+</code>
+
+Для подключения плагинов используется команда ''require'':
+
+<code javascript>
+// gulpfile.js
+var gulp = require('gulp'),
+  clean = require('gulp-clean'),
+  concat = require('gulp-concat');
+
+...
+</code>
+
+Все плагины Gulp доступны на [[http://gulpjs.com/plugins/|сайте проекта]].
+
+~~DISQUS~~

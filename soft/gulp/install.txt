@@ -1,0 +1,17 @@
+====== Установка ======
+
+Gulp распространяется в виде NodeJS пакета и может быть установлен с помощью npm.
+
+Локальная установка:
+
+<code bash>
+npm install gulp
+</code>
+
+Глобальная установка:
+
+<code bash>
+npm install --global gulp
+</code>
+
+~~DISQUS~~

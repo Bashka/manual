@@ -1,0 +1,23 @@
+====== gulp-concat ======
+
+Плагин ''gulp-concat'' позволяет объединить содержимое файлов в один.
+
+Плагин принимает следующие параметры:
+
+  * Имя целевого файла, в который необходимо объединить файлы проекта
+  * Опции плагина (не обязательно), такие как:
+    * ''newLine'' - символ, используемый для объединения содержимого файлов (по умолчанию используется ''\r\n'')
+
+<code javascript>
+// gulpfile.js
+var gulp = require('gulp'),
+  concat = require('gulp-concat');
+
+gulp.task('build-js', function(){
+  gulp.src('src/js/*.js')
+    .pipe(concat('index.js'))
+    .pipe(gulp.dest('build/js'));
+});
+</code>
+
+~~DISQUS~~

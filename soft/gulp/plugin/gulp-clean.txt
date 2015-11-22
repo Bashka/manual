@@ -1,0 +1,16 @@
+====== gulp-clean ======
+
+Плагин ''gulp-clean'' позволяет отчистить проект от старых файлов перед сборкой или от временных файлов после нее.
+
+<code javascript>
+// gulpfile.js
+var gulp = require('gulp'),
+  clean = require('gulp-clean');
+
+gulp.task('clean', function(){
+  gulp.src('build/js/*')
+    .pipe(clean());
+});
+</code>
+
+~~DISQUS~~

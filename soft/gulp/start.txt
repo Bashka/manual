@@ -1,0 +1,9 @@
+  * [[.:install|Установка]]
+  * [[.:plugin|Плагины]]
+  * [[.:gulpfile|gulpfile]]
+    * [[.:plugin:gulp-clean|gulp-clean]] - отчистка проекта
+    * [[.:plugin:gulp-concat|gulp-concat]] - объединение файлов
+    * [[.:plugin:gulp-uglify|gulp-uglify]] - оптимизация JS
+    * [[.:plugin:gulp-uglifycss|gulp-uglifycss]] - оптимизация CSS
+
+~~DISQUS~~

@@ -1,0 +1,17 @@
+====== gulp-uglifycss ======
+
+Плагин ''gulp-uglifycss'' позволяет оптимизировать CSS код, удалив из него все лишние символы и максимально уменьшив его размер.
+
+<code javascript>
+// gulpfile.js
+var gulp = require('gulp'),
+  uglifycss = require('gulp-uglifycss');
+
+gulp.task('build-css', function(){
+  gulp.src('src/css/*.css')
+    .pipe(uglifycss())
+    .pipe(gulp.dest('build/css'));
+});
+</code>
+
+~~DISQUS~~

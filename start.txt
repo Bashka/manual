@@ -26,6 +26,7 @@
 
 ====== Утилиты и программы ======
   * [[soft:git:|Git]]
+  * [[soft:gulp:|Gulp]]
   * [[soft:latex:|LaTeX]]
   * [[.:soft:vim:|Vim]]
     * [[.:pl:vimscript:|VimScript]]

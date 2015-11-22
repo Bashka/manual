@@ -1,0 +1,17 @@
+====== gulp-uglify ======
+
+Плагин ''gulp-uglify'' позволяет оптимизировать JS код, удалив из него все лишние символы и максимально уменьшив его размер.
+
+<code javascript>
+// gulpfile.js
+var gulp = require('gulp'),
+  uglify = require('gulp-uglify');
+
+gulp.task('build-js', function(){
+  gulp.src('src/js/*.js')
+    .pipe(uglify())
+    .pipe(gulp.dest('build/js'));
+});
+</code>
+
+~~DISQUS~~
