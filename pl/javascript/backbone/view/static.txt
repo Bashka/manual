@@ -1,0 +1,55 @@
+====== Объявление и инициализация представления ======
+Для объявления представления используется базовый класс ''Backbone.View'', который необходимо расширить с помощью метода ''extend'' логикой создаваемого представления:
+
+<code javascript>
+var UserView = Backbone.View.extend({
+  ...
+});
+</code>
+
+Инстанциация представления реализуется с помощью оператора ''new'':
+
+<code javascript>
+var userWidget = new UserView;
+</code>
+
+Конструктор представления по умолчанию принимает опции, некоторые из которых (за исключением опций ''el'', ''id'', ''className'', ''tagName'', ''model'', ''collection'' и ''attributes'') будут доступны в свойстве ''options'' экземпляра представления.
+
+<code javascript>
+var userWidget = new UserView({myOption: 'test', el: document.body});
+</code>
+
+Если необходимо дополнительно инициализировать экземпляр представления, можно определить метод ''initialize'', который будет вызван после конструктора:
+
+<code javascript>
+var UserView = Backbone.View.extend({
+  initialize: function(options){
+    ...
+  },
+  ...
+});
+</code>
+
+При определении класса представления, можно указать так же следующие статичные свойства:
+
+  * ''className'' - имя класса, используемое для корневого элемента представления
+  * ''tagName'' - имя тега, используемое для корневого элемента представления
+<code javascript>
+var UserView = Backbone.View.extend({
+  tagName: 'li',
+  className: 'element'
+  ...
+});
+</code>
+  * ''events'' - словарь событий, ключами которого служат события и элементы их порадившие, а значениями - методы представления, вызываемые в качестве обработчиков
+<code javascript>
+var UserView = Backbone.View.extend({
+  events: {
+    'click .create-button': 'create',
+    'click .delete-button': 'delete'
+  },
+  ...
+});
+</code>
+
+~~DISQUS~~

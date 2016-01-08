@@ -1,0 +1,89 @@
+====== Объявление и инициализация модели ======
+Для объявления модели используется базовый класс ''Backbone.Model'', который необходимо расширить с помощью метода ''extend'' логикой создаваемой модели:
+
+<code javascript>
+var User = Backbone.Model.extend({
+  ...
+});
+</code>
+
+Инстанциация модели реализуется с помощью оператора ''new'':
+
+<code javascript>
+var currentUser = new User;
+</code>
+
+Конструктор модели по умолчанию принимает два аргумента:
+
+  * Словарь атрибутов, устанавливаемый в качестве свойств модели
+  * Опции модели
+    * ''collection'' - коллекция, которой принадлежит модель
+    * ''urlRoot'' - URL, используемый моделью для синхронизации
+    * ''parse'' - если установлено в true, словарь атрибутов перед добавлением в модель будет пропущен через функцию ''parse''
+
+<code javascript>
+var currentUser = new User({login: 'foo'});
+console.log(currentUser.get('login')); // 'foo'
+</code>
+
+Если необходимо дополнительно инициализировать экземпляр модели, можно определить метод ''initialize'', который будет вызван после конструктора:
+
+<code javascript>
+var User = Backbone.Model.extend({
+  initialize: function(attrs, options){
+    ...
+  },
+  ...
+});
+</code>
+
+Если необходимо определить значения свойств по умолчанию для всех экземпляров модели, используется словарь ''defaults'':
+
+<code javascript>
+var User = Backbone.Model.extend({
+  defaults: {
+    login: 'no identify'
+  },
+
+  ...
+});
+</code>
+
+Можно использовать функции ''defaults'' вместо словаря. Это полезно, если в качестве значения должен использоваться уникальный для всех экземпляров модели объект:
+
+<code javascript>
+var User = Backbone.Model.extend({
+  defaults: function(){
+    return {login: new Login};
+  },
+
+  ...
+});
+</code>
+
+====== Валидация значений свойств ======
+Для валидации значений свойств при попытке их изменения (методы ''save'' и ''set'' с опцией ''validate: true'') используется метод ''validate'':
+
+<code javascript>
+var User = Backbone.Model.extend({
+  validate: function(attr){
+    if(attr.login === undefined || attr.login === ''){
+      return 'Login invalid';
+    }
+  },
+
+  ...
+});
+</code>
+
+При попытке изменения значений свойств модели, выполняется валидация данных, и если она неудачна, состояние модели не изменяется, но выбрасывается событие ''invalid''.
+
+<code javascript>
+var currentUser = new User;
+currentUser.on('invalid', function(){
+  ...
+});
+currentUser.set('login', '', {validate: true});
+</code>
+
+~~DISQUS~~

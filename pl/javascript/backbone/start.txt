@@ -1,6 +1,17 @@
-  * [[.:events|События]] (Events)
-  * [[.:model|Модель]] (Model)
-  * [[.:collection|Коллекции]] (Collection)
-  * [[.:view|Представление]] (View)
+  * [[.:install|Установка]]
+  * [[.:events|События]]
+  * Модель
+    * [[.:model:static|Объявление]]
+    * [[.:model:state|Состояние]]
+    * [[.:model:sync|Синхронизация]]
+    * [[.:model:events|События]]
+  * Коллекция
+    * [[.:collection:static|Объявление]]
+    * [[.:collection:state|Состояние]]
+    * [[.:collection:sync|Синхронизация]]
+    * [[.:collection:events|События]]
+  * Представление
+    * [[.:view:static|Объявление]]
+    * [[.:view:render|Рендеринг]]
 
 ~~DISQUS~~

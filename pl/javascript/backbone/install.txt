@@ -1,0 +1,63 @@
+====== Зависимости ======
+BackboneJS зависит от двух библиотек:
+
+  * [[http://jquery.com|jQuery]] - библиотека для работы с DOM и AJAX (может быть заменена любой, схожей по семантике библиотекой)
+  * [[http://underscorejs.org|Underscore]] - легковесная библиотека, включающая основные функции для работы с JS
+
+====== Подключение библиотеки ======
+Для подключения BackboneJS достаточно подключить все ее зависимости (в перечисленном выше порядке) и саму библиотеку с помощью тега ''script'' или любого инструмента для загрузки модулей (на пример RequireJS).
+
+<code html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="underscore.js"></script>
+    <script type="text/javascript" src="backbone.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var model = Backbone.Model.extend({
+        ...
+      });
+    </script>
+  </body>
+</html>
+</code>
+
+===== Подключение с помощью RequireJS =====
+
+<code html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="require.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      requirejs.config({
+        shim: {
+          backbone: {
+            deps: ['underscore', 'jquery'],
+            exports: 'Backbone'
+          },
+          underscore: {
+            exports: '_'
+          },
+          jquery: {
+            exports: '$'
+          }
+        }
+      });
+
+      requirejs(['backbone'], function(Backbone){
+        var model = Backbone.Model.extend({
+          ...
+        });
+      });
+    </script>
+  </body>
+</html>
+</code>
+
+~~DISQUS~~

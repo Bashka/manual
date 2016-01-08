@@ -1,0 +1,86 @@
+====== Рендеринг ======
+Представление использует свойство ''el'' как корневой элемент, в котором оно должно быть отображено. Это свойство может быть задано при инстанциации представления с помощью опции:
+
+<code javascript>
+var userWidget = new UserView({el: document.all['currentUserBox']});
+</code>
+
+В противном случае корневой элемент будет создан автоматически на основании значения свойства ''tagName'' и вставить его в страницу будет необходимо самостоятельно:
+
+<code javascript>
+var userWidget = new UserView;
+userWidget.render();
+document.all['currentUserBox'].appendChild(userWidget.el);
+</code>
+
+Для генерации представления необходимо переопределить метод ''render()'', который должен заполнять свойство ''el'' при вызове:
+
+<code javascript>
+var UserView = Backbone.View.extend({
+  render: function(){
+    this.el.innerHTML = 'Hello world';
+
+    return this;
+  },
+  ...
+});
+</code>
+
+При использовании jQuery-подобной библиотеке, так же доступно свойство ''$el'', которое является jQuery-оберткой над корневым элементом представления:
+
+<code javascript>
+var UserView = Backbone.View.extend({
+  render: function(){
+    this.$el.html('Hello world');
+
+    return this;
+  },
+  ...
+});
+</code>
+
+Процесс рендеринга ориентируется на связанную с представлнием модель или коллекцию, доступную в свойствах ''model'' и ''collection'' соответственно:
+
+<code javascript>
+var UserView = Backbone.View.extend({
+  render: function(){
+    this.$el.html('<li>' + this.model.get('login') + '</li>');
+
+    return this;
+  },
+  ...
+});
+
+var currentUser = new User;
+currentUser.fetch();
+
+var userWidget = new UserView({
+  model: currentUser,
+  el: document.all['currentUserBox']
+});
+userWidget.render();
+</code>
+
+При рендеринге часто удобнее использовать шаблонизатор, сохраняемый в свойстве ''template'' представления:
+
+<code javascript>
+var UserView = Backbone.View.extend({
+  template: _.template('<li><%= login %></li>'),
+
+  render: function(){
+    this.$el.html(this.template(this.model.toJSON()));
+
+    return this;
+  },
+  ...
+});
+</code>
+
+Помимо перечисленного, представление включает следующий набор методов:
+
+  * ''setElement(элемент)'' - делает заданный элемент корневым для представления перенеся на него все обработчики событий с прежнего корневого элемента
+  * ''remove()'' - удаляет представления из документа и отключает все его обработчики событий
+  * ''delegateEvents([карта])'' - устанавливает обработчики событий с использованием свойства ''events'' или параметра метода, если он передан
+  * ''undelegateEvents()'' - удаление всех обработчиков событий представления
+
+~~DISQUS~~
