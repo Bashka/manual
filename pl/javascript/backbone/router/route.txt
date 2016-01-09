@@ -1,0 +1,80 @@
+====== Статичная маршрутизация ======
+Для указания маршрутов на уровне класса роутера используется свойство ''routes'' класса роутера, представленное в виде словаря, ключами которого являются шаблоны маршрутов, а значениями их имена:
+
+<code javascript>
+var Router = Backbone.Router.extend({
+  routes: {
+    'help': 'help',
+    'list/:entity': 'entityList',
+    'view/:entity/:id': 'entityView',
+    'edit/:entity/:id': 'entityEdit'
+  },
+  ...
+});
+</code>
+
+Шаблоны маршрутов могут включать:
+  * Параметры - начинающиеся на двоеточие и охватывающие все между двумя соседними слешами
+  * Селекторы - начинающиеся на звездочку и продолжающиеся до конца URL
+
+При нахождении соответствующего маршрута, будет выброшено событие ''route:имя'' и вызван одноименный метод роутера:
+
+<code javascript>
+var Router = Backbone.Router.extend({
+  routes: {
+    'help': 'help'
+  },
+
+  help: function(){
+    ...
+  },
+  ...
+});
+</code>
+
+====== Динамическая маршрутизация ======
+Маршруты можно указать для каждого экземпляра роутера с помощью метода ''route'':
+
+<code javascript>
+var myRouter = new Backbone.Router;
+myRouter.route('help', 'help', function(){
+  ...
+});
+</code>
+
+Эти маршруты обрабатываются аналогично статичным аналогам.
+
+====== Навигация ======
+После инстанциации всех используемых в приложении роутеров необходимо вызвать метод ''Backbone.history.start()'', который определит начальное состояние приложения:
+
+<code javascript>
+var myRouter = new Router;
+Backbone.history.start();
+</code>
+
+Для добавления состояния приложения в историю используется метод ''navigate'' роутера:
+
+<code javascript>
+var Router = Backbone.Router.extend({
+  routes: {
+    'page/:p': 'page'
+  },
+
+  page: function(page){
+    ...
+    this.navigate('page/' + page);
+  },
+  ...
+});
+</code>
+
+Этот метод только изменят URL и не приводит к повторной маршрутизации, но его можно использовать как изменения состояния приложения с помощью опции ''trigger'':
+
+<code javascript>
+var router = new Router;
+Backbone.history.start();
+...
+router.navigate('page/start', {trigger: true});
+</code>
+
+~~DISQUS~~
