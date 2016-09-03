@@ -1,0 +1,89 @@
+Класс [[http://framework.zend.com/manual/current/en/modules/zend.db.adapter.html|Adapter]] предоставляет доступ к используемой СУБД.
+
+===== Соединение =====
+
+Для соединения с СУБД достаточно создать экземпляр данного класса и сконфигурировать его. Конфигурация соединения передается в конструктор класса в виде массива, который может содержать следующие ключи:
+
+  * driver - драйвер, используемый для соединения с СУБД (допустимыми являются (Mysqli, Sqlsrv, Pdo_Sqlite, Pdo_Mysql, Pdo=OtherPdoDriver);
+  * database - имя используемой БД;
+  * username - пользователь, от имени которого выполняется соединение;
+  * password - пароль пользователя;
+  * hostname - адрес хоста, на котором расположена СУБД;
+  * port - порт, который слушает СУБД;
+  * charset - используемая кодировка БД.
+
+<code php>
+$adapter = new Zend\Db\Adapter\Adapter([
+  'driver'   => 'Mysqli',
+  'database' => 'zend_db_example',
+  'username' => 'developer',
+  'password' => 'developer-password',
+  'hostname' => 'localhost',
+  'charset'  => 'utf8',
+]);
+</code>
+
+<code php>
+$adapter = new Zend\Db\Adapter\Adapter([
+  'driver'   => 'Pdo',
+  'dsn'      => 'mysql:dbname=myDb;host=localhost',
+  'username' => 'developer',
+  'password' => 'developer-password',
+  'driver_options' => [
+    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"
+  ],
+]);
+</code>
+
+===== Выполнение запроса =====
+
+Для выполнения запроса к СУБД используются подготовленные (statement) запросы. Создать их можно с помощью метода ''createStatement'', передав ему строку SQL запроса.
+
+Для выполнения таких запросов используется метод ''execute'' объекта запроса, который возвращает результат запроса в виде экземпляра класса [[ЯП:ZF2:lib:Db:ResultSet]].
+
+<code php>
+$statement = $adapter->createStatement('select * from test where id = 4');
+$result = $statement->execute();
+</code>
+
+Подготовленный SQL запрос может включать параметры. Значения подставляются на месте параметров при выполнении SQL запроса методом ''execute''. Параметры могут быть следующих видов:
+
+  * Именные - эти параметры записываются в виде '':имя'', а доступ к ним осуществляется с помощью ключа массива параметров;
+
+<code php>
+$statement = $adapter->createStatement('SELECT * FROM `artist` WHERE `id` = :id');
+$result = $statement->execute(['id' = > 5]);
+</code>
+
+  * Не именные - эти параметры записываются в виде ''?'', а массив параметров заполняет их поочередно.
+
+<code php>
+$statement = $adapter->createStatement('SELECT * FROM `artist` WHERE `id` = ?');
+$result = $statement->execute([5]);
+</code>
+
+Инициализировать параметры запроса можно прямо в методе ''createStatement'', передав в качестве второго параметра массив значений.
+
+<code php>
+$statement = $adapter->createStatement('select * from test where id = :id', ['id' => 46]);
+$result = $statement->execute();
+</code>
+
+==== Метод query ====
+
+Метод ''query'' является "фассадом" для подготовки или выполнения запросов к СУБД. Он принимающий строку SQL запроса, а так же, опционально, массив параметров запроса.
+
+Если второй параметр не передан, метод подготавливает запрос и возвращает его:
+
+<code php>
+$statement = $adapter->query('SELECT * FROM `artist` WHERE `id` = ?');
+$result = $statement->execute([5]);
+</code>
+
+В противном случае, метод выполняет подготавливает и выполняет запрос, возвращая его результат:
+
+<code php>
+$result = $adapter->query('SELECT * FROM `artist` WHERE `id` = ?', [5]);
+</code>
+
+~~DISQUS~~

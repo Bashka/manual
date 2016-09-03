@@ -1,0 +1,52 @@
+====== Семантика ======
+
+===== RendererInterface =====
+
+Интерфейс ''RendererInterface'' описывает семантику механизма, позволяющие преобразовать модель представления в строку с помощью определенной логики рендеринга.
+
+  * ''getEngine'' - предоставляет систему, выполняющую рендеринг
+  * ''setResolver'' - устанавливает [[.:resolver|Resolver]], используемый данным механизмом для получения адресов фаблонов
+  * ''render'' - выполняет рендеринг модели представления
+
+====== Реализация ======
+
+===== PhpRenderer =====
+
+Класс ''PhpRenderer'' реализует ''RendererInterface'' используя PHP в качестве шаблонизатора.
+
+<code php>
+$res = new TemplatePathStack;
+$res->setDefaultSuffix('pthml');
+$res->addPath(__DIR__ . '/tmpls');
+
+$model = new ViewModel([
+  ...
+]);
+$model->setTemplate('panel/order/table');
+
+$renderer = new PhpRenderer;
+$renderer->setResolver($res);
+
+$view = $renderer->render($model);
+</code>
+
+Класс передает переменные модели и самого себя (в переменной ''$this'') в шаблон, что позволяет использовать их данные при рендеринге.
+
+Класс допускает использование [[.:helper|Helper]] при рендеринге через реализацию метода ''%%__call%%''. При этом, если Helper реализует метод ''%%__invoke%%'', то он будет вызван непосредственно, иначе класс вернет экземпляр Helper.
+
+<code html>
+<div>
+  <?= $this->invokableHelper($args) ?>
+  <?= $this->simpleHelper()->helperMethod() ?>
+</div>
+</code>
+
+===== JsonRenderer =====
+
+Класс ''PhpRenderer'' реализует ''RendererInterface'' используя шаблонизацию модели в формат JSON. Файлы шаблона для этого преобразования не используются.
+
+===== ConsoleRenderer =====
+
+Класс ''ConsoleRenderer'' реализует ''RendererInterface'' используя шаблонизацию модели в простую строку. Файлы шаблона для этого преобразования не используются.
+
+~~DISQUS~~

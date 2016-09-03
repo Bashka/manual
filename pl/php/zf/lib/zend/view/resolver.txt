@@ -1,0 +1,62 @@
+====== Семантика ======
+
+===== ResolverInterface =====
+
+Интерфейс ''ResolverInterface'' описывает механизм поиска файла шаблона в системе по его имени через вызов метода '''resolve''.
+
+====== Реализация ======
+
+===== TemplateMapResolver =====
+
+Класс ''TemplateMapResolver'' реализует ''ResolverInterface'' используя карту соответствий для определения расположения файла шаблона в системе.
+
+  * ''setMap/getMap'' - задает и предоставляет карту соответствий
+  * ''add'' - добавляет путь в карту соответствий
+  * ''merge'' - сливает указанную карту соответствий в текущую
+  * ''has'' - проверяет наличие указанного файла в карте соответствий
+  * ''get'' - получает путь из карты соответствий по имени
+
+<code php>
+$res = new TemplateMapResolver;
+$res->map('tmps/index.pthml', '/var/www/site/backend/templates/index.phtml');
+$path = $res->resolve('tmps/index.pthml');
+</code>
+
+===== TemplatePathStack =====
+
+Класс ''TemplatePathStack'' реализует ''ResolverInterface'' используя рекурсивный поиск файла шаблона в указанных каталогах.
+
+  * ''setDefaultSuffix/getDefaultSuffix'' - определяет расширение файла шаблона, используемое по умолчанию во время поиска
+  * ''setPaths/addPaths'' - задает и добавляет адреса каталогов, в которых будет производиться поиск
+  * ''addPath'' - добавляет адрес каталога, в котором будет производиться поиска
+  * ''clearPaths'' - отчищает очередь поиска
+  * ''getPaths'' - предоставляет массив адресов каталогов, в которых будет производиться поиск
+  * ''setLfiProtection/isLfiProtectionOn'' - устанавливает и проверяет защиту, запрещающую использовать шаблоны вне перечисленных каталогов (путем использования ''..'')
+
+<code php>
+// Для файла шаблона ./tmpls/panel/order/table.phtml
+$res = new TemplatePathStack;
+$res->setDefaultSuffix('pthml');
+$res->addPath(__DIR__ . '/tmpls');
+$path = $res->resolve('panel/order/table'); // __DIR__/tmpls/panel/order/table.phtml
+</code>
+
+===== AggregateResolver =====
+
+Класс ''AggregateResolver'' реализует ''ResolverInterface'' позволяя объединять экземпляры различных классов и используя их для поиска файла шаблона.
+
+<code php>
+$mr = new TemplateMapResolver;
+$mr->map('index.pthml', __DIR__ . '/layouts/index.phtml');
+
+$psr = new TemplatePathStack;
+$prs->setDefaultSuffix('pthml');
+$psr->addPath(__DIR__ . '/tmpls');
+
+$ar = new AggregateResolver;
+$ar->attach($mr);
+$ar->attach($psr);
+$path = $ar->resolve(...);
+</code>
+
+~~DISQUS~~

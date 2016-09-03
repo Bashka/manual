@@ -1,0 +1,69 @@
+====== Реализация ======
+
+===== View =====
+
+Класс ''View'' представляет фасад, облегчающий процесс рендеринга моделей представления. Класс генерирует следующие события в своей работе:
+
+  * ''ViewEvent::EVENT_RENDERER'' - событие генерируется до определения используемого [[.:renderer|Renderer]] и служит для его определения обработчиками
+  * ''ViewEvent::EVENT_RENDERER_POST'' - событие генерируется непосредственно перед рендерингом
+  * ''ViewEvent::EVENT_RESPONSE'' - событие генерируется после рендеринга и служит для заполнения объекта ответа
+
+Обработчики событий должны быть представлены классами [[.:strategy|Strategy]].
+
+<code php>
+$renderer = new PhpRenderer;
+$view = new View;
+$view->addRenderingStrategy(new PhpRendererStrategy($renderer)); // Использование PHP рендеринга
+$model = new ViewModel([...]);
+$model->setTemplate('...');
+echo $view->render($model); // Выполнение рендеринга
+</code>
+
+Данный класс так же обеспечивает рендеринг моделей с включенными в них дочерними моделями:
+
+layout.phtml:
+<code html>
+<div>
+  <?= $this->content ?>
+</div>
+</code>
+
+span.phtml:
+<code html>
+<span><?= $data ?></span>
+</code>
+
+<code php>
+use Zend\View\Model\ViewModel;
+use Zend\View\Resolver\TemplatePathStack;
+use Zend\View\Renderer\PhpRenderer;
+use Zend\View\Strategy\PhpRendererStrategy;
+use Zend\View\View;
+use Zend\Stdlib\Response;
+
+$childModel = new ViewModel([
+  'data' => 'Hello world',
+]);
+$childModel->setTemplate('span');
+
+$model = new ViewModel();
+$model->setTemplate('layout');
+$model->addChild($childModel, 'content');
+
+$resolver = new TemplatePathStack;
+$resolver->addPath(__DIR__ . '/lib/dir');
+
+$renderer = new PhpRenderer;
+$renderer->setResolver($resolver);
+
+$view = new View;
+$strategy = new PhpRendererStrategy($renderer);
+$strategy->attach($view->getEventManager());
+$response = new Response;
+$view->setResponse($response);
+
+$view->render($model);
+echo $response->getContent();
+</code>
+
+~~DISQUS~~

@@ -1,0 +1,51 @@
+Класс Reader позволяет получить конфигурацию из различных форматов, в том числе INI, XML, Json, Yaml, JavaProperties.
+
+Данный класс считывает конфигурацию и возвращает PHP массив, который затем может быть передан в класс Config для создания экземпляра этого класса.
+
+INI:
+<code ini>
+[core]
+author=zf2
+</code>
+
+XML:
+<code xml>
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+  <core>
+    <author>zf2</author>
+  </core>
+</config>
+</code>
+
+Json:
+<code javascript>
+{
+  "core": {
+    "author": "zf2"
+  }
+}
+</code>
+
+Yaml:
+<code yaml>
+core:
+  author: zf2
+</code>
+
+JavaProperties:
+<code java>
+core.author:zf2
+</code>
+
+<code php>
+$reader = new Zend\Config\Reader\Ini();
+//$reader = new Zend\Config\Reader\Xml();
+//$reader = new Zend\Config\Reader\Json();
+//$reader = new Zend\Config\Reader\Yaml();
+//$reader = new Zend\Config\Reader\JavaProperties();
+$conf = new Zend\Config\Config($reader->fromFile('conf/conf.ini'));
+echo $conf->core->author;
+</code>
+
+~~DISQUS~~

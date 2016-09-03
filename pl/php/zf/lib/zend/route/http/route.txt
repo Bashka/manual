@@ -1,0 +1,177 @@
+====== Семантика ======
+
+===== RouteInterface =====
+
+Интерфейс ''RouteInterface'' описывает семантику маршрута.
+
+  * ''match'' - сверят запрос и в случае его соответствия данному маршруту, возвращает RouteMatch
+  * ''assemble'' - формирует компонент запроса, за проверку которого отвечает данный маршрут
+  * ''factory'' - статичный метод-фабрика, для создания экземпляра маршрута
+
+<code php>
+$route = new Segment('/:controller/:action', [
+  'controller' => '[a-zA-Z0-9][a-zA-Z0-9_-]+',
+  'action' => '[a-zA-Z0-9][a-zA-Z0-9_-]+',
+], [
+  'controller' => 'Index',
+  'action' => 'index',
+]);
+$route->assemble(['action' => 'view']); // "/Index/view"
+</code>
+
+===== RouteMatch =====
+
+Класс ''RouteMatch'' используется для представления найденных соответствий запроса маршруту.
+
+  * ''setMatchedRouteName/getMatchedRouteName'' - установка и предоставление имени маршрута
+  * ''setParam/getParam'' - установка и предоставление параметра
+  * ''getParams'' - предоставление всех параметров
+
+<code php>
+$route = new Segment('https', [
+  'module' => 'secure',
+]);
+$match = $route->match($request);
+$match->getParam('module'); // "secure"
+</code>
+
+===== RouteStackInterface =====
+
+Для поиска маршрута из группы возможных используется класс роутера, реализующего интерфейс ''RouteStackInterface''.
+
+  * ''addRoute'' - добавляет маршрут в роутер
+  * ''addRoutes'' - добавляет маршруты в роутер
+  * ''removeRoute'' - удаляет маршрут из роутера
+  * ''setRoutes'' - устанавливает маршруты роутеру
+
+<code php>
+$router->addRoute('home_page', new Segment(...));
+$router->addRoute('foo_page', new Segment(...));
+$router->addRoute('bar_page', new Segment(...));
+$match = $router->match($request); // Первый подходящий для данного запроса маршрут
+</code>
+
+====== Реализация ======
+
+===== SimpleRouteStack =====
+
+Класс ''SimpleRouteStack'' реализует ''RouteStackInterface'' и позволяет выполнить маршрутизацию используя модель FIFO для поиска среди допустимых маршрутов.
+
+===== Маршруты =====
+
+  * ''Hostname'' - маршрутизация по домену 
+    * ''route'' - шаблон домена
+    * ''constraints'' - регулярные выражения, определяющие допустимый формат параметров шаблона
+    * ''defaults'' - значения параметров шаблона по умолчанию
+
+<code php>
+$route = new Hostname(':subdomain.domain.com', [
+  'subdomain' => 'fw\d{2}',
+], [
+  'subdomain' => 'fw01',
+  'type' => 'json',
+]);
+</code>
+
+  * ''Method'' - маршрутизация по методу запроса
+    * ''verb'' - перечисленные через запятую, допустимые методы запроса
+    * ''defaults'' - значения параметров по умолчанию
+
+<code php>
+$route = new Method('post,put', [
+  'controller' => ApiUpdateController::class,
+]);
+</code>
+
+  * ''Scheme'' - маршрутизация по протоколу запроса
+    * ''scheme'' - целевой протокол
+    * ''defaults'' - значения параметров по умолчанию
+
+<code php>
+$route = new Scheme('https', [
+  'secure' => true,
+]);
+</code>
+
+  * ''Literal'' - маршрутизация по точному соответствию пути
+    * ''route'' - целевой путь
+    * ''defaults'' - значения параметров по умолчанию
+
+<code php>
+$route = new Literal('/foo', [
+  'controller' => 'Index',
+  'action' => 'fooAction'
+]);
+</code>
+
+  * ''Segment'' - маршрутизация по шаблону пути
+    * ''route'' - шаблон пути
+      * '':имя'' - параметр
+      * ''[...]'' - необязательный параметр
+    * ''constraints'' - регулярные выражения, определяющие допустимый формат параметров шаблона
+    * ''defaults'' - значения параметров шаблона по умолчанию
+
+<code php>
+$route = new Segment('/:controller[/[:action[/]]]', [
+  'controller' => '[a-zA-Z0-9][a-zA-Z0-9_-]+',
+  'action' => '[a-zA-Z0-9][a-zA-Z0-9_-]+',
+], [
+  'controller' => 'Index',
+  'action' => 'index',
+]);
+</code>
+
+  * ''Regex'' - маршрутизация по шаблону пути
+    * ''regex'' - регулярное выражения для проверки маршрута
+    * ''spec'' - шаблон для сборки пути с помощью метода ''assemble''
+      * ''%имя%'' - вставляемый параметр
+    * ''defaults'' - значения параметров шаблона по умолчанию
+
+<code php>
+$route = new Regex('/blog/(?<id>[a-zA-Z0-9_-]+)(\.(?<format>(json|html|xml|rss)))?', '/blog/%id%.%format%', [
+  'controller' => BlogController::class,
+  'action' => 'list',
+  'format' => 'html'
+]);
+</code>
+
+  * ''Part'' - составная маршрутизация
+    * ''route'' - корневой маршрутизатор
+      * ''type'' - имя корневого маршрутизатора в используемом [[..:service_manager:plugin_manager|PluginManager]]
+      * ''options'' - конфигурация корневого маршрутизатора
+    * ''route_plugins'' - используемый PluginManager
+    * ''may_terminate'' - может ли являться корневой маршрутизатор завершающим
+    * ''child_routes'' - дочерие маршрутизаторы
+
+<code php>
+$route = new Part([ // Базовый маршрутизатор
+  'type' => 'literal',
+  'options' => [ // Опции базового маршрутизатора
+    'route' => '/',
+    'defaults' => [
+      'controller' => IndexController::class,
+      'action' => 'index',
+    ],
+  ],
+], true, $pluginManager, [
+  'blog' => [                   // Имя дочернего маршрута
+    'type' => 'literal',
+    'options' => [
+      'route' => '/blog',
+      'defaults' => [
+        'controller' => BlogController::class,
+        'action' => 'index',
+      ],
+    ],
+    'may_terminate' => true,
+    'child_routes' => [
+      ...
+    ],
+  ],
+  'forum' => [
+    ...
+  ],
+]);
+</code>
+
+~~DISQUS~~

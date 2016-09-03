@@ -1,0 +1,55 @@
+====== Семантика ======
+
+===== RequestInterface =====
+
+Интерфейс ''RequestInterface'' описывает семантику запроса клиенту в системе и расширяет интерфейс [[.:message|MessageInterface]] следующими методами:
+
+  * ''withRequestTarget/getRequestTarget'' - устанавливает или получает адрес целевого ресурса запроса
+  * ''withMethod/getMethod'' - устанавливает или получает метод запрос
+  * ''withUri/getUri'' - устанавливает или получает [[.:uri|URI]] целевого узла запроса
+
+Экземпляры данного класса должны быть представлены в виде объектов-значений, это означает, что сеттеры класса не изменяют объект, а возвращает его измененную копию.
+
+===== ServerRequestInterface =====
+
+Интерфейс ''ServerRequestInterface'' расширяет ''RequestInterface'' и описывает семантику запроса серверу в системе следующими методами:
+
+  * ''getServerParams'' - предоставляет параметры сервера (возможно, но не обязательно содержимое ''$_SERVER'')
+  * ''withCookieParams/getCookieParams'' - устанавливает и предоставляет Cookies
+  * ''withQueryParams/getQueryParams'' - устанавливает и предоставляет параметры запроса
+  * ''withUploadedFiles/getUploadedFiles'' - устанавливает и предоставляет передаваемые файлы
+  * ''withParsedBody/getParsedBody'' - устанавливает и предоставляет отпарсенные данные запроса
+  * ''getAttributes'' - предоставляет атрибуты запроса
+  * ''withAttribute/getAttribute'' - устанавливает и предоставляет атрибут запроса
+  * ''withoutAttribute'' - удаляет атбирут запроса
+
+Экземпляры данного класса должны быть представлены в виде объектов-значений, это означает, что сеттеры класса не изменяют объект, а возвращает его измененную копию.
+
+====== Реализация ======
+
+===== RequestTrait =====
+
+Примесь ''RequestTrait'' включает базовую реализацию интерфейса ''RequestInterface''.
+
+===== Request =====
+
+Класс ''Request'' представляет входящий запрос клиенту и полностью реализует интерфейс ''RequestInterface''.
+
+<code php>
+$request = new Request(new Uri('http://site.com'));
+$request = $request->withMethod('POST')->withHeader('Set-Cookie', 'cookie=value');
+</code>
+
+===== ServerRequest =====
+
+Класс ''ServerRequest'' реализует интерфейс ''ServerRequestInterface''.
+
+===== ServerRequestFactory =====
+
+Фабрика ''ServerRequestFactory'' позволяет сформировать экземпляр класса ''ServerRequest'' из глобальных массивов PHP.
+
+<code php>
+$request = ServerRequestFactory::fromGlobals();
+</code>
+
+~~DISQUS~~

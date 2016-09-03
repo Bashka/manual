@@ -1,0 +1,34 @@
+Шаблон главной страницы системы по умолчанию называется ''layout/layout''. Если необходимо определить другой файл в качестве шаблона главной страницы, он должен быть объявлен в опции ''template_map'' конфигурации [[ЯП:ZF2:lib:ViewManager]].
+
+<code php>
+'view_manager' => [
+  ...,
+  'layout' => 'site/layout', // Имя шаблона главной страницы.
+  'template_map' => [
+    'site/layout' => __DIR__ . '/../view/site/index.phtml', // Адрес файла шаблона.
+    ...
+  ],  
+],
+</code>
+
+Содержимое, вставляемое контроллером в главнуй страницу при рендеринге [[:ЯП:ZF2:lib:ViewManager:ViewModel]] по умолчанию вставляется в свойство ''%%$this->content%%'', а шаблон обычно имеет следующий вид:
+
+<file html layout.phtml>
+<?=$this->doctype();?>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <?=$this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'])
+                ->prependStylesheet($this->basePath() . '/css/style.css');?>
+        <?=$this->headScript()
+                ->prependFile($this->basePath('js/script.js'));?>
+    </head>
+    <body>
+        <?=$this->content;?>
+    </body>
+    <?=$this->inlineScript()
+            ->prepndFile($this->basePath('js/inline.js'));?>
+</html>
+</file>
+
+~~DISQUS~~

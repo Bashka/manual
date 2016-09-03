@@ -1,0 +1,53 @@
+====== Семантика ======
+
+===== LogLevel =====
+
+Класс ''LogLevel'' [[https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md|PSR-3]] описывает следующие уровни логирования:
+
+  * EMERG - аварийная ошибка;
+  * ALERT - тревога;
+  * CRIT - критическая ошибка;
+  * ERR - ошибка;
+  * WARN - предупреждение;
+  * NOTICE - предупреждающее сообщение;
+  * INFO - сообщение;
+  * DEBUG - дебагинг.
+
+===== LoggerInterface =====
+
+Для представления логгеров должен использоваться класс, реализующий интерфейс ''LoggerInterface'' [[https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md|PSR-3]].
+
+  * ''log'' - добавляет запись указанного уровня в лог
+  * ''emergency/alert/critical/error/warning/notice/info/debug'' - добавляет запись соотвествующего уровня в лог
+
+Перед записью в лог, сообщения должны интерполироваться с заменой всех вхождений вида ''{имя}'' на значение переменных контекста.
+
+<code php>
+$logger->info('Error {name}', ['name' => 'runtime']); // "Error runtime"
+</code>
+
+===== LoggerAwareInterface =====
+
+Классы, агрегирующие логгер должны реализовать интерфейс ''LoggerAwareInterface''.
+
+  * ''setLogger'' - добавление логгера классу
+
+====== Реализация ======
+
+===== LoggerTrait =====
+
+Примесь ''LoggerTrait'' реализует все базовые методы интерфейса ''LoggerInterface'', оставляя абстрактным метод ''log'', который должен быть реализован в конкретном логгере.
+
+===== AbstractLogger =====
+
+Абстрактный класс ''AbstractLogger'' аналогичен примеси ''LoggerTrait''.
+
+===== LoggerAwareTrait =====
+
+Примесь ''LoggerAwareTrait'' реализует интерфейс ''LoggerAwareInterface'' используя защищенное свойство ''$logger'' класса в качестве ссылки на используемый классом логгер.
+
+===== NullLogger =====
+
+Класс ''NullLogger'' представляет Null-объект логгер.
+
+~~DISQUS~~

@@ -1,0 +1,18 @@
+Класс [[http://framework.zend.com/manual/current/en/modules/zend.config.writer.html|Writer]] позволяет изменять содержимое конфигурационных файлов различных типов с помощью PHP. В частности поддерживаются следующие типы файлов INI, XML, Json, Yaml, JavaProperties.
+
+<code php>
+$conf = new Zend\Config\Config([
+  'core' => [
+    'author' => 'zf2'
+  ]
+]);
+
+$writer = new Zend\Config\Writer\Ini();
+//$writer = new Zend\Config\Writer\Xml();
+//$writer = new Zend\Config\Writer\Json();
+//$writer = new Zend\Config\Writer\Yaml();
+//$writer = new Zend\Config\Writer\JavaProperties();
+$writer->toFile('conf/conf.ini', $conf);
+</code>
+
+~~DISQUS~~

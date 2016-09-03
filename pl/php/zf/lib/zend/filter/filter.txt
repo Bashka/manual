@@ -1,0 +1,155 @@
+====== Семантика ======
+
+===== FilterInterface =====
+
+Интерфейс ''FilterInterface'' определяет классы, используемые для изменения данных. Метод ''filter'' выполняет эти изменения.
+
+====== Реализация ======
+
+===== AbstractFilter =====
+
+Абстрактный класс ''AbstractFilter'' включает методы для конфигурирования фильтра.
+
+  * ''setOptions'' - конфигурирует фильтр используя одноименные setters или определенные в свойстве ''$options'' ключи
+  * ''getOptions'' - предоставляет конфигурацию фильтра
+  * ''%%__invoke%%'' - выполняет фильтрацию
+
+<code php>
+class MyFilter extends AbstractFilter{
+  public function setConcreteOption($value){
+    ...
+  }
+}
+
+$filter = new MyFilter;
+$filter->setOptions(['concreteOption' => 'value']); // Будет вызван метод setConcreteOption
+</code>
+
+===== StaticFilter =====
+
+Класс ''StaticFilter'' это статическое хранилище фильтров, которое может использоваться для быстрой фильтрации данных.
+
+<code php>
+$data = StaticFilter::execute($data, 'stringToLower');
+</code>
+
+===== FilterChain =====
+
+Фильтр ''FilterChain'' позволяет сформировать очередь и использовать ее для фильтрации данных с помощью множества фильтров.
+
+  * ''count'' - предоставляет число входящих в очередь фильтров
+  * ''setPluginManager/getPluginManager'' - устанавливает и предоставляет хранилище ([[..:service_manager:plugin_manager|PluginManager]]) допустимых фильтров
+  * ''attach'' - регистрирует очередной фильтр (возможно использование ''callable'' в качестве фильтра)
+  * ''attachByName'' - регистрирует очередной фильтр по его имени в используемом хранилище
+  * ''merge'' - сливает конфигурацию данной очереди в вызываемую
+  * ''getFilters'' - предоставляет все используемые очередью фильтры
+
+<code php>
+$chain = new FilterChain; // Использование стандартного PluginManager
+$chain->attachByName('stringTrim');
+$chain->attachByName('stringToLower', ['encoding' => 'utf-8']);
+$chain->filter($string);
+</code>
+
+<code php>
+$chain = new FilterChain([
+  'filters' => [
+    ['name' => 'stringtrim'],
+    [
+      'name' => 'stringToLower',
+      'options' => ['encoding' => 'utf-8']
+    ],
+  ]
+]);
+</code>
+
+====== Стандартные фильтры ======
+
+===== Пользовательские =====
+
+  * ''Callback'' - использование пользовательской функции для фильтрации
+    * ''callback'' - используемая пользовательская функция
+    * ''callback_params'' - дополнительные параметры, передаваемые в пользовательскую функцию при вызове (первым передается фильтруемое значение)
+  * ''PregReplace'' - использование регулярного выражения для поиска с заменой
+    * ''pattern'' - регулярное выражение
+    * ''replacement'' - правило замены
+  * ''Whitelist'' - только перечисленные значения
+    * ''list'' - массив допустимых значений
+    * ''strict'' - необходимо ли использовать строгую типизацию при сравнении
+  * ''Blacklist'' - все кроме перечисленных значений 
+    * ''list'' - массив недопустимых значений
+    * ''strict'' - необходимо ли использовать строгую типизацию при сравнении
+
+===== Строки =====
+
+  * ''StringToLower'' - приведение строки к нижнему регистру
+    * ''encoding'' - кодировка
+  * ''StringToUpper'' - приведение строки к верхнему регистру
+    * ''encoding'' - кодировка
+  * ''UpperCaseWords'' - приводит первую букву каждого слова к верхнему регистру
+    * ''encoding'' - кодировка
+  * ''CamelCaseToSeparator/CamelCaseToDash/CamelCaseToUnderscore'' - разделение ''CamelCase'' на составляющие, объединение составляющих по дефису и нижнему подчеркиванию
+  * ''DashToSeparator/DashToCamelCase/DashToUnderscore'' - разделение по дефису на составляющие, объединение в ''CamelCase'' и по нижнему подчеркиванию
+  * ''UnderscoreToSeparator/UnderscoreToCamelCase/UnderscoreToUnderscore'' - разделение по нижнему подчеркиванию на составляющие, объединение в ''CamelCase'' и по дефису
+  * ''SeparatorToSeparator/SeparatorToCamelCase/SeparatorToDash'' - разделение по разделителю на составляющие, объединение в ''CamelCase'' и по дефису
+    * ''separator'' - разделитель
+    * ''replacementSeparator'' - объединитель
+  * ''StringTrim'' - удаление символов с начала и конца строки
+    * ''charlist'' - удаляемый символ
+  * ''StripNewlines'' - удаление символов новой строки
+  * ''StripTags'' - удаление HTML-тегов
+    * ''tagsAllowed'' - список допустимых тегов (возможно указание допустимых для этих тегов аттрибутов)
+    * ''attributesAllowed'' - список допустимых аттрибутов для всех допустимых тегов
+
+<code php>
+$filter = new StripTags;
+$filter->setTagsAllowed([
+  'div',
+  'a' => ['href'],
+]);
+$filter->setAttributesAllowed(['class']);
+$html = $filter->filter('
+<div class="my-class">
+  Foo
+  <a href="site.com" onclick="...">Bar</div>
+</div>
+<script>...</script>
+');
+// Результат
+/*
+<div class="my-class">
+  Foo
+  <a href="site.com">Bar</div>
+</div>
+*/
+</code>
+
+===== Дата и время =====
+
+  * ''DateTimeFormatter'' - приводит дату в указанный формат
+    * ''format'' - используемый формат даты и времени для приведения
+
+===== Файловая система =====
+
+  * ''BaseName'' - последний компонент пути (%%/etc/%%**sudoers.d**)
+  * ''Dir'' - имя родительского каталога (**/etc**%%/sudoers.d%%)
+  * ''RealPath'' - полный адрес файла с раскрытыми относительными ссылками (''..'', ''.'')
+    * ''exists'' - ''true'', если указанный путь должен существовать
+
+===== Сеть =====
+
+  * ''UriNormalize'' - нормализация URI
+
+===== Шифрование =====
+
+===== Сжатие =====
+
+===== Другое =====
+
+  * ''Boolean'' - приведение к логическому типу
+  * ''Digits'' - удаляет все кроме цифровых символов
+  * ''ToInt'' - приводит к целочисленному типу
+  * ''ToNull'' - приводит к null
+
+
+~~DISQUS~~

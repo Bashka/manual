@@ -1,0 +1,79 @@
+====== Семантика ======
+
+===== ConfigInterface =====
+
+Заполнить и сконфигурировать [[.:service_manager|ServiceManager]] можно через вызов его методов, а можно с использованием объекта конфигурации, класс которого должен реализовать интерфейс ''ConfigInterface''.
+
+  * ''configureServiceManager'' - выполняет конфигурирование менеджера
+  * ''toArray'' - представляет конфигурацию в виде массива
+
+====== Реализация ======
+
+===== Config =====
+
+Класс ''Config'' реализует интерфейс ''ConfigInterface'' и может использоваться для конфигурирования менеджера. Конфигурация задается в виде массива параметром конструктора класса и может включать следующие ключи:
+
+  * ''services'' - сервисы
+  * ''invokables'' - фабрики [[.:factory|InvokableFactory]]
+  * ''factories'' - фабрики
+  * ''lazy_services'' - карта сервисов с отложенной загрузкой
+  * ''aliases'' - псевдонимы
+  * ''abstract_factories'' - абстрактные фабрики
+  * ''delegators'' - делегирующие фабрики
+  * ''initializers'' - инициализаторы
+  * ''shared'' - разделяемые сервисы
+
+Сконфигурировать менеджер можно так же передав в его конструктор массив конфигурации. При этом класс ''Config'' будет использован автоматически.
+
+<code php>
+$sm = new ServiceManager([
+  // Сервисы
+  'services' => [
+    'Config' => [...],
+    ...
+  ],
+  // InvokableFactory
+  'invokables' => [
+    'EmailFilter' => Module\Filter\EmailFilter::class,
+    Module\Filter\PhoneFilter::class,
+    ...
+  ],
+  // Фабрики
+  'factories' => [
+    DB::class => new DBFactory,
+    ...
+  ],
+  // Сервисы с отложенной загрузкой
+  'lazy_services' => [
+    'class_map' => [
+      MyClass::class => MyClass::class,
+      ...
+    ],
+  ],
+  // Псевдонимы
+  'aliases' => [
+    'FilterEmail' => EmailFilter::class,
+    ...
+  ],
+  // Абстрактные фабрики
+  'abstract_factories' => [
+    MapperAbstractFactory::class,
+    ...
+  ],
+  // Делегирующие фабрики
+  'delegators' => [
+    'Logger' => new FilterLoggerDelegatFactory,
+  ],
+  // Инициализаторы
+  'initializers' => [
+    new ConstructorInitializer,
+    ...
+  ],
+  // Разделяемые сервисы
+  'shared' => [
+    DB::class => true,
+  ],
+]);
+</code>
+
+~~DISQUS~~

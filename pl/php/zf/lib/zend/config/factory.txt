@@ -1,0 +1,21 @@
+Класс [[http://framework.zend.com/manual/current/en/modules/zend.config.factory.html|Factory]] позволяет получить конфигурацию из файлов различных типов более удобным способом.
+
+<code php>
+$config = Zend\Config\Factory::fromFile('/conf/conf.ini', true);
+echo $config->core->author;
+</code>
+
+Второй параметр метода `fromFile` класса определяет формат возвращаемого значения:
+
+  * true - в виде Config объекта;
+  * false (по умолчанию) - в виде массива.
+
+Класс так же позволяет записать в файл конфигурацию:
+
+<code php>
+$config = Zend\Config\Factory::toFile('/conf/conf.ini', $config);
+</code>
+
+В качестве конфигурации здесь может выступать как объект класса Config, так и PHP массив.
+
+~~DISQUS~~

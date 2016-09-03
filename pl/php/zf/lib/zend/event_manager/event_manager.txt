@@ -1,0 +1,131 @@
+====== Семантика ======
+
+===== EventManagerInterface =====
+
+Для реализации модели событийного взаимодействия в ZF используется менеджер событий. Данный класс объектов должен реализовать интерфейс ''EventManagerInterface'', определяющий семантику регистрации и вызова обработчиков событий. Интерфейс включает следующие основные методы:
+
+  * ''attach'' - метод позволяет добавить слушателя к событию;
+  * ''detach'' - метод позволяет отписать слушателя от события;
+  * ''clearListeners'' - метод отписывает всех слушателей от события;
+  * ''trigger'' - метод генерирует событие по его имени;
+  * ''triggerEvent'' - метод генерирует событие используя экземпляр класса [[.:event|Event]];
+  * ''triggerUntil'' - метод генерирует событие (по его имени) и проверяет возвращаемое каждым обработчиком значение с помощью функции обратного вызова. Если данная функция возвращает ''true'', дальнейшая обработка события прекращается
+  * ''triggerEventUntil'' - метод аналогичен ''triggerUntil'', но генерирует событие используя экземпляр класса [[.:event|Event]]
+  * ''setEventPrototype'' - определяет прототип объекта события, который будет использован для представления события при выбросе
+
+===== EventManagerAwareInterface =====
+
+Чаще всего менеджер событий агрегируется в экземпляр другого класса, генерирующего события. Этот класс должен реализовать интерфейс ''EventsCapableInterface'', включающий единственный метод ''getEventManager'', предоставляющий менеджер событий для экземпляров данного класса. Где будет храниться и каким образом устанавливаться менеджер интерфейс не определяет.
+
+Интерфейс ''EventManagerAwareInterface'' расширяет ''EventsCapableInterface'', добавляя семантику установки менеджера событий классу через метод ''setEventManager''.
+
+===== ListenerAggregateInterface =====
+
+Для объектного представления группы обработчиков, их пакетной регистрации и отписки используется класс, реализующий интерфейс ''ListenerAggregateInterface'' с двумя методами:
+
+  * ''attach'' - метод регистрирует группу обработчиков
+  * ''detach'' - метод отписывает группу обработчиков
+
+====== Реализации ======
+
+===== EventManager =====
+
+ZF включает реализацию менеджера событий через класс ''EventManager''. Данный класс реализуется интерфейс ''EventManagerInterface'', а так же включает несколько дополнительных методов.
+
+Подписка и генерация события:
+<code php>
+$em = new EventManager;
+$em->attach('myEvent', function(EventInterface $e){
+  echo 'My event';
+  $e->stopPropagation(); // Остановка дальнейшей обработки события
+}, $priority);
+$em->trigger('myEvent', $target, $params);
+
+$em->attach('*', ...): // Подписка обработчика на все события менеджера
+</code>
+
+Проверка результатов обработки события:
+<code php>
+$em = new EventManager;
+$em->attach('myEvent', function(EventInterface $e){
+  return 'My event';
+});
+$em->attach('myEvent', function(EventInterface $e){
+  return 1;
+});
+$em->triggerUntil(function($result){
+  return is_string($result); // Второй обработчик (возвращающий число) вызван не будет
+}, 'myEvent');
+</code>
+
+===== EventManagerAwareTrait =====
+
+Интерфейс ''EventManagerAwareInterface'' может быть реализован классом через использование примеси ''EventManagerAwareTrait''. Эта примесь организует хранение менеджера событий в свойстве ''events'' использующего класса и регистрирует его в свойстве автоматически, используя класс ''EventManager'', если это не было сделано заблаговременно вызовом метода ''setEventManager''.
+
+<code php>
+class MyClass implements EventManagerAwareInterface{
+  use EventManagerAwareTrait;
+}
+
+$obj = new MyClass;
+$em = $obj->getEventManager(); // Менеджер создается автоматически
+...
+$obj->setEventManager(new EventManager); // Менеджер устанавливается программно
+</code>
+
+===== AbstractListenerAggregate =====
+
+Абстрактный класс ''AbstractListenerAggregate'' и аналогичная по функциональности примесь ''ListenerAggregateTrait'' предоставляют частичную реализацию интерфейса ''ListenerAggregateInterface'', реализуя метод ''detach''. Отписка обработчиков выполняется автоматически для всех добавленных методом ''attach'' обрабтчиков в свойство ''listeners'', определяемое данными реализациями.
+
+<code php>
+class MyListenerAggregate extends AbstractListenerAggregate{
+  public function attach(EventManagerInterface $events, $priority = 1){
+    $this->listeners[] = $events->attach('event', [$this, 'onEvent']);
+  }
+
+  public function onEvent(EventInterface $e){
+    ...
+  }
+}
+
+$em = new EventManager;
+$listenerAggregate = new MyListenerAggregate;
+$listenerAggregate->attach($em, $priority);
+$em->trigger('event');
+$listenerAggregate->detach($em);
+</code>
+
+===== LazyListener =====
+
+Прокси-класс ''LazyListener'' позволяет выполнить отложенную инициализацию обработчика событий.
+
+<code php>
+class MyEventListener{
+  public function __construct(){
+    ...
+    sleep(5); // Долгая инициализация обработчика
+  }
+
+  // Метод-обработчик
+  public function onEventListen(){
+    ...
+  }
+}
+
+$sm = new ServiceManager([
+  'invokables' => [
+    MyEventListener::class,
+  ],
+]);
+
+$em = new EventManager;
+// Регистрация обработчика без задержки на инициализацию
+$em->attach('event', new LazyListener([
+  'listener' => MyEventListener::class,
+  'method' => 'onEventListen',
+], $sm));
+// Задержка на инициализацию только при первом появлении события 
+$em->trigger('event'); // Задержка 5 секунд
+</code>
+
+~~DISQUS~~

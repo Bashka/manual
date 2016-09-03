@@ -1,0 +1,92 @@
+====== Семантика ======
+
+===== WriterInterface =====
+
+Интерфейс ''WriterInterface'' описывает логику механизма, ответственного за запись событий лога.
+
+  * ''addFilter'' - добавляет [[.:filter|Filter]], используемый для фильтрации событий лога перед записью
+  * ''setFormatter'' - устанавливает [[.formatter|Formatter]], используемый для форматирования событий лога перед записью
+  * ''write'' - выполняет запись событий лога
+  * ''shutdown'' - завершает работу с используемым хранилищем
+
+Событие лога имеет следующую структуру:
+
+<code php>
+[
+  'timestamp'     => временная метка,
+  'priority'      => код приоритета,
+  'priorityName'  => приоритет,
+  'message'       => сообщение,
+  'extra'         => контекст для интерполяции сообщения
+]
+</code>
+
+====== Реализация ======
+
+===== AbstractWriter =====
+
+Абстрактный класс ''AbstractWriter'' частично реализует интерфейс ''WriterInterface'', включая логику добавления Filter, Formatter и обработчик исключений уровня логгирования.
+
+  * ''setFilterPluginManager/getFilterPluginManager'' - устанавливает и предоставляет [[..:service_manager:plugin_manager|PluginManager]] для Filter
+  * ''filterPlugin'' - предоставляет плагин для Filter
+  * ''setFormatterPluginManager/getFormatterPluginManager'' - устанавливает и предоставляет PluginManager для Formatter
+  * ''formatterPlugin'' - предоставляет плагин для Formatter
+  * ''setConvertWriteErrorsToExceptions'' - определяет, необходимо ли преобразовывать ошибки уровня лога в исключения
+
+Метод ''write'' данного класса реализует логику фильтрации событий и обработку ошибок и исключений уровня логгирования. Дочерний класс должен реализовать метод ''doWrite'', включающий использование Formatter и непосредственную запись события лога.
+
+<code php>
+class FileWriter extends AbstractWriter{
+  private $file;
+
+  public function __construct($file){
+    $this->file = $file;
+  }
+
+  public function doWrite(array $event){
+    $line = $this->getFormatter()->format($event) . PHP_EOL;
+    file_put_contents($this->file, $line);
+  }
+}
+</code>
+
+===== Noop =====
+
+Класс ''Noop'' расширяет ''AbstractWriter'' представляя Null-объект.
+
+===== Psr =====
+
+Класс ''Prs'' является адаптером, использующим любой реализующий стандарт [[.:psr_logger|PSR-3]] логгер в качестве хранилища.
+
+<code php>
+$writer = new Psr;o
+$writer->setLogger($psrLogger);
+$writer->write([...]);
+</code>
+
+===== Stream =====
+
+Класс ''Stream'' расширяет ''AbstractWriter'' используя в качестве хранилища файловый или URL поток.
+
+<code php>
+$writer = new Stream('log/error.log', 'a', PHP_EOL, 0777);
+$write->write([...]);
+</code>
+
+===== Db =====
+
+Класс ''Db'' расширяет ''AbstractWriter'' используя в качестве хранилища таблицу в реляционной СУБД.
+
+<code php>
+use Zend\Db\Adapter\Adapter;
+
+$adapter = new Adapter(...);
+$writer = new Db($adapter, 'table', [
+  'timestamp' => 'time_field',
+  'priority' => 'priority_field',
+  ...
+]);
+$write->write([...]);
+</code>
+
+~~DISQUS~~

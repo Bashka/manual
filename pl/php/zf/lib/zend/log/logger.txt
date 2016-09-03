@@ -1,0 +1,58 @@
+====== Семантика ======
+
+===== LoggerInterface =====
+
+Интерфейс ''LoggerInterface'' описывает механизм логгирования.
+
+  * ''emerg/alert/crit/err/warn/norice/info/debug'' - добавляет запись соответствующего уровня в лог
+
+===== LoggerAwareInterface =====
+
+Интерфейс ''LoggerAwareInterface'' описывает классы, использующие логгирование.
+
+  * ''setLogger'' - устанавливает логгер
+
+====== Реализация ======
+
+===== Logger =====
+
+Класс ''Logger'' реализует ''LoggerAwareInterface'' позволяя фиксировать события лога с помощью перечисленных [[.:writer|Writer]], а так же обрабатывать их с помощью [[.:processor|Processor]].
+
+  * ''addWriter'' - добавляет используемый логгером Writer
+  * ''getWriters'' - предоставляет все используемые логгером Writer
+  * ''addProcessor'' - добавляет используемые логгером Processor
+  * ''getProcessors'' - предоставляет все используемые логгером Processor
+  * ''log'' - записывает событие заданного уровня
+
+Статичные методы:
+
+  * ''registerFatalErrorShutdownFunction'' - включает логгирование фатальных ошибок для данного логгера
+  * ''registerErrorHandler/unregisterErrorHandler'' - включает и отключает логгирование системных ошибок для данного логгера
+  * ''registerExceptionHandler/unregisterExceptionHandler'' - включает и отключает логгирование исключений для данного логгера
+
+<code php>
+$logger = new Logger;
+$logger->addProcessor(new RequestId);
+
+$writer = new Stream('log/error.log', 'a');
+$writer->setFormatter(new Simple('%timestamp% %priorityName% (%extra%): %message%'));
+
+$logger->addWriter($writer);
+
+$logger->alert('Foo bar');
+</code>
+
+===== LoggerAwareTrait =====
+
+Примесь ''LoggerAwareTrait'' реализует интерфейс ''LoggerAwareInterface'' используя свойство ''$logger''.
+
+===== PsrLoggerAdapter =====
+
+Класс ''PsrLoggerAdapter'' является адаптером над реализациями ''LoggerInterface'', обеспечивающими совместимость с интерфейсом [[.:psr_logger|LoggerInterface]] для PSR-3.
+
+<code php>
+$psrLogger = new PsrLoggerAdapter($logger);
+$psrLogger->log(LogLevel::ALERT, 'Message');
+</code>
+
+~~DISQUS~~

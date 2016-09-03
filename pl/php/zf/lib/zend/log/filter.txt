@@ -1,0 +1,64 @@
+====== Семантика ======
+
+===== FilterInterface =====
+
+Интерфейс ''FilterInterface'' описывает классы, отвечающие за фильтрацию сообщений на уровне [[.:writer|Writer]] перед записью в хранилище. Он описывает только метод ''filter'', который и должен определять допустимось записи события лога в хранилище.
+
+<code php>
+$writer->addFilter(new SuppressFilter(true)); // Блокировка хранилища
+$writer->writer($logEvent); // Событие лога не будет записано в хранилище
+</code>
+
+====== Реализация ======
+
+===== SuppressFilter =====
+
+Класс ''SuppressFilter'' реализует ''FilterInterface'' используя флаг, который и определяет доступность хранилища для записи.
+
+<code php>
+$filter = new SuppressFilter;
+$filter->suppress(true); // Блокировка событий
+$filter->filter($logEvent); // false
+$filter->suppress(false); // Разблокирова событий
+$filter->filter($logEvent); // true
+</code>
+
+===== Priority =====
+
+Класс ''Priority'' реализует ''FilterInterface'' ориентируясь на уровень логирования события.
+
+<code php>
+$filter = new Priority(Logger::WARN, '>='); // Пропуск событий WARN, NOTICE, INFO, DEBUG
+$filter->filter(['priority' => Logger::INFO]); // true
+$filter->filter(['priority' => Logger::WARN]); // true
+$filter->filter(['priority' => Logger::ALERT]); // false
+</code>
+
+===== Timestamp =====
+
+Класс ''Timestamp'' реализует ''FilterInterface'' ориентируясь на время возникноения события.
+
+<code php>
+$filter = new Timestamp(new DateTime('15:00:00')); // Только события после 15:00
+</code>
+
+===== Regex =====
+
+Класс ''Regex'' реализует ''FilterInterface'' сверяя сообщение события с шаблоном регулярного выражения.
+
+<code php>
+$filter = new Regex('/^FOO: [A-Z0-9]+/');
+$filter->filter(['message' => 'FOO: A3']); // true
+$filter->filter(['message' => 'BAR: A3']); // false
+</code>
+
+===== Sample =====
+
+Класс ''Sample'' реализует ''FilterInterface'' и используется для получения выборки событий согласно указанному значению вероятности.
+
+<code php>
+$filter = new Sample(0.5); // Фильтр будет пропускать каждое второе событие
+$filter = new Sample(0.1); // Фильтр будет пропускать каждое десятое событие
+</code>
+
+~~DISQUS~~

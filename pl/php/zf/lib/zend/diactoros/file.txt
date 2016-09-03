@@ -1,0 +1,27 @@
+====== Семантика ======
+
+===== UploadedFileInterface =====
+
+Для представления передаваемых файлов используется интерфейс ''UploadedFileInterface'', включающий следующие методы:
+
+  * ''getStream'' - предоставляет [[.:stream|поток]] для данного файла
+  * ''moveTo'' - перемещает файл по указанному адресу
+  * ''getSize'' - получает размер файла
+  * ''getError'' - если файл не был загружен, предоставляет информацию об ошибке в виде кодов констант UPLOAD_ERR_*
+  * ''getClientFilename'' - предоставляет пользовательское название файла
+  * ''getClientMediaType'' - предоставляет пользовательский медиа-тип файла
+
+====== Реализация ======
+
+===== UploadedFile =====
+
+Класс ''UploadedFile'' реализует интерфейс ''UploadedFileInterface''.
+
+<code php>
+$files = $serverRequest->getUploadedFiles();
+foreach($files as $i => $file){
+  $file->moveTo('./storage/' . $i . '_' . $file->getClientFilename());
+}
+</code>
+
+~~DISQUS~~

@@ -1,0 +1,21 @@
+Адаптер кэша использует [[pl:php:zf2:lib:zend:event_manager:event_manager|EventManager]] во время работы, что позволяет подписываться на его события.
+
+Адаптер выбрасывает три события для каждого метода доступа к данным кэша:
+
+  * pre - выполняется до доступа;
+  * post - выполняется после доступа;
+  * exception - выполняется в случае ошибки.
+
+<code php>
+$em = $cache->getEventManager();
+$em->attach('setItem.post', function($e){
+  echo 'Item set';
+});
+$em->attach('getItem.pre', function($e){
+  echo 'Item get';
+});
+$cache->setItem('key', 'value'); // "Item set"
+echo $cache->getItem('key'); // "Item get"
+</code>
+
+~~DISQUS~~

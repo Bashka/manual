@@ -1,0 +1,35 @@
+====== Семантика ======
+
+===== HelperInterface =====
+
+Хелперы представления это классы, облегчающие шаблонизацию. Они должны реализовывать интерфейс ''HelperInterface'', а так же включать любые методы, которые и будут вызываться в шаблоне.
+
+  * ''setView/getView'' - устанавливает и предоставляет текущий шаблонизатор хелперу
+
+====== Реализация ======
+
+===== AbstractHelper =====
+
+Класс ''AbstractHelper'' реализует интерфейс ''HelperInterface'' сохраняя шаблонизатор в свойстве хелпера.
+
+<code php>
+class MyHelper extends AbstractHelper{
+  public function myMethod(){
+    return 'Hello world';
+  }
+}
+
+$renderer->getHelperPluginManager()->setService('my_helper', new MyHelper);
+</code>
+
+<code html>
+<div>
+  {$this->my_helper()->myMethod()} // Получение хелпера и вызов его метода из шаблона
+</div>
+</code>
+
+===== HelperPluginManager =====
+
+Класс ''HelperPluginManager'' расширяет [[..:service_manager:plugin_manager|AbstractPluginManager]] и предоставляет стандартный локатор хелперов для шаблонизатора. В данный класс включена группа готовых хелперов, которые могут использоваться любым шаблонизатором, использующим его в качестве локатора.
+
+~~DISQUS~~

@@ -1,0 +1,6 @@
+  * [[.:adapter|Adapter]]
+  * [[.:result_set|ResultSet]]
+  * [[.:sql|Sql]]
+  * [[.:ddl|Ddl]]
+  * [[.:table_gateway|TableGateway]]
+  * [[.:row_gateway|RowGateway]]

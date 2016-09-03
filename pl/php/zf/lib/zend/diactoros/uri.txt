@@ -1,0 +1,32 @@
+====== Семантика ======
+
+===== UriInterface =====
+
+Для представления URI-адресов должен использоваться класс, реализующий интерфейс ''UriInterface'' [[https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-7-http-message.md|PSR-7]].
+
+  * ''withScheme/getScheme'' - определяет или предоставляет схему URI (**http**:%%//user@site.com:8080/path/to/resource?query=param#fragment%%)
+  * ''getAuthority'' - предоставляет сведения о хосте (%%http://%%**user@site.com:8080**%%/path/to/resource?query=param#fragment%%)
+  * ''withUserInfo/getUserInfo'' - определяет или предоставляет информацию о пользователе (%%http://%%**user:pass**%%@site.com:8080/path/to/resource?query=param#fragment%%)
+  * ''withHost/getHost'' - определяет или предоставляет домен хоста (%%http://user@%%**site.com**%%:8080/path/to/resource?query=param#fragment%%)
+  * ''withPort/getPort'' - определяет или предоставляет используемый порт (%%http://user@site.com:%%**8080**%%/path/to/resource?query=param#fragment%%)
+  * ''withPath/getPath'' - определяет или предоставляет путь целевого ресурса (%%http://user@site.com:8080%%**/path/to/resource**%%?query=param#fragment%%)
+  * ''withQuery/getQuery'' - определяет или предоставляет параметры запроса (%%http://user@site.com:8080/path/to/resource%%**?query=param**%%#fragment%%)
+  * ''withFragment/getFragment'' - определяет или предоставляет фрагмент запроса (%%http://user@site.com:8080/path/to/resource?query=param%%**#fragment**)
+
+Экземпляры данного класса должны быть представлены в виде объектов-значений, это означает, что сеттеры класса не изменяют объект, а возвращает его измененную копию.
+
+====== Реализация ======
+
+===== Uri =====
+
+Класс ''Uri'' в ZF реализует интерфейс ''UriInterface'' и позволяет сформировать свой экземпляр на основании строки:
+<code php>
+$uri = new Uri('http://user:pass@site.com:8080/path/to/resource?query=param#fragment');
+</code>
+
+Изменение адреса:
+<code php>
+$uri = $uri->withScheme('https');
+</code>
+
+~~DISQUS~~

@@ -3,7 +3,7 @@
     * [[.:pl:bash:|Bash]]
     * [[.:pl:perl:|Perl]]
     * [[.:pl:php:|PHP]]
-      * [[.:pl:php:zf2:|Zend Framework 2]]
+      * [[.:pl:php:zf:|Zend Framework]]
       * [[.:pl:php:composer:|Composer]]
     * [[.:pl:javascript:|JavaScript]]
       * [[.:pl:javascript:requirejs:|RequireJS]]
@@ -16,13 +16,6 @@
 
   * Разработка:
     * [[.:development:algorithms:|Алгоритмы и структуры данных]]
-    * Паттерны
-    * [[.:development:refactoring:|Рефакторинг]]
-
-====== Разметка ======
-  * XML, XSD, XSLT
-  * HTML
-  * CSS
 
 ====== Утилиты и программы ======
   * [[soft:git:|Git]]
@@ -30,8 +23,4 @@
   * [[soft:latex:|LaTeX]]
   * [[.:soft:vim:|Vim]]
     * [[.:pl:vimscript:|VimScript]]
-  * LibreOffice
-
-====== Операционные системы ======
-  * [[.:os:linux:|GNU/Linux]]
-  * [[.:os:networks:|Компьютерные сети]]
+  * [[.:soft:drupal|Drupal]]

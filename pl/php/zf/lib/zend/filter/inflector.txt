@@ -1,0 +1,36 @@
+Класс [[http://framework.zend.com/manual/current/en/modules/zend.filter.inflector.html|Inflector]] позволяет преобразовывать части строки с помощью фильтров.
+
+<code php>
+$inflector = new Zend\Filter\Inflector('pages/:page.:suffix');
+$inflector->setRules([
+  // Фильтры
+  ':page'  => ['Word\CamelCaseToDash', new Zend\Filter\StringToLower()],
+  // Статичные данные
+  'suffix' => 'html',
+]);
+
+$string   = 'camelCasedWords';
+$filtered = $inflector->filter(array('page' => $string)); // "pages/camel-cased-words.html"
+</code>
+
+Для перечисления фильтров, помимо метода ''setRules'' можно воспользоваться следующими методами:
+
+  * setStaticRule - статичные данные;
+
+<code php>
+$inflector = new Zend\Filter\Inflector(':script.:suffix');
+$inflector->setStaticRule('script', 'index');
+$inflector->setStaticRule('suffix', 'php');
+</code>
+
+  * setFilterRule - фильтры.
+
+<code php>
+$inflector = new Zend\Filter\Inflector(':script.:suffix');
+$inflector->setFilterRule('script', [
+    'Word\CamelCaseToDash',
+    new Zend\Filter\StringToLower()
+]);
+</code>
+
+~~DISQUS~~

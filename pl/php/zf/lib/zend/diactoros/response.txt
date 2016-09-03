@@ -1,0 +1,71 @@
+====== Семантика ======
+
+===== ResponseInterface =====
+
+Интерфейс ''RequestInterface'' описывает семантику ответа клиенту в системе и расширяет интерфейс [[.:message|MessageInterface]] следующими методами:
+
+  * ''withStatus'' - определяет статус ответа
+  * ''getStatusCode'' - предоставляет статус ответа
+  * ''getReasonPhrase'' - предоставляет описание статуса ответа
+
+Экземпляры данного класса должны быть представлены в виде объектов-значений, это означает, что сеттеры класса не изменяют объект, а возвращает его измененную копию.
+
+===== EmitterInterface =====
+
+Интерфейс ''EmitterInterface'' описывает семантику механизмов передачи ответа клиенту с помощью метода ''emit''.
+
+====== Реализация ======
+
+===== Response =====
+
+Класс ''Response'' реализует интерфейс ''ResponseInterface''.
+
+<code php>
+$request = new Request('php://output', 200);
+</code>
+
+Следующие классы расширяют ''Response'':
+
+  * ''EmptyResponse'' - представляя пустой ответ (204 статус)
+  * ''RedirectResponse'' - представляя ответ с периадресацией (302 статус)
+
+<code php>
+$redirect = new RedirectResponse('http://redirect.site.com');
+</code>
+
+===== InjectContentTypeTrait =====
+
+Примесь ''InjectContentTypeTrait'' позволяет расширить класс приватным метдом ''injectContentType'', используемым для установки типа контента в ответе (заголовок Content-Type).
+
+<code php>
+class XmlResponse extends Response{
+  use InjectContentTypeTrait;
+
+  public function __construct($xml, $status = 200, array $headers = []){
+    $body = new Stream('php://temp', 'wb+');
+    $body->write($xml);
+    $body->rewind();
+
+    $headers = $this->injectContentType('text/xml', $headers);
+
+    parent::__construct($body, $status, $headers);
+  }
+}
+</code>
+
+Примесь используется следующими классами:
+
+  * ''TextResponse'' - использует простой текст в качестве данных ответа
+  * ''JsonResponse'' - использует JSON в качестве данных ответа
+  * ''HtmlResponse'' - использует HTML в качестве данных ответа
+
+===== SapiEmitter =====
+
+Класс ''SapiEmitter'' реализует интерфейс ''EmitterInterface'' используя встроенные PHP механизмы для передачи ответа клиенту.
+
+<code php>
+$redirect = new RedirectResponse('http://other.site.com');
+(new SapiEmitter)->emit($redirect);
+</code>
+
+~~DISQUS~~

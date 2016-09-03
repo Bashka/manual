@@ -1,0 +1,66 @@
+====== Семантика ======
+
+===== SharedEventManagerInterface =====
+
+Если необходимо зарегистрировать обработчик событий для объекта, менеджер которого будет определен в будущем, используется особый, разделяемый менеджер событий, класс которого должен реализовать интерфейс ''SharedEventManagerInterface''. Данный менеджер должен включать как логику регистрации и вызова обработчиков, так и логику идентификации будущих менеджеров событий. Интерфейс определяет следующие методы:
+
+  * ''attach'' - регистрирует обработчик события для данного идентификатора
+  * ''detach'' - отписывает обработчик события для данного идентификатора
+  * ''getListeners'' - предоставляет все обработчики события для данных идентификаторов
+  * ''clearListeners'' - отписывает все обработчики события для данного идентификатора
+
+===== SharedEventsCapableInterface =====
+
+Если разделяемый менеджер событий для данного класса предоставляется самим классом, он должен реализовать интерфейс ''SharedEventsCapableInterface'', включающий метод ''getSharedManager'', который и должен предоставлять разделяемый менеджер.
+
+====== Реализации ======
+
+===== SharedEventManager =====
+
+Класс ''SharedEventManager'' является реализацией интерфейса ''SharedEventManagerInterface'' в ZF.
+
+<code php>
+class MyClass implements EventManagerAwareInterface, SharedEventsCapableInterface{
+  use EventManagerAwareTrait;
+
+  protected static $sharedEvents;
+
+  public static function setSharedManager(SharedEventManagerInterface $sem){
+    self::$sharedEvents = $sem;
+  }
+
+  public function getSharedManager(){
+    if(!self::$sharedEvents instanceof SharedEventManagerInterface){
+      self::$sharedEvents = new SharedEventManager;
+    }
+    return self::$sharedEvents;
+  }
+
+  public function getEventManager(){
+    if(!$this->events instanceof EventManagerInterface){
+      $this->setEventManager(new EventManager($this->getSharedManager()));
+    }
+    return $this->events;
+  }
+
+  public function method(){
+    $this->getEventManager()->trigger(__FUNCTION__, $this);
+  }
+}
+
+$sem = new SharedEventManager;
+MyClass::setSharedManager($sem); // Разделяемый менеджер для событий всех экземпляров класса
+
+// Обработчик события event для всех экземпляров класса
+$sem->attach(MyClass::class, 'method', function(EventInterface $e){
+  ...
+}, $priority);
+
+$obj1 = new MyClass;
+$obj2 = new MyClass;
+
+$obj1->method();
+$obj2->method();
+</code>
+
+~~DISQUS~~

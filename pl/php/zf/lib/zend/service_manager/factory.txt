@@ -1,0 +1,108 @@
+====== Семантика ======
+
+===== FactoryInterface =====
+
+Для создания сервиса могут применяться классы-фабрики, реализующие интерфейс ''FactoryInterface''. Фабрика должна включать реализацию метода ''%%__invoke%%'', который и будет отвечать за конструирование сервиса.
+
+<code php>
+class LoggerFactory implements FactoryInterface{
+  public function __invoke(ContainerInterface $container, $requestedName, array $options = null){
+    $config = $container->get('Config');
+    $logger = new Logger($config['Log']['path']);
+    return $logger;
+  }
+}
+</code>
+
+===== AbstractFactoryInterface =====
+
+В отличии от обычной, абстрактная фабрика должна включать реализацию метода ''canCreate'' интерфейса ''AbstractFactoryInterface'' (в дополнение к методу ''%%__invoke%%'' обычной фабрики), который будет определять возможность создания сервиса фабрикой по его имени.
+
+<code php>
+class AbstractMapperFactory implements AbstractFactoryInterface{
+  public function canCreate(ContainerInterface $container, $requestedName){
+    return substr($requestedName, -6) == 'Mapper'; // Обслуживание только сервисов, заканчивающихся на 'Mapper'
+  }
+
+  public function __invoke(ContainerInterface $container, $requestedName, array $options = null){
+    return new $requestedName($container->get('DB')); // Все 'Mapper' должны быть инициализированы драйвером БД
+  }
+}
+</code>
+
+===== DelegatorFactoryInterface =====
+
+Делегирующие фабрики это декораторы, расширяющие логику обычных фабрик без наследования или изменения исходного кода. Они должны реализовать интерфейс ''DelegatorFactoryInterface'' и метод ''%%__invoke%%''.
+
+Пример делегирующей фабрики для описанного в первом листинге класса:
+<code php>
+class LoggerDelegatorFactory implements DelegatorFactoryInterface{
+  public function __invoke(ContainerInterface $container, $name, callable $callback, array $options = null){
+    $logger = $callback();
+    $logger->addFormatter(new HttpRequestContextFormatter());
+
+    return $logger;
+  }
+}
+</code>
+
+===== InitializerInterface =====
+
+Инициализатор не является фабрикой, но так же отвечает за конструирование сервисов. Класс-инициализатор должен реализовывать интерфейс ''InitializerInterface'' и метод ''%%__invoke%%'', в котором будет выполняться инициализация.
+
+<code php>
+class LoggerAwareInitializer implements InitializerInterface{
+  public function __invoke(ContainerInterface $container, $instance){
+    if(!$instance instanceof LoggerAwareInterface){
+      return;
+    }
+
+    $instance->setLog($container->get('Logger'));
+  }
+}
+</code>
+
+====== Реализация ======
+
+===== InvokableFactory =====
+
+Фабрика ''InvokableFactory'' реализует логику конструирования сервиса с использованием имеющегося у целевого класса конструктора. Конструктор класса либо не должен принимать параметров, либо должен принимать один параметр в виде массива.
+
+<code php>
+class MyClass{
+  public function __construct(){
+    ...
+  }
+}
+
+$sm->setFactory('MyClass', new InvokableFactory);
+...
+$obj = $sm->get('MyClass');
+</code>
+
+===== LazyServiceFactory =====
+
+Делегирующая-фабрика ''LazyServiceFactory'' предоставляет механизм формирования сервисов с отложенной инициализацией за счет использования прокси-объектов. Фабрика зависит от [[https://github.com/Ocramius/ProxyManager|Ocramius/ProxyManager]].
+
+<code php>
+class MyClass{
+  public function __construct(){
+    ...
+    sleep(5); // Предполагается долгая инициализация
+  }
+
+  // Полезный метод
+  public function method(){
+    ...
+  }
+}
+
+$sm->mapLazyService('MyClass', 'MyClass');
+$sm->setFactory('MyClass', new InvokableFactory);
+$sm->addDelegator('MyClass', LazyServiceFactory::class);
+
+$obj = $sm->get('MyClass'); // Нет 5 секундной задержки
+$obj->method(); // 5 секундная задержка перед использованием, обусловленная отложенной инициализацией
+</code>
+
+~~DISQUS~~

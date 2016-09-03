@@ -1,0 +1,84 @@
+====== Семантика ======
+
+===== ServiceLocatorInterface =====
+
+Локатор служб в ZF должен реализовать интерфейс ''ServiceLocatorInterface'', описывающий следующие методы:
+
+  * ''get'' - предоставляет сервис по его имени
+  * ''has'' - проверяет возможность предоставления сервиса по имени
+  * ''build'' - конструирует сервис по его имени и опциям
+
+====== Реализация ======
+
+====== ServiceManager ======
+
+Класс ''ServiceManager'' реализует интерфейс ''ServiceLocatorInterface'' и дополняет его некоторыми специальными методами, в том числе:
+
+  * ''setAllowOverride'' - позволяет перезаписывать уже зарегистрированные за данным именем сервисы
+  * ''getAllowOverride'' - проверяет, разрешена ли перезапись сервисов
+  * ''configure'' - конфигурирует менеджер
+  * ''configureAliases'' - задает конфигурацию псевдонимов
+  * ''setAlias'' - задает псевдоним имени сервиса
+  * ''setInvokableClass'' - использует фабрику [[.:factory|InvokableFactory]] в качестве фабрики для укажанного сервиса
+  * ''setFactory'' - использует указанную фабрику для сервиса
+  * ''mapLazyService'' - задает карту соответствия имен классов для сервисов с отложенной инициализацией
+  * ''addAbstractFactory'' - добавляет абстрактную фабрику
+  * ''addDelegator'' - добавляет делегирующую фабрику
+  * ''addInitializer'' - добавляет инициализатор
+  * ''setService'' - устанавливает сервис
+  * ''setShared'' - делает сервис разделяемым
+
+Пример перезаписи сервисов:
+<code php>
+$sm = new ServiceManager;
+$sm->setService('MyService', new MyService);
+$sm->setService('MyService', new MyService); // Error
+$sm->setAllowOverride(true);
+$sm->setService('MyService', new MyService); // Ok
+</code>
+
+Псевдонимы:
+<code php>
+$sm = new ServiceManager;
+// Сервисы
+$sm->setService('MyService', new MyService);
+$sm->setAlias('OtherService', 'MyService');
+$sm->get('OtherService'); // Сервис MyService
+
+// Фабрики
+$sm->setFactory('MyService', new MyServiceFactory);
+$sm->setAlias('OtherService', 'MyService');
+$sm->get('OtherService'); // Сервис MyService
+
+// Псевдонимы
+$sm->setService('MyService', new MyService);
+$sm->setAlias('FooService', 'MyService');
+$sm->setAlias('BarService', 'FooService');
+$sm->get('BarService'); // Сервис MyService
+</code>
+
+Разделяемые сервисы:
+<code php>
+$sm = new ServiceManager;
+$sm->setFactory('MyService', new MyServiceFactory);
+$sm->setShared('MyService', true);
+$sm->get('MyService') === $sm->get('MyService'); // true
+$sm->setShared('MyService', false);
+$sm->get('MyService') === $sm->get('MyService'); // false
+</code>
+
+Создание сервиса с опциями:
+<code php>
+class MyServiceFactory implements FactoryInterface{
+  public function __invoke(ContainerInterface $container, $requestedName, array $options = null){
+    // Использование $options
+    ...
+  }
+}
+
+$sm = new ServiceManager;
+$sm->setFactory('MyService', new MyServiceFactory);
+$obj = $sm-build('MyService', $options);
+</code>
+
+~~DISQUS~~

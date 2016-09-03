@@ -1,0 +1,56 @@
+====== Семантика ======
+
+===== ProcessorInterface =====
+
+Интерфейс ''ProcessorInterface'' описывает классы, обрабатывающие и дополняющие конфигурацию события лога перед передачей его в [[.:writer|Writer]]. Интерфейс описывает метод ''process'' принимающий событие лога и возвращающий его после обработки.
+
+====== Реализация ======
+
+===== ReferenceId =====
+
+Класс ''ReferenceId'' реализует ''ProcessorInterface'' дополняя все события лога уникальным идентификатором (''extra.referenceId''), который может использоваться для отслеживания сессии на уровне лога.
+
+<code php>
+$processor = new ReferenceId;
+$processor->setReferenceId(uniqid());
+$processor->process($logEvent); // Событие дополняется параметром extra.referenceId
+</code>
+
+===== RequestId =====
+
+Класс ''RequestId'' аналогичен ''ReferenceId'' с той разницей, что использует собственный идентификатор (''extra.requestId'') вместо пользовательского.
+
+<code php>
+$processor = new RequestId;
+$processor->process($logEvent); // Событие дополняется параметром extra.requestId
+</code>
+
+===== PsrPlaceholder =====
+
+Класс ''PsrPlaceholder'' реализует ''ProcessorInterface'' и служит для замены плейсхолдеров ([[.:psr_logger|PSR-3]]) в тексте события лога.
+
+<code php>
+$processor = new PsrPlaceholder;
+$processor->process([
+  'message' => 'foo {data} bar',
+  'extra' => [
+    'data' => 'baz',
+  ],
+]); // "foo baz bar"
+</code>
+
+===== Backtrace =====
+
+Класс ''Backtrace'' реализует ''ProcessorInterface'' и дополняет конфигурацию события лога следующими данными трасировки:
+
+  * ''file'' - файл, в котором было вызвано событие
+  * ''class'' - класс, в котором было вызвано событие
+  * ''function'' - функция или метод, в котором было вызвано событие
+  * ''line'' - строка, вызвавшее событие
+
+<code php>
+$processor = new Backtrace;
+$processor->process($logEvent);
+</code>
+
+~~DISQUS~~

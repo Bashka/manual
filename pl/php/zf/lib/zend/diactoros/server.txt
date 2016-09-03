@@ -1,0 +1,21 @@
+====== Реализация ======
+
+===== Server =====
+
+Класс ''Server'' применяется для обработки запроса сервером и формировании ответа клиенту. Для этих целей используются следующие методы:
+
+  * ''setEmitter'' - определяет используемый сервером механизм пересылки полученного в ходе обработки ответа клиенту
+  * ''listen'' - запускает обработку запроса
+
+<code php>
+$server = Server::createServerFromRequest(function($request, $response, $finalHandler){
+  ... // Обработка запроса
+
+  return new RedirectResponse('http://other.site.com');
+}, ServerRequestFactory::fromGlobals());
+
+// Вызов обработчика, формирование им ответа и передача его клиенту
+$server->listen($finalHandler); // По умолчанию используется SapiEmitter
+</code>
+
+~~DISQUS~~

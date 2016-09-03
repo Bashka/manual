@@ -1,0 +1,25 @@
+====== Фабрика ======
+
+Фабрика ''AutoloaderFactory'' позволяет пакетно создавать и регистрировать загрузчики. Класс является абстрактным и реализует только статичные методы:
+
+  * ''factory'' - создает и регистрирует загрузчики из массива конфигураций
+  * ''getRegisteredAutoloaders'' - возвращает все зарегистрированные фабрикой загрузчики
+  * ''getRegisteredAutoloader'' - возвращает конкретный загрузчик по его имени
+  * ''unregisterAutoloaders'' - отключает все зарегистрированные фабрикой загрузчик
+  * ''unregisterAutoloader'' - отключает конкретный загрузчик по его имени
+
+<code php>
+AutoloaderFactory::factory([
+  'Zend\Loader\ClassMapAutoloader' => [
+    'config/autoload_classmap.php',
+    [
+      'Validator' => __DIR__ . '/old_lib/Validator/Phone.php',
+    ],
+  ],
+  'Zend\Loader\StandardAutoloader' => [
+    'namespaces' => [
+      'Filter' => __DIR__ . '/lib/Filter',
+    ],
+  ],
+]);
+</code>

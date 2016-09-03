@@ -1,0 +1,37 @@
+====== Семантика ======
+
+===== MessageInterface =====
+
+Любые сообщения описываются интерфейсом ''MessageInterface'' [[https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-7-http-message.md|PSR-7]]. Семантика конкретного типа сообщения (запрос или ответ) расширяется дополнительным интерфейсом.
+
+  * ''withProtocolVersion/getProtocolVersion'' - устанавливает и предоставляет версию используемого протокола
+  * ''getHeaders'' - предоставляет все заголовки сообщения в виде двумерного массива
+  * ''hasHeader'' - проверяет присутствие заголовка
+  * ''getHeader'' - предоставляет все значения (разделенные запятой) конкретного заголовка в виде массива
+  * ''getHeaderLine'' - предоставляет все значения конкретного заголовка в виде строки
+  * ''withHeader'' - устанавливает заголовок сообщения
+  * ''withAddedHeader'' - добавляет значение (через запятую) заголовку сообщения
+  * ''withoutHeader'' - удаляет заголовок сообщения
+  * ''withBody/getBody'' - устанавливает или предоставляет [[.:stream|поток]] данных для тела сообщения
+
+Экземпляры данного класса должны быть представлены в виде объектов-значений, это означает, что сеттеры класса не изменяют объект, а возвращает его измененную копию.
+
+====== Реализация ======
+
+====== MessageTrait ======
+
+В ZF для реализации интерфейса ''MessageInterface'' может применяться примесь ''MessageTrait'', включающая все его методы.
+
+<code php>
+class Message implements MessageInterface{
+  use MessageTrait;
+}
+
+$message = (new Message)
+  ->withProtocolVersion('1.0')
+  ->withHeader('Set-Cookie', 'cookie=value')
+  ->withAddedHeader('Set-Cookie', 'cookie2=value2')
+  ->withBody(new Stream('php://output', 'w'));
+</code>
+
+~~DISQUS~~

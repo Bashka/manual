@@ -1,0 +1,59 @@
+====== Семантика ======
+
+===== PluginManagerInterface =====
+
+Менеджер плагинов это немного расширенный локатор служб, который выполняет те же функции, но предоставляет службы только определенного (определенных) типа (класса). Он описывается интерфейсом ''PluginManagerInterface'', который определяет единственный метод ''validate'', проверяющий допустимость предоставления данного сервиса менеджером.
+
+====== Реализация ======
+
+===== AbstractPluginManager =====
+
+Абстрактный класс ''AbstractPluginManager'' реализует ''PluginManagerInterface'', определяя два механизма проверки предоставляемых им сервисов.
+
+  * С помощью определения свойства ''$instanceOf'' дочерним классом, которое задает допустимый класс сервисов для данного менеджера
+
+<code php>
+class MyPluginManager extends AbstractPluginManager{
+  protected $instanceOf = Service::class; // Допустимы только сервисы данного класса и его подклассы
+}
+</code>
+
+  * С помощью переопределения метода ''validate'', в котором будет производиться проверка сервиса на допустимость
+
+<code php>
+class MyPluginManager extends AbstractPluginManager{
+  public function validate($instance){
+    if($instance instanceof Foo || $instance instanceof Bar){
+      return;
+    }
+
+    throw new InvalidServiceException('This is not a valid service!');
+  }
+}
+</code>
+
+В остальном класс полностью аналогичен классическому локатору служб, но так как он реализуется конкретными классами, может быть сконфигурирован по умолчанию:
+
+<code php>
+class MyPluginManager extends AbstractPluginManager{
+  protected $factories = [
+    ... // Фабрики локатора
+  ];
+
+  protected $aliases = [
+    ... // Псевдонимы локатора
+  ];
+
+  public function __construct(){
+    $this->initializers[] = [$this, 'injectMethod']; // Инициализаторы локатора
+  }
+
+  public function injectMethod(){
+    ...
+  }
+
+  ...
+}
+</code>
+
+~~DISQUS~~

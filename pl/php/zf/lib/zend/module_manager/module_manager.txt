@@ -1,0 +1,21 @@
+''ModuleManager'' это класс, отвечающий за загрузку всех используемых в системе модулей, а так же за доступ к ним. Он генерирует множество [[http://framework.zend.com/manual/current/en/modules/zend.module-manager.module-manager.html|событий]], которые используются другими частями системы для загрузки и инициализации модулей.
+
+Для конфигурации класса используется массив (как правило, содержащийся в файле ''config/application.config.php'') следующей структуры:
+
+<code php>
+[
+  'modules' => [
+    'Application',
+    'MyModule',
+    ...
+  ],
+  'module_listener_options' => [
+    'module_paths' => [
+      './module',
+      './vendor',
+    ]
+  ],
+]
+</code>
+
+~~DISQUS~~

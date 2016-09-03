@@ -1,0 +1,5 @@
+  * [[.:module|Module]]
+    * [[.:controller|Контроллеры]]
+    * [[.:service|Службы]]
+    * [[.:model|Бизнес-логика и БД]]
+  * [[.:module_manager|ModuleManager]]

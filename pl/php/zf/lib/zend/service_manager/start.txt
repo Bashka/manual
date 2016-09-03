@@ -1,0 +1,4 @@
+  * [[].:factory|Factory]]
+  * [[.:service_manager|ServiceManager]]
+  * [[.:config|Config]]
+  * [[.:plugin_manager|PluginManager]]

@@ -1,0 +1,137 @@
+====== Семантика ======
+
+===== SplAutoloader =====
+
+Механизмы автозагрузки классов в ZF представлены в виде классов, реализующих интерфейс ''SplAutoloader'', который содержит следующие методы:
+
+  * ''%%__construct%%'' - конструктор, принимающий опции загрузчика
+  * ''setOptions'' - устанавливает новые опции загрузчика
+  * ''autoload'' - выполняет загрузку класса по его полному имени
+  * ''register'' - регистрирует загрузчик с помощью функции ''spl_autoload_register''
+
+====== Реализация ======
+
+===== ClassMapAutoloader =====
+
+Загрузчик ''ClassMapAutoloader'' является наиболее быстрым решением, так как использует карту проекции имен классов на адреса файлов, в которых они хранятся. Данный загрузчик может получить карту загрузки как из PHP файла, возвращающего массив, так и в виде массива.
+
+Класс реализует интерфейс ''SplAutoloader'' и добавляет к нему следующие методы:
+
+  * ''registerAutoloadMap'' - добавляет карту проекции загружая ее из файла или используя переданный массив
+  * ''registerAutoloadMaps'' - пакетно добавляет карты проекций
+  * ''getAutoloadMap'' - предоставляет сформированную на момент вызова карту проекции
+
+Регистрация карты:
+<code php>
+use lib\Filter\Email as EmailFilter;
+
+$cml = new ClassMapAutoloader;
+$cml->registerAutoloadMap([
+  'lib\Filter\Email' => __DIR__ . '/lib/Filter/Email.php',
+  ...
+]);
+$cml->register();
+
+$emailFilter = new EmailFilter;
+</code>
+
+Загрузка карты из файла:
+<code php>
+// config/autoload_classmap.php
+return [
+  'lib\Filter\Email' => __DIR__ . '/../lib/Filter/Email.php',
+  ...
+];
+</code>
+
+<code php>
+$cml = new ClassMapAutoloader;
+$cml->registerAutoloadMap('config/autoload_classmap.php');
+$cml->register();
+</code>
+
+Конфигурирование:
+<code php>
+$config = [
+  'config/autoload_classmap.php',
+  [
+    'lib\Filter\Phone' => __DIR__ . '/lib/Filter/Phone.php',
+  ]
+];
+
+// Все перечисленные операции аналогичны
+$cml = new ClassMapAutoloader($config);
+$cml->setOptions($config);
+$cml->registerAutoloadMaps($config);
+</code>
+
+===== StandardAutoloader =====
+
+Загрузчик ''StandardAutoloader'' использует стандарт PSR-0 для вычисления адресов файлов, хранящих загружаемые классы.
+
+Класс реализует интерфейс ''SplAutoloader'' и добавляет к нему следующие методы:
+
+  * ''registerNamespace'' - регистрирует расположение целевого каталога для данного пространства имен
+  * ''registerNamespaces'' - пакетная регистрация пространств имен
+  * ''registerPrefix'' - регистрирует расположение целевого каталога для данного префикса
+  * ''registerPrefixes'' - пакетная регистрация префиксов
+
+Регистрация пространства имен:
+<code php>
+// lib/Filter/Email.php
+namespace Filter;
+class Email{
+  ...
+}
+</code>
+
+<code php>
+use Filter\Email as EmailFilter;
+
+$sl = new StandardAutoloader;
+$sl->registerNamespace('Filter', __DIR__ . '/lib/Filter');
+$sl->register();
+
+$obj = new EmailFilter;
+</code>
+
+Регистрация префикса:
+<code php>
+// old_lib/Filter/Email.php
+class Filter_Email{
+  ...
+}
+</code>
+
+<code php>
+$sl = new StandardAutoloader;
+$sl->registerPrefix('Filter', __DIR__ . '/old_lib/Filter');
+$sl->register();
+
+$obj = new Filter_Email;
+</code>
+
+Конфигурирование:
+<code php>
+$config = [
+  'namespaces' => [
+    'Filter' => __DIR__ . '/lib/Filter',
+  ],
+  'prefixes' => [
+    'Validator' => __DIR__ . '/old_lib/Validator',
+  ],
+];
+
+// Все перечисленные операции аналогичны
+$cml = new ClassMapAutoloader($config);
+$cml->setOptions($config);
+$cml->registerAutoloadMaps($config);
+
+// Все перечисленные операции аналогичны
+$sl = new StandardAutoloader($config);
+$sl->setOptions($config);
+$cml->registerNamespaces($config['namespaces']);
+$cml->registerPrefixes($config['prefixes']);
+</code>
+
+~~DISQUS~~

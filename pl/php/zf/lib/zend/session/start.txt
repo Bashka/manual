@@ -1,0 +1,21 @@
+{{http://plantuml.com/plantuml/png/hP7FIiD048Vl-nHxRA1vWK843u8U_0CvIYc36KAmtPJDqk9D1KLGyAXluBM8mO84Ns7sZPnDx3Os8XvwMTZacvdljmDd9jTorvqYYYGzKqLBUqjBMj07d--qS3VxAAD8r9WCTsICHP7bwX0KfAZbG1O6j14Rdnq8Czm7bOnhAf-YwXKDD58mmK2q0UPFK4z0eJ8nJ-8cNAGH4b-K9O7eC65dK086JeURpKVnNXmV71-j0PVuYPD-Si8h-o3fZIyLLVRUtlmTECNL-1RadGiqlNEywCiPZ3dZohEhmD1GHWwhNLxiDPLk0rHkpILjN0BXPuS__diFqNxFfj70cxbNUgNINjexRyXIwvx_My4l-vthp61hmVtlqk0B|Модель взаимодействия компонентов:}}
+
+  * Инициализация
+    * Пользователь открывает сессию (SessionManager.start)
+    * Менеджер открывает соединение с постоянным хранилищем (SaveHandler.open)
+    * Данные из постоянного хранилища считываются в глобальный массив ''$_SESSION''
+  * Запись данных
+    * Пользователь получает доступ к хранилищу данных сессии (SessionManager.getStorage)
+    * Пользователь добавляет данные в хранилище (Storage.set)
+    * Хранилище дублирует данные в глобальный массив ''$_SESSION''
+  * Чтение данных
+    * Пользователь получает доступ к хранилищу данных сессии (SessionManager.getStorage)
+    * Пользователь запрашивает данные из хранилища (Storage.get)
+    * Хранилище получает данные из глобального массива ''$_SESSION'' и передает их пользователю
+  * Завершение
+    * Данные из глобального массива ''$_SESSION'' записываются в постоянное хранилище (SaveHandler.write)
+
+  * [[.:storage|Storage]]
+  * [[.:save_handler|SaveHandler]]
+  * [[.:config|Config]]
+  * [[.:manager|Manager]]

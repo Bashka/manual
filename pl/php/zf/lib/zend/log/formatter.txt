@@ -1,0 +1,32 @@
+====== Семантика ======
+
+===== FormatterInterface =====
+
+Интерфейс ''FormatterInterface'' описывает логику классов, используемых [[.:writer|Writer]] для формирования текстового сообщения из события лога, записываемого в хранилище.
+
+  * ''format'' - выполняет преобразование события лога в строку
+  * ''setDateTimeFormat/getDateTimeFormat'' - определяет и предоставляет формат даты, используемый по умолчанию для форматирования ''timestamp''
+
+====== Реализация ======
+
+===== Base =====
+
+Класс ''Base'' реализует интерфейс ''FormatterInterface'' используя метод ''format'' для нормализации всех нескалярных данных события лога и приведения их в скалярный тип.
+
+===== Simple =====
+
+Класс ''Simple'' расширяет ''Base'' используя маркеры вида ''%имя%'' для обозначения позиции подстановки элементов события лога в сообщение.
+
+<code php>
+$simple = new Simple('%timestamp% %priorityName% (%extra%): %message%');
+$simple->format([
+  'timestamp' => time(),
+  'priorityName' => 'error',
+  'message' => 'foo bar',
+  'extra' => [
+    'referenceId' => uniqid(),
+  ],
+]); // "123 error ({"referenceId":"57c344953585e"}): foo bar"
+</code>
+
+~~DISQUS~~
