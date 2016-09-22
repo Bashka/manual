@@ -1,0 +1,317 @@
+====== Семантика ======
+
+===== AbstractSchemaManager =====
+
+Абстрактный класс ''AbstractSchemaManager'' реализует семантику менеджера схемы БД. Для каждого конкретного [[.:driver|Driver]] должен быть реализован конкретный менеджер схемы.
+
+  * Получение информации о схеме:
+    * ''createSchema'' - предоставляет ''Schema'' для текущей БД
+    * ''listDatabases'' - предоставляет массив имен доступных БД
+    * ''listNamespaceNames'' - предоставляет массив (доступных в текущей БД) пространств имен
+    * ''listTables'' - предоставляет массив ''Table'' (в текущей БД)
+    * ''listTableNames'' - предоставляет массив (доступных в текущей БД) имен таблиц
+    * ''tablesExist'' - проверяет, существуют ли указанные таблицы (в текущей БД)
+    * ''listTableDetails'' - предоставляет ''Table'' для указанной таблицы (в текущей БД)
+    * ''listTableColumns'' - предоставляет массив ''Column'' для указанной таблицы
+    * ''listSequences'' - предоставляет массив ''Sequence'' для указанной БД
+    * ''listTableIndexes'' - предоставляет массив ''Index'' для указанной таблицы
+    * ''listTableForeignKeys'' - предоставляет массив ''ForeignKey'' для указанной таблицы
+    * ''listViews'' - предоставляет массив ''View'' (в текущей БД)
+  * Изменение схемы:
+    * ''createDatabase/dropDatabase'' - создает и удаляет БД
+    * ''crateTable/renameTable/alterTable/dropTable'' - создает, изменяет и удаляет ''Table''
+    * ''createSequence/dropSequence'' - создает и удаляет ''Sequence''
+    * ''createConstraint/dropConstraint'' - создает и удаляет ''Constraint''
+    * ''createIndex/dropIndex'' - создает и удаляет ''Index''
+    * ''createForeignKey/dropForeignKey'' - создает и удаляет ''ForeignKey''
+    * ''createView/dropView'' - создает и удаляет ''View''
+
+<code php>
+$schema = $connection->getSchemaManager()->createSchema();
+foreach($schema->getTables() as $table){
+  var_dump($table->getName());
+}
+</code>
+
+===== AbstractAsset =====
+
+Абстрактный класс ''AbstractAsset'' описывает базовую структуру большинства __Элементов__ схемы БД, таких как: таблицы, колонки, представления, индексы и т.д. Эти __Элементы__ могут использоваться как для получения информации о схеме БД, так и для редактирования этой схемы через вызовы соответствующих методов ''AbstractSchemaManager'' с передачей им __Элементов__.
+
+  * ''getName'' - предоставляет имя __Элемента__
+  * ''getNamespaceName'' - предоставляет пространство имен __Элемента__
+  * ''getFullQualifiedName'' - предоставляет пространство имен и имя __Элемента__, разделенных точкой
+
+===== Constraint =====
+
+Интерфейс ''Constraint'' описывает список ''Column'', ограничиваемых некоторым условием (на пример индексацией).
+
+  * ''getName'' - предоставляет имя ограничителя
+  * ''getColumns'' - предоставляет массив ограничиваемых колонок
+
+===== Visitor =====
+
+Интерфейс ''Visitor'' описывает механизмы генерации и верификации __Элементов__ через паттерн [[http://en.wikipedia.org/wiki/Visitor_pattern|Посетитель]].
+
+  * ''acceptSchema'' - посещение и обработка ''Schema''
+  * ''acceptTable'' - посещение и обработка ''Table''
+  * ''acceptColumn'' - посещение и обработка ''Column''
+  * ''acceptForeignKey'' - посещение и обработка ''ForeignKey''
+  * ''acceptIndex'' - посещение и обработка ''Index''
+  * ''acceptSequence'' - посещение и обработка ''Sequence''
+
+Реализации этого интерфейса чаще всего используются для генерации SQL.
+
+===== NamespaceVisitor =====
+
+Интерфейс ''NamespaceVisitor'' дополняет ''Visitor'' включая метод обработки ''Namespace''.
+
+  * ''acceptNamespace'' - посещение и обработка ''Namespace''
+
+====== Реализация ======
+
+===== Элементы =====
+
+==== Schema ====
+
+__Элемент__ ''Schema'' представляет схему БД.
+
+  * Пространства имен:
+    * ''getNamespaces'' - предоставляет список имен доступных пространств
+    * ''hasNamespace'' - проверяет наличие указанного пространства
+    * ''createNamespace'' - создает пространство
+  * Последовательности:
+    * ''getSequences'' - получает список доступных последовательностей
+    * ''hasSequence'' - проверяет наличие указанной последовательности
+    * ''getSequence'' - получает ''Sequence''
+    * ''createSequence'' - создает последовательность
+    * ''dropSequence'' - удаляет последовательность
+  * Таблицы:
+    * ''getTableNames'' - получает список имен доступных таблиц
+    * ''getTables'' - получает список доступных ''Table''
+    * ''hasTable'' - проверяет наличие таблицы
+    * ''getTable'' - получает ''Table''
+    * ''createTable'' - создает таблицу
+    * ''renameTable'' - переименовывает таблицу
+    * ''dropTable'' - удаляет таблицу
+  * Другое:
+    * ''toSql'' - предоставляет массив SQL запросов для создания схемы
+    * ''toDropSql'' - предоставляет массив запросов для удаления схемы
+    * ''getMigrateToSql'' - предоставляет массив запросов, выполняющих миграцию указанной схемы в текущую
+    * ''getMigrateFromSql'' - предоставляет массив запросов, выполняющих миграцию текущей схемы в указанную
+
+<code php>
+$schema = $connection->getSchemaManager()->createSchema();
+$table = $schema->createTable('user');
+$table->addColumn('id', 'integer', ['unsigned' => true]);
+...
+$sql = $schema->toSql($schemaManager->getDatabasePlatform());
+...
+</code>
+
+==== Sequence ====
+
+Последовательности
+
+==== Table ====
+
+__Элемент__ ''Table'' представляет таблицу в БД.
+
+  * Поля:
+    * ''getColumns'' - предоставляет список доступных ''Column''
+    * ''getPrimaryKeyColumns'' - предоставляет список ''Column'', являющихся первичным ключем
+    * ''hasColumn'' - проверяет, присутствует ли колонка с таким именем
+    * ''getColumn'' - предоставляет ''Column''
+    * ''addColumn'' - добавляет колонку
+    * ''changeColumn'' - изменяет свойства колонки
+    * ''dropColumn'' - удаляет колонку
+  * Первичный ключ:
+    * ''setPrimaryKey'' - устанавливает первичный ключ
+    * ''dropPrimaryKey'' - удаляет первичный ключ
+    * ''getPrimaryKey'' - предоставляет ''Index'', являющийся первичным ключем
+    * ''hasPrimaryKey'' - проверяет наличие первичного ключа
+  * Внешние ключи:
+    * ''getForeignKeys'' - предоставляет список ''ForeignKey''
+    * ''hasForeignKey'' - проверяет наличие внешнего ключа по его имени
+    * ''getForeignKey'' - предоставляет ''ForeignKey''
+    * ''addForeignKeyConstraint'' - добавляет внешний ключ
+    * ''addUnnamedForeignKeyConstraint'' - добавляет неименованный внешний ключ
+    * ''addNamedForeignKeyConstraint'' - добавляет именованный внешнию ключ
+    * ''removeForeignKey'' - удаляет внешний ключ
+  * Индексы:
+    * ''getIndexes'' - предоставляет список ''Index''
+    * ''hasIndex'' - проверяет наличие индекса
+    * ''getIndex'' - предоставляет ''Index''
+    * ''addIndex'' - добавляет индекс
+    * ''dropIndex'' - удаляет индекс
+    * ''addUniqueIndex'' - добавляет уникальный индекс
+    * ''renameIndex'' - переименовывает индекс
+    * ''columnsAreIndexed'' - проверяет, состоит ли индекс из указанных полей
+  * Опции:
+    * ''getOptions'' - предоставляет опции
+    * ''hasOption'' - проверяет наличие опции
+    * ''getOption'' - предоставляет значение опции
+    * ''addOption'' - добавляет опцию
+
+<code php>
+$table = $schema->createTable('user');
+$table->addColumn('id', 'integer', ['unsigned' => true]); // Возвращает Column
+$table->addColumn('login', 'string', ['length' => 256]);
+$table->addColumn('role', 'integer', ['unsigned' => true]);
+$table->setPrimaryKey(['id']);
+$table->addUniqueIndex(['login']);
+$table->addForeignKeyConstraint('role', ['role'], ['id'], ['onUpdate' => 'CASCADE']);
+...
+</code>
+
+==== Column ====
+
+__Элемент__ ''Column'' представляет колонку таблицы.
+
+  * ''setOptions'' - устанавливает опции колонки
+  * ''setType/getType'' - задает [[.:types|Type]]
+  * ''setLength/getLength'' - задает максимальную длину столбца
+  * ''setFixed/getFixed'' - имеет ли столбец типа ''string'' фиксированную длину
+  * ''setScale/getScale'' - задает число десятичных знаков для типа с плавающей точкой
+  * ''setPrecision/getPrecision'' - задает максимальное число знаков (включая десятичных) для типа с плавающей точкой
+  * ''setUnsigned/getUnsigned'' - задает диапазон положительных и отрицательных чисел
+  * ''setNotnull/getNotnull'' - допускает NULL в качестве значения
+  * ''setDefault/getDefault'' - задает значение по умолчанию
+  * ''setAutoincrement/getAutoincrement'' - делает колонку автоинкрементируемой
+  * ''setComment/getComment'' - задает комментарий
+
+<code php>
+$table = $schema->createTable('user');
+$column = $table->addColumn('id', 'integer');
+$column->setUnsigned(true);
+$column->setAutoincrement(true);
+$table->setPrimaryKey(['id']);
+</code>
+
+==== Index ====
+
+__Элемент__ ''Index'' реализует интерфейс ''Constraint'' и описывает индекс колонок.
+
+  * ''isSimpleIndex'' - является ли индекс не уникальным и не первичным
+  * ''isUnique'' - является ли индекс уникальным
+  * ''isPrimary'' - является ли индекс первичным
+  * ''getFlags'' - получение платформо-зависимых флагов индекса
+  * ''hasFlag'' - проверка установки платформо-зависимого флага индекса
+  * ''addFlag'' - установка платформо-зависимого флага индекса
+  * ''removeFlag'' - отключение платформо-зависимого флага индекса
+  * ''getOptions'' - получение платформо-зависимых опций индекса
+  * ''hasOption'' - проверка наличия платформо-зависимой опции индекса
+  * ''getOption'' - получение значения платформо-зависимой опции индекса
+  * ''spansColumns'' - содержит ли индекс все перечисленные колонки в указанном порядке
+  * ''isFullfilledBy'' - является вызываемый индекс подмножеством указанного
+  * ''overrules'' - может ли другой индекс быть перезаписан этим
+
+==== ForeignKey ====
+
+__Элемент__ ''ForeignKeyConstraint'' реализует интерфейс ''Constraint'' и описывает внешний индекс колонок.
+
+  * ''getLocalTableName'' - предоставляет имя таблицы, хранящей индекс
+  * ''getLocalTable'' - предоставляет ''Table'', хранящую индекс
+  * ''setLocalTable'' - устанавливает ''Table'', которая должна хранить индекс
+  * ''getLocalColumns'' - предоставляет массив ''Column'', описывающих связь в хранящей индекс таблице
+  * ''getForeignTableName'' - предоставляет имя табилцы, на которую ссылается индекс
+  * ''getForeignColumns'' - предоставляет имена колонок, на которые ссылается индекс
+  * ''onUpdate'' - предоставляет имя обработчика, который должен быть вызван при обновлении индекса
+  * ''onDelete'' - предоставляет имя обработчика, который должен быть вызван при удалении индекса
+
+<code php>
+$fk = new ForeignKeyConstraint(['role_id'], 'role', ['id'], 'fk_name', ['onUpdate' => 'CASCADE', 'onDelete' => 'CASCADE']);
+</code>
+
+==== View ====
+
+__Элемент__ ''View'' это представление в БД.
+
+  * ''getSql'' - предоставляет SQL, используемый для формирования представления
+
+<code php>
+$view = new View('guests', 'SELECT * FROM users WHERE role = "guest"');
+$connection->getSchemaManager()->createView($view);
+</code>
+
+===== Посетители =====
+
+==== AbstractVisitor ====
+
+Абстрактный класс ''AbstractVisitor'' реализует интерфейсы ''Visitor'' и ''NamespaceVisitor'' без конкретной логики (тела методов не реализованы).
+
+==== CreateSchemaSqlCollector ====
+
+Посетитель ''CreateSchemaSqlCollector'' наследует ''AbstractVisitor'' и используется для формирования массива SQL запросов, создающих данный __Элемент__.
+
+  * ''getQueries'' - предоставляет собранный массив SQL
+  * ''resetQueries'' - отчищает собранный массив SQL
+
+<code php>
+$visitor = new CreateSchemaSqlCollector($platform);
+$schema->visit($visitor);
+$sql = $visitor->getQueries();
+</code>
+
+==== DropSchemaSqlCollector ====
+
+Посетитель ''DropSchemaSqlCollector'' аналогичен ''CreateSchemaSqlCollector'', но используется для удаления __Элемента__.
+
+==== Comparator ====
+
+Изменение __Элементов__ не влияет непосредственно на схему БД, а только описывает их. Класс ''Comparator'' позволяет сформировать различие (''Diff'') между двумя __Элементами__ и использовать его для внесения правок в БД.
+
+  * ''compare'' - формирует различие (''SchemaDiff'') между двумя ''Schema''
+  * ''diffTable'' - формирует различие (''TableDiff'') между двумя ''Table''
+  * ''diffColumn'' - формирует список различий (''ColumnDiff'') между двумя ''Column''
+
+Полученные различия можно использовать для внесения правок в структуру БД.
+
+<code php>
+$fromSchema = $schemaManager->createSchema();
+$toSchema = clone $fromSchema;
+$toSchema->dropTable('user');
+$sql = (new Comparator)->compare($fromSchema, $toSchema)->toSql($schemaManager->getDatabasePlatform());
+// или
+$sql = $fromSchema->getMigrateToSql($toSql, $schemaManager->getDatabasePlatform());
+
+$connection->beginTransaction();
+foreach($sql as $statement){
+  try{
+    $connection->exec($statement);
+  }
+  catch(...){
+    $connection->rollBack();
+    break;
+  }
+}
+if($connection->isTransactionActive()){
+  $connection->commit();
+}
+</code>
+
+==== SchemaDiff ====
+
+Класс ''SchemaDiff'' описывает различия между двумя ''Schema''.
+
+Свойства:
+
+  * ''fromSchema'' - сравниваемая схема
+  * ''newNamespaces/removedNamespaces'' - новые и удаленные пространства имен
+  * ''newTables/changedTables/removedTables'' - новые, измененные и удаленные таблицы
+  * ''newSequences/changedSequences/removedSequences'' - новые, измененные и удаленные последовательности
+  * ''orphanedForeignKeys'' - "осиротевшие" внешние ключи
+
+Методы:
+
+  * ''toSql'' - предоставляет массив SQL запросов, позволяющих выполнить миграцию различий
+  * ''toSaveSql'' - предоставляет массив SQL запросов, позволяющих выполнить безопасную миграцию различий (исключая DROP запросы)
+
+==== TableDiff ====
+
+Класс ''TableDiff'' описывает различия между двумя ''Table''.
+
+==== ColumnDiff ====
+
+Класс ''ColumnDiff'' описывает различия между двумя ''Column''.
+
+~~DISQUS~~

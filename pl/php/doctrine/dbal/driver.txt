@@ -1,0 +1,135 @@
+====== Семантика ======
+
+===== Driver =====
+
+Интерфейс ''Driver'' описывает семантику классов, унифицирующих логику подключения к используемой БД.
+
+  * ''connect'' - выполняет подключение и возвращает экземпляр ''Connection'' для БД драйвера
+  * ''getName'' - предоставляет имя драйвера
+  * ''getDatabasePlatform'' - предоставляет [[.:platform|Platform]] для БД драйвера
+  * ''getSchemaManager'' - предоставляет [[.:scheme|Scheme]] для БД драйвера
+  * ''getDatabase'' - предоставляет имя выбранной БД драйвера
+
+<code php>
+$driver = new FooDriver;
+$connect = $driver->connect(['dbname' => 'db'], 'root', 'pass');
+</code>
+
+===== Connection =====
+
+Интерфейс ''Connection'' аналогичен [[http://php.net/manual/ru/book.pdo.php|PDO]]. Он описывает семантику взаимодействия с выбранной БД для конкретного драйвера.
+
+  * ''prepare'' - компиляция SQL в ''Statement''
+  * ''quote'' - добавление кавычек
+  * ''query'' - выполнение запроса и предоставление результата
+  * ''exec'' - выполнение SQL и предоставление информации о количестве затронутых запросом строк
+  * ''lastInsertId'' - предоставление идентификатора последней добавленной записи
+  * ''beginTransaction'' - начало транзакции
+  * ''commit/rollBack'' - завершение транзакции с применением и откатом изменений
+  * ''errorCode/errorInfo'' - предоставление информации о последней ошибке
+
+<code php>
+foreach($connect->query('SELECT * FROM table') as $row){
+  ...
+}
+</code>
+
+===== Statement =====
+
+Интерфейс ''Statement'' аналогичен [[http://php.net/manual/ru/class.pdostatement.php|PDOStatement]]. Он описывает семантику подготовленного запроса для конкретного драйвера.
+
+  * ''bindValue'' - передает значение в параметр запроса
+  * ''bindParam'' - связывает переменную с параметром запроса
+  * ''errorCode/errorInfo'' - предоставляет информацию об ошибке
+  * ''execute'' - выполняет запрос
+  * ''rowCount'' - предоставляет информацию о количестве строк в запросе или о количестве затронутых запросом строк
+
+===== DriverException =====
+
+Интерфейс ''DriverException'' аналогичен [[http://php.net/manual/ru/class.pdoexception.php|PDOException]]. Он описывает семантику исключений уровня БД.
+
+  * ''getErrorCode'' - предоставляет специфичный для драйвера код ошибки
+  * ''getSQLState'' - предоставляет стандартный (SQLSTATE) код ошибки
+  * ''getMessage'' - предоставляет сообщение об ошибке
+
+====== Реализация ======
+
+===== Реализация драйвера =====
+
+Каждая конкретная платформа, поддерживаемая DBAL, должна быть реализована в виде классов ''Driver'', ''Connection'' и ''Statement''. В частности, это следующие платформы:
+
+  * MySQL
+  * Oracle
+  * Microsoft SQL Server
+  * PostgreSQL
+  * SAP Sybase SQL Anywhere
+  * SQLite
+  * Drizzle
+  * Все драйвера PDO
+
+===== Connection =====
+
+Класс ''Connection'' является оберткой над конкретным драйвером и его экземпляром соединения с БД. Он не только реализует интерфейс ''Connection'', но и декарирует его новыми методами:
+
+  * ''getDriver'' - предоставляет используемый ''Driver''
+  * ''getEventManager'' - предоставляет [[..:event_manager:|EventManager]]
+  * ''getDatabasePlatform'' - предоставляет [[.:platforms|Platform]] для используемого ''Driver''
+  * ''getExpressionBuilder'' - предоставляет [[.:query_builder|ExpressionBuilder]]
+  * ''getSchemaManager'' - предоставляет [[.:schema|SchemaManager]]
+  * ''connect'' - выполняет соединение с БД с помощью драйвера
+  * ''fetchAll/fetchAssoc/fetchArray'' - выполняет запрос и возвращает ответ
+  * ''delete'' - удаляет данные из таблицы
+  * ''update'' - обновляет данные в таблице
+  * ''insert'' - добавляет данные в таблицу
+  * ''isTransactionActive'' - определяет, запущена ли транзакция
+
+<code php>
+$connection = new Connection(['dbname' => 'db', 'user' => 'root', 'password' => 'pass'], new FooDriver);
+$connection->insert('users', ['login' => 'user_login'], [PDO::PARAM_STR]);
+</code>
+
+Экземпляры данного класса снабжены [[.:event_manager|EventManager]] и способны генерировать следующие события:
+
+  * ''Events::postConnect'' - после соединения с БД
+
+===== Statement =====
+
+Класс ''Statement'' является оберткой над скомпилированным запросом конкретного драйвера. Он не только реализует интерфейс ''Statement'', но и декарирует его новыми методами.
+
+Экземпляр данного класса возвращается методом ''Connection::prepare''.
+
+===== DriverManager =====
+
+Фабрика ''DriverManager'' позволяет создать драйвер подключения к БД, обернутый в указанный ''Connection''. Для этого используется статичный метод ''getConnection'' и следующие конфигурации:
+
+  * ''driver'' - имя используемого, встроенного драйвера (pdo_mysql, pdo_sqlite, pdo_pgsql, pdo_oci, pdo_sqlsrv, oci8, ibm_db2, mysqli, drizzle_pdo_mysql, sqlanywhere, sqlsrv)
+  * ''driverClass'' - имя класса, используемого в качестве драйвера (если нет подходящего ''driver'')
+  * ''host'' - хост
+  * ''dbname'' - имя используемой БД
+  * ''user'' - логин пользователя
+  * ''password'' - пароль пользователя
+  * ''wrapperClass'' - имя класса обертки, используемого вместо ''Connection''
+  * ''url'' - конфигурация подключения в форме URL. В качестве драйвера необходимо указывать следующие псевдонимы:
+    * ibm_db2 -> db2, ibm-db2
+    * pdo_sqlsrv -> mssql, pdo-sqlsrv
+    * pdo_mysql -> mysql, mysql2, pdo-mysql
+    * pdo_pgsql -> pgsql, postgres, postgresql, pdo-pgsql
+    * pdo_sqlite -> sqlite, sqlite3, pdo-sqlite
+
+<code php>
+$connection = DriverManager::getConnection([
+  'driver' => 'pdo_mysql',
+  'host' => 'localhost',
+  'dbname' => 'mydb',
+  'user' => 'root',
+  'password' => 'pass',
+]);
+// Или
+$connection = DriverManager::getConnection([
+  'url' => 'mysql://root:pass@localhost/mydb?charset=UTF-8'
+]);
+</code>
+
+Каждый конкретный драйвер может использовать собственные параметры конфигурации, [[http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html|описанные в документации]].
+
+~~DISQUS~~

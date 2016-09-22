@@ -1,0 +1,71 @@
+====== Criteria ======
+
+Класс ''Criteria'' описывает клитерий фильтрации и сортировки коллекции на уровне приложения, используя для этого выражения и правила.
+
+Статичные методы:
+
+  * ''create'' - создает экземпляр без конфигурации
+  * ''expr'' - предоставляет фабрику ''ExpressionBuilder''
+
+Методы:
+
+  * ''where'' - устанавливает выражение для фильтрации
+  * ''andWhere'' - добавляет выражение для фильтрации, используя логическое И
+  * ''orWhere'' - добавляет выражение для фильтрации, используя логическое ИЛИ
+  * ''getWhereExpression'' - предоставляет выражение для фильтрации
+  * ''orderBy/getOrderings'' - устанавливает и предоставляет правила сортировки
+  * ''setFirstResult/getFirstResult'' - устанавливает и предоставляет позицию первого выбираемого элемента
+  * ''setMaxResults/getMaxResults'' - устанавливает и предоставляет максимальное число выбираемых элементов
+
+<code php>
+$criteria = new Criteria;
+$criteria->where($criteria->expr()->eq('prop', 'foo')); // Только элементы со значением 'foo' в свойстве 'prop'
+$criteria->orderBy(['prop' => 'DESC']); // Обратная сортировка по свойству 'prop'
+$criteria->setFirstResult(($page - 1) * $limit);
+$criteria->setMaxResults($limit); // Получение только текущей страницы
+$collect = $collect->matching($criteria);
+</code>
+
+====== Выражения фильтрации ======
+
+__Выражения фильтрации__ это унифицированный, объектный язык описания условий, представленный в виде экземпляров различных классов. Перед использованием, полученное __Выражение фильтрации__ должно быть преобразовано в __Результирующий фильтр__ с помощью ''ExpressionVisitor''.
+
+  * ''Value'' - представляет скалярное значение
+  * ''Comparison'' - представляет условие отбора
+
+<code php>
+$comp = new Comparison('prop', Comparison::EQ, new Value(5));
+</code>
+
+  * ''CompositeExpression'' - представляет составное условие отбора
+
+<code php>
+$composit = new CompositeExpression(CompositeExpression::AND, [$compA, $compB, $compC]);
+$composit = new CompositeExpression(CompositeExpression::OR, [$composit, $compD]);
+</code>
+
+====== Expression ======
+
+Интерфейс ''Expression'' описывает __Выражение фильтрации__, которое может быть преобразовано в __Результирующий фильтр__ с помощью метода ''visit'' использующего конкретный ''ExpressionVisitor'' для этого. Абстрактный класс ''ExpressionVisitor'', в свою очередь, описывает сам механизм обхода и формирования __Результирующего фильтра__.
+
+====== ClosureExpressionVisitor ======
+
+Класс ''ClosureExpressionVisitor'' расширят ''ExpressionVisitor'' и использует [[http://php.net/manual/ru/class.closure.php|Closure]] для формирования __Результирующего фильтра__, который может использоваться в методах ''select'' и ''filter'' коллекций.
+
+<code php>
+$comparasion = new Comparison('prop', Comparison::EQ, 5);
+$filter = (new ClosureExpressionVisitor)->dispatch($comparasion);
+array_filter($data, $filter);
+</code>
+
+====== ExpressionBuilder ======
+
+Фабрика ''ExpressionBuilder'' может использоваться быстрого создания сложных __Выражений фильтрации__.
+
+<code php>
+$builder = new ExpressionBuilder;
+$exp = $builder->eq('propA', 5);
+$exp = $builder->andX([$exp, $builder->gte('propB', 10)]);
+</code>
+
+~~DISQUS~~

@@ -5,6 +5,7 @@
     * [[.:pl:php:|PHP]]
       * [[.:pl:php:zf:|Zend Framework]]
       * [[.:pl:php:composer:|Composer]]
+      * [[.:pl:php:doctrine:|Doctrine]]
     * [[.:pl:javascript:|JavaScript]]
       * [[.:pl:javascript:requirejs:|RequireJS]]
       * [[.:pl:javascript:backbone:|BackboneJS]]

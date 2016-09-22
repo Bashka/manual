@@ -1,0 +1,7 @@
+  * [[.:collections:collection|Collection]] ([[https://github.com/doctrine/collections|Doctrine/Common/Collections]])
+  * [[.:dbal:driver|Driver, Connection и Statement]] ([[https://github.com/doctrine/dbal|Doctrine/DBAL]]) - унифицирующие классы, семантически схожие с PDO и PDOStatement
+  * [[.:dbal:types|Types]] ([[https://github.com/doctrine/dbal|Doctrine/DBAL]]) - типы данных и их конвертеры
+  * [[.:dbal:schema|Schema]] ([[https://github.com/doctrine/dbal|Doctrine/DBAL]]) - унифицирующие классы для работы с DDL
+  * Platforms ([[https://github.com/doctrine/dbal|Doctrine/DBAL]])
+  * Logging ([[https://github.com/doctrine/dbal|Doctrine/DBAL]])
+  * QueryBuilder ([[https://github.com/doctrine/dbal|Doctrine/DBAL]])

@@ -1,0 +1,47 @@
+====== Семантика ======
+
+===== Type =====
+
+Абстрактный класс ''Type'' описывает представление типов БД на уровне PHP, а так же методы их преобразования для записи и получения значений в/из БД.
+
+Статичные методы:
+
+  * ''getType'' - фабрика, предоставляющая экземпляр ''Type'' по его имени
+  * ''hasType'' - доступен ли ''Type'' с данным именем
+  * ''addType'' - добавляет новый ''Type'' по имени и классу
+  * ''overrideType'' - переопределяет ''Type''
+
+Методы:
+
+  * ''convertToDatabaseValue'' - преобразует значение PHP в значение БД
+  * ''convertToPHPValue'' - преобразует значение БД в значение PHP
+  * ''getSQLDeclaration'' - предоставляет SQL декларацию типа в БД
+  * ''getName'' - предоставляет имя типа
+  * ''getBindingType'' - предоставляет [[http://php.net/manual/ru/pdo.constants.php|PDO::PARAM_*]] для данного типа
+  * ''getDefaultLength'' - предоставляет длину по умолчанию для данного типа
+
+Собственные типы:
+
+<code php>
+class MoneyType extends Type{
+  public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform){
+    return 'Money';
+  }
+
+  public function getName(){
+    return 'money';
+  }
+
+  public function convertToPHPValue($value, AbstractPlatform $platform){
+    return new Money($value);
+  }
+
+  public function convertToDatabaseValue($value, AbstractPlatform $platform){
+    return $value->toDecimal();
+  }
+}
+</code>
+
+====== Реализация ======
+
+~~DISQUS~~
