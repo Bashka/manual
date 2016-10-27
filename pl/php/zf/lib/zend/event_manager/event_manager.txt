@@ -12,6 +12,7 @@
   * ''triggerUntil'' - метод генерирует событие (по его имени) и проверяет возвращаемое каждым обработчиком значение с помощью функции обратного вызова. Если данная функция возвращает ''true'', дальнейшая обработка события прекращается
   * ''triggerEventUntil'' - метод аналогичен ''triggerUntil'', но генерирует событие используя экземпляр класса [[.:event|Event]]
   * ''setEventPrototype'' - определяет прототип объекта события, который будет использован для представления события при выбросе
+  * ''setIdentifiers/getIdentifiers'' - определяет и получает идентификаторы менеджера, которые будут использоваться им для взаимодействия с [[.:shared_event_manager|SharedEventManager]]
 
 ===== EventManagerAwareInterface =====
 
@@ -72,6 +73,18 @@ $em = $obj->getEventManager(); // Менеджер создается автом
 ...
 $obj->setEventManager(new EventManager); // Менеджер устанавливается программно
 </code>
+
+Данная примесь так же вызывает метод ''setIdentifiers'' на используемом ей ''EventManager'' с именем текущего класса:
+<code php>
+class MyClass implements EventManagerAwareInterface{
+  use EventManagerAwareTrait;
+}
+
+$obj = new MyClass;
+$obj->getEventManager()->getIdentifiers(); // ['MyClass']
+</code>
+
+Это может быть полезно, при использовании [[.:shared_event_manager|SharedEventManager]].
 
 ===== AbstractListenerAggregate =====
 

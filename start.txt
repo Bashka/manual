@@ -13,6 +13,8 @@
       * [[.:pl:cpp:lex:|Lex]]
       * Yacc
     * [[.:pl:python:|Python]]
+    * Ruby
+      * [[.:pl:ruby:jekyll:|Jekyll]]
     * [[.:pl:jass:|Jass]]
 
   * Разработка:
