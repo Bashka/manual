@@ -30,6 +30,8 @@ $listeners = $sem->getListeners([MyClass::class], 'eventName');
 foreach($listeners as $listener){
   ...
 }
+
+$sem->getListeners('*', ...): // Получение обработчиков для всех идентификаторов
 </code>
 
 Пример реализации интерфейса ''SharedEventsCapableInterface'':

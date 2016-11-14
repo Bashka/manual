@@ -50,7 +50,7 @@ class SetVector
   * Потребление памяти
 
 ===== Минусы =====
-  * Именение структуры
+  * Изменение структуры
   * Хранение только логических данных
 
 ==== Операции ====
@@ -58,26 +58,17 @@ class SetVector
 class SetMask
   int mask
   
-  function Set()
+  function SetMask()
     mask = 0
   
-  function getMask(index)
-    if index == 0
-      indexMask = 0
-    else
-      indexMask = 1
-      while index--
-        indexMask = indexMask << 1
-    return indexMask
-  
-  function is(index)
-    return mask & getMask(index) > 0
+  function is(value)
+    return (mask & value) == value
     
-  function add(index)
-    mask |= getMask(index)
+  function add(value)
+    mask |= value
 
-  function remove(index)
-    mask &= ~getMask(index)
+  function remove(value)
+    mask &= ~value
 </code>
 
 ~~DISQUS~~
