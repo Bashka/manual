@@ -54,9 +54,30 @@ $em->attach('myEvent', function(EventInterface $e){
 $em->attach('myEvent', function(EventInterface $e){
   return 1;
 });
-$em->triggerUntil(function($result){
+$em->triggerUntil(function($result){ // Функция, проверяющая результаты работы каждого обработчика
   return is_string($result); // Второй обработчик (возвращающий число) вызван не будет
 }, 'myEvent');
+</code>
+
+===== ResponseCollection =====
+
+Класс ''ResponseCollection'' служит для аккумуляции результатов обработки события и должен возвращаться методами ''trigger'', ''triggerEvent'', ''triggerUntil'', ''triggerEventUntil''.
+
+  * ''stopped/setStopped'' - получает и устанавливает флаг предварительной остановки обработки события
+  * ''first/last'' - получает значение первого и последнего обработчика
+  * ''contains'' - проверяет, содержится ли в результате обработки данное значение
+
+<code php>
+$em = new EventManager;
+$em->attach('myEvent', function(EventInterface $e){
+  return 1;
+});
+$em->attach('myEvent', function(EventInterface $e){
+  return 2;
+});
+$response = $em->trigger('myEvent');
+echo $response->contains(1); // true
+echo $response->last(); // 2
 </code>
 
 ===== EventManagerAwareTrait =====

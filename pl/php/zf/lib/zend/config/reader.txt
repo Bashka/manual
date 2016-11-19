@@ -1,14 +1,29 @@
-Класс Reader позволяет получить конфигурацию из различных форматов, в том числе INI, XML, Json, Yaml, JavaProperties.
+====== Семантика ======
 
-Данный класс считывает конфигурацию и возвращает PHP массив, который затем может быть передан в класс Config для создания экземпляра этого класса.
+===== ReaderInterface =====
 
-INI:
+Интерфейс ''ReaderInterface'' описывает классы, реализующие логику преобразования данных различных типов в массив, пригодный для передачи экземпляру [[.:config|Config]].
+
+  * ''fromString'' - преобразует строку в массив конфигурации
+  * ''fromFile'' - преобразует данные файла в массив конфигурации
+
+====== Реализация ======
+
+===== Ini =====
+
 <code ini>
 [core]
 author=zf2
 </code>
 
-XML:
+<code php>
+$reader = new Zend\Config\Reader\Ini;
+$config = new Zend\Config\Config($reader->fromFile('config.ini'));
+echo $config->core->author; // "zf2"
+</code>
+
+===== Xml =====
+
 <code xml>
 <?xml version="1.0" encoding="utf-8"?>
 <config>
@@ -18,7 +33,14 @@ XML:
 </config>
 </code>
 
-Json:
+<code php>
+$reader = new Zend\Config\Reader\Xml;
+$config = new Zend\Config\Config($reader->fromFile('config.xml'));
+echo $config->core->author; // "zf2"
+</code>
+
+===== Json =====
+
 <code javascript>
 {
   "core": {
@@ -27,25 +49,35 @@ Json:
 }
 </code>
 
-Yaml:
+<code php>
+$reader = new Zend\Config\Reader\Json;
+$config = new Zend\Config\Config($reader->fromFile('config.json'));
+echo $config->core->author; // "zf2"
+</code>
+
+===== Yaml =====
+
 <code yaml>
 core:
   author: zf2
 </code>
 
-JavaProperties:
+<code php>
+$reader = new Zend\Config\Reader\Yaml;
+$config = new Zend\Config\Config($reader->fromFile('config.yml'));
+echo $config->core->author; // "zf2"
+</code>
+
+===== JavaProperties =====
+
 <code java>
 core.author:zf2
 </code>
 
 <code php>
-$reader = new Zend\Config\Reader\Ini();
-//$reader = new Zend\Config\Reader\Xml();
-//$reader = new Zend\Config\Reader\Json();
-//$reader = new Zend\Config\Reader\Yaml();
-//$reader = new Zend\Config\Reader\JavaProperties();
-$conf = new Zend\Config\Config($reader->fromFile('conf/conf.ini'));
-echo $conf->core->author;
+$reader = new Zend\Config\Reader\JavaProperties;
+$config = new Zend\Config\Config($reader->fromFile('config.properties'));
+echo $config->core->author; // "zf2"
 </code>
 
 ~~DISQUS~~

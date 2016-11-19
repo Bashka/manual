@@ -1,21 +1,34 @@
-Класс [[http://framework.zend.com/manual/current/en/modules/zend.config.factory.html|Factory]] позволяет получить конфигурацию из файлов различных типов более удобным способом.
+====== Реализация ======
 
+===== Factory =====
+
+Класс ''Factory'' является фассадом, облегчающим процесс чтение конфигурации из файла, а так же записи ее.
+
+  * ''fromFile'' - чтение конфигурации из файла
+  * ''fromFiles'' - чтение и объединение конфигураций из файлов
+  * ''toFile'' - запись конфигурации в файл
+  * ''registerReader/registerWriter'' - регистрация [[.:reader|Reader]] и [[.:writer|Writer]] для конкретных расширений файлов
+  * ''setReaderPluginManager/getReaderPluginManager'' - установка и получение менеджеров плагинов для Reader
+  * ''setWriterPluginManager/getWriterPluginManager'' - установка и получение менеджеров плагинов для Writer
+
+Пример записи:
 <code php>
-$config = Zend\Config\Factory::fromFile('/conf/conf.ini', true);
-echo $config->core->author;
+$config = new Zend\Config\Config([
+  ...
+]);
+Zend\Config\Factory::toFile('config.php', $config); // Используется PhpArray Writer, на основании расширения целевого файла конфигурации
 </code>
 
-Второй параметр метода `fromFile` класса определяет формат возвращаемого значения:
-
-  * true - в виде Config объекта;
-  * false (по умолчанию) - в виде массива.
-
-Класс так же позволяет записать в файл конфигурацию:
-
+Пример чтения:
 <code php>
-$config = Zend\Config\Factory::toFile('/conf/conf.ini', $config);
+$config = Zend\Config\Factory::fromFile('config.xml', true); // Используется Xml Reader, на основании расширения целевого файла конфигурации
 </code>
 
-В качестве конфигурации здесь может выступать как объект класса Config, так и PHP массив.
+Пример использования собственного класса Reader или Writer:
+<code php>
+Zend\Config\Factory::registerReader('db', new MyDbConfigReader);
+Zend\Config\Factory::registerWriter('db', new MyDbConfigWriter);
+...
+</code>
 
 ~~DISQUS~~

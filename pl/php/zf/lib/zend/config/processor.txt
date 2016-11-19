@@ -1,0 +1,80 @@
+====== Семантика ======
+
+===== ProcessorInterface =====
+
+Интерфейс ''ProcessorInterface'' описывает семантику классов, способных обрабатывать конфигурацию перед использованием.
+
+  * ''processValue'' - обрабатывает конкретное значение конфигурации
+  * ''process'' - обрабатывает конфигурацию в целом
+
+====== Реализация ======
+
+===== Token =====
+
+Процессор ''Token'' способен заменять вхождения определенных токенов в конфигурации на заданные значения.
+
+  * ''addToken/setToken'' - устанавливает значение токена
+  * ''getTokens'' - предоставляет установленные токены
+
+<code php>
+$config = new Zend\Config\Config([
+  'key' => 'value TOKEN',
+], true);
+$processor = new Zend\Config\Processor\Token;
+$processor->addToken('TOKEN', 'foo');
+$processor->process($config);
+echo $config->key; // "value foo"
+</code>
+
+===== Constant =====
+
+Процессор ''Constant'' это частная реализация ''Token'', позволяющая выполнить замену глобальных констант в конфигурации.
+
+<code php>
+define('TOKEN', 'foo');
+
+$config = new Zend\Config\Config([
+  'key' => 'value TOKEN',
+], true);
+$processor = new Zend\Config\Processor\Constant;
+$processor->process($config);
+echo $config->key; // "value foo"
+</code>
+
+===== Filter =====
+
+Процессор ''Filter'' способен обрабатывать значения конфигурации с помощью [[..:filter|Filter]].
+
+  * ''setFilter'' - устанавливает фильтр
+
+<code php>
+$config = new Zend\Config\Config([
+  'key' => 'value',
+], true);
+$processor = new Zend\Config\Processor\Filter(new Zend\Filter\StringToUpper);
+$processor->process($config);
+echo $config->key; // "VALUE"
+</code>
+
+===== Queue =====
+
+Процессор ''Queue'' позволяет объединить несколько процессоров в один, с помощью метода ''insert''.
+
+<code php>
+$config = new Zend\Config\Config([
+  'key' => 'value TOKEN',
+], true);
+$queue = new Zend\Config\Processor\Queue;
+
+$processor = new Zend\Config\Processor\Token;
+$processor->addToken('TOKEN', 'foo');
+$queue->insert($processor);
+
+$processor = new Zend\Config\Processor\Filter(new Zend\Filter\StringToUpper);
+$queue->insert($processor);
+
+$queue->process($config);
+echo $config->key; // "VALUE FOO"
+</code>
+
+~~DISQUS~~

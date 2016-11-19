@@ -1,0 +1,73 @@
+====== Семантика ======
+
+===== TranslatorInterface =====
+Интерфейс ''TranslatorInterface'' описывает семантику переводчиков, включая следующие методы:
+
+  * ''translate'' - переводит сообщение
+  * ''translatePlural'' - переводит числовое сообщение
+
+====== Реализация ======
+
+====== Translator ======
+Класс ''Translator'' реализует логику переводчика, используя классы [[.:loader|Loader]]  для загрузки файлов переводов и [[..:event_manager:|EventManager]] в качестве точки доступа к процессу перевода.
+
+  * ''setLocale/getLocale'' - устанавливает и получает текущую локаль
+  * ''setFallbackLocale/getFallbackLocale'' - устанавливает и получает запасную локаль, на случай, если текущая локаль не доступна
+  * ''addTranslationFile'' - регистрирует указанный файл в качестве файла переводов
+  * ''addTranslationFilePattern'' - регистрирует указаный шаблон в качестве пути до файлов переводов
+  * ''setCache/getCache'' - устанавливает и получает [[..:cache:|Cache]], используемый для кеширования переводов (если установлен)
+  * ''setPluginManager/getPluginManager'' - устанавливает и предоставляет менеджер плагинов
+  * ''getAllMessages'' - предоставляет все переводы, доступные для текущей локали
+  * ''enableEventManager/disableEventManager'' - включает и отключает генерацию событий в процессе работы переводчика
+
+Пример файла локализации:
+<code php>
+<?php
+# ./locale/ru/messages.php
+return [
+  '' => [
+    // Правило вычисления локализующей строки для числа
+    'plural_forms' => 'nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);',
+  ],
+  // Три типа локализации для числа
+  '%d day ago' => [
+    '%d день назад',
+    '%d дня назад',
+    '%d дней назад',
+  ],
+  // Локализация для строки
+  'Hello world' => 'Привет мир',
+];
+</code>
+
+Пример использования:
+<code php>
+$translator = new Translator;
+
+$translator->setLocale('ru');
+$translator->setFallbackLocale('en');
+
+$translator->addTranslationFile('phparray', './locale/ru/messages.php', 'default', 'ru');
+// или
+$translator->addTranslationFilePattern('phparray', './locale', '%s/messages.php', 'default'); // В позицию %s будет подставлена текущая локаль "ru"
+
+$num = 5;
+echo sprintf($translator->translatePlural('%d day ago', '%d days ago',  $num), $num); // "5 дней назад"
+echo $translator->translate('Hello world'); // "Привет мир"
+</code>
+
+Класс выбрасывает следующие события (при включении выброса методом ''enableEventManager''):
+
+  * ''EVENT_MISSING_TRANSLATION'' - в случае отсутствия перевода для конкретного сообщения
+  * ''EVENT_NO_MESSAGES_LOADED'' - в случае отсутствия целевого файла перевода
+
+<code php>
+$translator = new Translator;
+... // Настройка переводчика
+$logger = new Logger;
+$translator->getEventManager()->attach(Translator::EVENT_MISSING_TRANSLATION, function($event) use($logger){
+  $logger->warn('Message [' . $event->getParam('message') . '] not translate');
+});
+</code>
+
+~~DISQUS~~

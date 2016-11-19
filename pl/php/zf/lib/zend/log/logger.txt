@@ -4,7 +4,7 @@
 
 Интерфейс ''LoggerInterface'' описывает механизм логгирования.
 
-  * ''emerg/alert/crit/err/warn/norice/info/debug'' - добавляет запись соответствующего уровня в лог
+  * ''emerg/alert/crit/err/warn/notice/info/debug'' - добавляет запись соответствующего уровня в лог
 
 ===== LoggerAwareInterface =====
 
